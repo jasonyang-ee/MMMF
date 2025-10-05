@@ -27,7 +27,7 @@ function BalanceTimeline({
         <table className="w-full">
           <thead className="bg-gray-100 dark:bg-[#2a2a2a] border-b-2 border-gray-300 dark:border-[#3a3a3a]">
             <tr>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
+              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700 dark:text-gray-400 w-20">
                 Action
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
@@ -52,33 +52,37 @@ function BalanceTimeline({
                   entry.transaction ? "" : "bg-gray-100 dark:bg-[#2a2a2a]/50"
                 }`}
               >
-                <td className="px-4 py-3">
-                  {entry.transaction && !entry.transaction.isRecurring && (
-                    <button
-                      onClick={() => onDeleteTransaction(entry.transaction.id)}
-                      className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
-                      title="Delete transaction"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                <td className="px-4 py-3 w-20">
+                  <div className="flex items-center justify-center">
+                    {entry.transaction && !entry.transaction.isRecurring && (
+                      <button
+                        onClick={() =>
+                          onDeleteTransaction(entry.transaction.id)
+                        }
+                        className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
+                        title="Delete transaction"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  )}
-                  {entry.transaction && entry.transaction.isRecurring && (
-                    <span className="text-gray-400 dark:text-gray-500 text-xs px-1">
-                      Auto
-                    </span>
-                  )}
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                    {entry.transaction && entry.transaction.isRecurring && (
+                      <span className="text-gray-400 dark:text-gray-500 text-xs px-1">
+                        Auto
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                   {entry.transaction

@@ -176,6 +176,13 @@ function RecurringList({
     type: "debit",
     dayOfMonth: "",
   });
+  const nameInputRef = useRef(null);
+
+  useEffect(() => {
+    if (showForm && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, [showForm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -222,6 +229,7 @@ function RecurringList({
           className="mb-4 p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg space-y-3"
         >
           <input
+            ref={nameInputRef}
             type="text"
             placeholder="Description"
             value={formData.name}

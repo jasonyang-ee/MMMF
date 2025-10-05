@@ -278,6 +278,13 @@ function RecurringCreditCards({
     name: "",
     dayOfMonth: "",
   });
+  const nameInputRef = useRef(null);
+
+  useEffect(() => {
+    if (showForm && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, [showForm]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -320,6 +327,7 @@ function RecurringCreditCards({
           className="mb-4 p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg space-y-3"
         >
           <input
+            ref={nameInputRef}
             type="text"
             placeholder="Card Name (e.g., Chase Sapphire)"
             value={formData.name}
