@@ -1,5 +1,8 @@
 # Use Debian-based Node.js image
-FROM node:20-bookworm-slim
+FROM node:20-alpine
+
+# Install curl for health checks
+RUN apk add --no-cache curl
 
 # Set working directory
 WORKDIR /app
