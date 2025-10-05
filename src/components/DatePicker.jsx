@@ -128,13 +128,13 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
       />
 
       {isOpen && (
-        <div className="absolute z-50 mt-2 bg-white dark:bg-[#2a2a2a] rounded-lg shadow-2xl border border-gray-200 dark:border-[#444444] p-4 w-80">
+        <div className="absolute z-50 mt-2 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg shadow-2xl border border-gray-300 dark:border-[#444444] p-4 w-80">
           {/* Month/Year Header */}
           <div className="flex items-center justify-between mb-4">
             <button
               type="button"
               onClick={previousMonth}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
             >
               <svg
                 className="w-5 h-5"
@@ -158,7 +158,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
             <button
               type="button"
               onClick={nextMonth}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
             >
               <svg
                 className="w-5 h-5"
@@ -208,7 +208,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
                       ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
                       : isDateDisabled(date)
                       ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-                      : "hover:bg-gray-100 dark:hover:bg-[#333333] text-gray-700 dark:text-gray-300"
+                      : "hover:bg-gray-200 dark:hover:bg-[#333333] text-gray-700 dark:text-gray-300"
                   }
                 `}
               >
@@ -218,11 +218,11 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
           </div>
 
           {/* Today Button */}
-          <div className="mt-4 pt-3 border-t border-gray-200 dark:border-[#444444]">
+          <div className="mt-4 pt-3 border-t border-gray-300 dark:border-[#444444]">
             <button
               type="button"
               onClick={() => handleDateClick(new Date())}
-              className="w-full py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="w-full py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
             >
               Today
             </button>

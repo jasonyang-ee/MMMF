@@ -48,8 +48,8 @@ function BalanceTimeline({
             {filteredHistory.map((entry, index) => (
               <tr
                 key={index}
-                className={`hover:bg-gray-50 dark:hover:bg-[#2a2a2a] ${
-                  entry.transaction ? "" : "bg-gray-50 dark:bg-[#2a2a2a]/50"
+                className={`hover:bg-gray-100 dark:hover:bg-[#2a2a2a] ${
+                  entry.transaction ? "" : "bg-gray-100 dark:bg-[#2a2a2a]/50"
                 }`}
               >
                 <td className="px-4 py-3">
