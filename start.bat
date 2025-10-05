@@ -18,7 +18,7 @@ if not exist "data\" (
 
 REM Start the application
 echo Starting development servers...
-echo    - Backend API: http://localhost:3000
+echo    - Backend API: http://localhost:3600
 echo    - Frontend: http://localhost:5173
 echo.
 echo Press Ctrl+C to stop
