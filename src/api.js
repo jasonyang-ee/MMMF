@@ -70,6 +70,28 @@ export const api = {
     return res.json();
   },
 
+  // Credit Cards
+  async getCreditCards() {
+    const res = await fetch(`${API_BASE}/credit-cards`);
+    return res.json();
+  },
+
+  async addCreditCard(card) {
+    const res = await fetch(`${API_BASE}/credit-cards`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(card),
+    });
+    return res.json();
+  },
+
+  async deleteCreditCard(id) {
+    const res = await fetch(`${API_BASE}/credit-cards/${id}`, {
+      method: "DELETE",
+    });
+    return res.json();
+  },
+
   // Settings
   async getSettings() {
     const res = await fetch(`${API_BASE}/settings`);

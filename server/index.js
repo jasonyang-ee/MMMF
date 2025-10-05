@@ -16,6 +16,7 @@ const DATA_DIR = path.join(__dirname, "..", "data");
 const TRANSACTIONS_FILE = path.join(DATA_DIR, "transactions.json");
 const RECURRING_FILE = path.join(DATA_DIR, "recurring.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
+const CREDIT_CARDS_FILE = path.join(DATA_DIR, "credit-cards.json");
 
 // Ensure data directory exists
 async function initializeDataDir() {
@@ -42,6 +43,12 @@ async function initializeDataDir() {
         SETTINGS_FILE,
         JSON.stringify({ startingBalance: 0 }, null, 2)
       );
+    }
+
+    try {
+      await fs.access(CREDIT_CARDS_FILE);
+    } catch {
+      await fs.writeFile(CREDIT_CARDS_FILE, JSON.stringify([], null, 2));
     }
   } catch (error) {
     console.error("Error initializing data directory:", error);
@@ -190,6 +197,41 @@ app.delete("/api/recurring/:id", async (req, res) => {
     res.json({ success: true });
   } else {
     res.status(500).json({ error: "Failed to delete recurring transaction" });
+  }
+});
+
+// Get all credit cards
+app.get("/api/credit-cards", async (req, res) => {
+  const creditCards = await readJsonFile(CREDIT_CARDS_FILE);
+  res.json(creditCards || []);
+});
+
+// Add a new credit card
+app.post("/api/credit-cards", async (req, res) => {
+  const creditCards = await readJsonFile(CREDIT_CARDS_FILE);
+  const newCard = {
+    id: Date.now().toString(),
+    ...req.body,
+    createdAt: new Date().toISOString(),
+  };
+  creditCards.push(newCard);
+
+  if (await writeJsonFile(CREDIT_CARDS_FILE, creditCards)) {
+    res.status(201).json(newCard);
+  } else {
+    res.status(500).json({ error: "Failed to save credit card" });
+  }
+});
+
+// Delete a credit card
+app.delete("/api/credit-cards/:id", async (req, res) => {
+  const creditCards = await readJsonFile(CREDIT_CARDS_FILE);
+  const filtered = creditCards.filter((c) => c.id !== req.params.id);
+
+  if (await writeJsonFile(CREDIT_CARDS_FILE, filtered)) {
+    res.json({ success: true });
+  } else {
+    res.status(500).json({ error: "Failed to delete credit card" });
   }
 });
 

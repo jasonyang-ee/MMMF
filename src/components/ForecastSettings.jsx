@@ -1,15 +1,16 @@
 import React from "react";
-import { getTodayDate } from "../utils";
 
 function ForecastSettings({
+  currentDate,
   forecastEndDate,
+  onCurrentDateChange,
   onForecastEndDateChange,
   onClearCalculations,
 }) {
-  // Calculate days from today
-  const today = new Date();
+  // Calculate days between dates
+  const startDate = new Date(currentDate);
   const endDate = new Date(forecastEndDate);
-  const daysDiff = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+  const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
 
   return (
     <div className="card">
@@ -20,9 +21,9 @@ function ForecastSettings({
           <label className="label">Current Date</label>
           <input
             type="date"
-            value={getTodayDate()}
-            disabled
-            className="input bg-gray-100 cursor-not-allowed"
+            value={currentDate}
+            onChange={(e) => onCurrentDateChange(e.target.value)}
+            className="input cursor-pointer"
           />
         </div>
 
@@ -32,12 +33,12 @@ function ForecastSettings({
             type="date"
             value={forecastEndDate}
             onChange={(e) => onForecastEndDateChange(e.target.value)}
-            min={getTodayDate()}
-            className="input"
+            min={currentDate}
+            className="input cursor-pointer"
           />
           <p className="text-sm text-gray-500 mt-1">
             {daysDiff > 0
-              ? `${daysDiff} days from now`
+              ? `${daysDiff} days from current date`
               : "Select a future date"}
           </p>
         </div>
