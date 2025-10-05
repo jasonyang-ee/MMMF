@@ -47,7 +47,7 @@ function BalanceDisplay({
           ) : (
             <div
               onClick={handleClick}
-              className="text-3xl font-bold cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded dark:text-gray-100"
+              className="text-3xl font-bold cursor-pointer hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded dark:text-gray-100"
               title="Click to edit"
             >
               {formatCurrency(startingBalance)}
@@ -56,7 +56,7 @@ function BalanceDisplay({
         </div>
 
         {/* Current Balance */}
-        <div className="border-t dark:border-gray-700 pt-4">
+        <div className="border-t dark:border-[#3a3a3a] pt-4">
           <label className="label">Forecasted Balance</label>
           <div className="text-3xl font-bold">
             <span
@@ -70,7 +70,7 @@ function BalanceDisplay({
         </div>
 
         {/* Balance Change */}
-        <div className="border-t dark:border-gray-700 pt-4">
+        <div className="border-t dark:border-[#3a3a3a] pt-4">
           <label className="label">Net Change</label>
           <div className="text-3xl font-bold">
             <span

@@ -102,7 +102,7 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg space-y-3"
+          className="mb-4 p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg space-y-3"
         >
           <input
             type="text"
@@ -139,31 +139,29 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
             required
           />
 
-          <div className="flex space-x-3">
-            <label className="flex items-center text-sm">
-              <input
-                type="radio"
-                value="debit"
-                checked={formData.type === "debit"}
-                onChange={(e) =>
-                  setFormData({ ...formData, type: e.target.value })
-                }
-                className="mr-1"
-              />
-              <span className="text-red-600 dark:text-red-400">Payment</span>
-            </label>
-            <label className="flex items-center text-sm">
-              <input
-                type="radio"
-                value="credit"
-                checked={formData.type === "credit"}
-                onChange={(e) =>
-                  setFormData({ ...formData, type: e.target.value })
-                }
-                className="mr-1"
-              />
-              <span className="text-green-600 dark:text-green-400">Income</span>
-            </label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: "debit" })}
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                formData.type === "debit"
+                  ? "bg-red-600 text-white shadow-md dark:bg-red-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
+              }`}
+            >
+              Payment
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: "credit" })}
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                formData.type === "credit"
+                  ? "bg-green-600 text-white shadow-md dark:bg-green-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
+              }`}
+            >
+              Income
+            </button>
           </div>
 
           <button type="submit" className="btn btn-primary w-full text-sm">

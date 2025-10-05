@@ -23,31 +23,31 @@ function BalanceTimeline({
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-100 dark:bg-gray-700 border-b-2 border-gray-300 dark:border-gray-600">
+          <thead className="bg-gray-100 dark:bg-[#2a2a2a] border-b-2 border-gray-300 dark:border-[#3a3a3a]">
             <tr>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
                 Action
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
                 Description
               </th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">
                 Amount
               </th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">
                 Balance
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
                 Date
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-gray-200 dark:divide-[#3a3a3a]">
             {filteredHistory.map((entry, index) => (
               <tr
                 key={index}
-                className={`hover:bg-gray-50 dark:hover:bg-gray-700 ${
-                  entry.transaction ? "" : "bg-gray-50 dark:bg-gray-700/50"
+                className={`hover:bg-gray-50 dark:hover:bg-[#2a2a2a] ${
+                  entry.transaction ? "" : "bg-gray-50 dark:bg-[#2a2a2a]/50"
                 }`}
               >
                 <td className="px-4 py-3">

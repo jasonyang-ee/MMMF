@@ -2,7 +2,7 @@ import React from "react";
 
 function Header() {
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm">
+    <header className="bg-white dark:bg-[#2a2a2a] shadow-sm dark:shadow-black/50">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center justify-between">
           <div>
@@ -15,7 +15,7 @@ function Header() {
           </div>
           <div className="flex items-center space-x-2">
             <svg
-              className="w-10 h-10 text-primary-600 dark:text-gray-400"
+              className="w-10 h-10 text-primary-600 dark:text-gray-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

@@ -157,7 +157,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center dark:bg-[#1f1f1f]">
         <div className="text-xl text-gray-600 dark:text-gray-400">
           Loading...
         </div>
@@ -166,7 +166,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#1f1f1f]">
       <Header />
 
       <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">

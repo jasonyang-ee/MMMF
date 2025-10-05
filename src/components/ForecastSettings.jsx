@@ -87,7 +87,7 @@ function ForecastSettings({
           </p>
         </div>
 
-        <div className="pt-4 border-t dark:border-gray-700">
+        <div className="pt-4 border-t dark:border-[#3a3a3a]">
           <button
             onClick={onClearCalculations}
             className="btn btn-danger w-full"

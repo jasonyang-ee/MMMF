@@ -75,33 +75,29 @@ function TransactionForm({ onAddTransaction }) {
 
         <div>
           <label className="label">Type</label>
-          <div className="flex space-x-4">
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="type"
-                value="debit"
-                checked={formData.type === "debit"}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <span className="text-red-600 dark:text-red-400 font-medium">
-                Debit (Payment)
-              </span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="type"
-                value="credit"
-                checked={formData.type === "credit"}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <span className="text-green-600 dark:text-green-400 font-medium">
-                Credit (Income)
-              </span>
-            </label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: "debit" })}
+              className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all ${
+                formData.type === "debit"
+                  ? "bg-red-600 text-white shadow-md dark:bg-red-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
+              }`}
+            >
+              Debit (Payment)
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: "credit" })}
+              className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all ${
+                formData.type === "credit"
+                  ? "bg-green-600 text-white shadow-md dark:bg-green-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
+              }`}
+            >
+              Credit (Income)
+            </button>
           </div>
         </div>
 
