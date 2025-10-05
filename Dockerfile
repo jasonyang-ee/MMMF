@@ -29,5 +29,8 @@ EXPOSE 5173
 ENV NODE_ENV=production
 ENV PORT=5173
 
+HEALTHCHECK --interval=5m --timeout=10s --start-period=10s --retries=3 \
+	CMD curl -f http://127.0.0.1:5173/ || exit 1
+
 # Start the application
-CMD ["node", "server/index.js"]
+ENTRYPOINT ["node", "server/index.js"]
