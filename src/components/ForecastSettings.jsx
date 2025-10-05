@@ -1,4 +1,5 @@
 import React from "react";
+import DatePicker from "./DatePicker";
 
 function ForecastSettings({
   currentDate,
@@ -28,34 +29,20 @@ function ForecastSettings({
       <div className="space-y-4">
         <div>
           <label className="label">Current Date</label>
-          <input
-            type="date"
+          <DatePicker
             value={currentDate}
-            onChange={(e) => onCurrentDateChange(e.target.value)}
-            className="input cursor-pointer w-full"
-            style={{
-              WebkitAppearance: "none",
-              MozAppearance: "textfield",
-              appearance: "none",
-            }}
-            onClick={(e) => e.target.showPicker && e.target.showPicker()}
+            onChange={onCurrentDateChange}
+            className="w-full"
           />
         </div>
 
         <div>
           <label className="label">Forecast Until</label>
-          <input
-            type="date"
+          <DatePicker
             value={forecastEndDate}
-            onChange={(e) => onForecastEndDateChange(e.target.value)}
+            onChange={onForecastEndDateChange}
             min={currentDate}
-            className="input cursor-pointer w-full"
-            style={{
-              WebkitAppearance: "none",
-              MozAppearance: "textfield",
-              appearance: "none",
-            }}
-            onClick={(e) => e.target.showPicker && e.target.showPicker()}
+            className="w-full"
           />
           <div className="flex gap-2 mt-2">
             <button

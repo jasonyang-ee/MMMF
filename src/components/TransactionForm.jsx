@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getTodayDate } from "../utils";
+import DatePicker from "./DatePicker";
 
 function TransactionForm({ onAddTransaction }) {
   const [formData, setFormData] = useState({
@@ -103,19 +104,10 @@ function TransactionForm({ onAddTransaction }) {
 
         <div>
           <label className="label">Date</label>
-          <input
-            type="date"
-            name="date"
+          <DatePicker
             value={formData.date}
-            onChange={handleChange}
-            className="input cursor-pointer w-full"
-            style={{
-              WebkitAppearance: "none",
-              MozAppearance: "textfield",
-              appearance: "none",
-            }}
-            onClick={(e) => e.target.showPicker && e.target.showPicker()}
-            required
+            onChange={(date) => setFormData({ ...formData, date })}
+            className="w-full"
           />
         </div>
 

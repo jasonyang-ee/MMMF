@@ -64,4 +64,34 @@
     -webkit-appearance: none;
     appearance: none;
   }
+
+  /* Style the date picker calendar dropdown */
+  input[type="date"]::-webkit-datetime-edit {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+
+  input[type="date"]::-webkit-datetime-edit-text {
+    padding: 0 0.25rem;
+  }
+
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field,
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    padding: 0.25rem;
+  }
+}
+
+/* Make the calendar dropdown larger and more readable */
+@layer utilities {
+  /* This affects Chrome/Edge calendar picker */
+  input[type="date"] {
+    min-height: 2.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 }
