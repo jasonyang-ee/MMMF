@@ -39,9 +39,25 @@ async function initializeDataDir() {
     try {
       await fs.access(SETTINGS_FILE);
     } catch {
+      // Initialize with default settings including current date and 30-day forecast
+      const today = new Date();
+      const todayStr = today.toISOString().split("T")[0];
+
+      const forecastEnd = new Date(today);
+      forecastEnd.setDate(forecastEnd.getDate() + 30);
+      const forecastEndStr = forecastEnd.toISOString().split("T")[0];
+
       await fs.writeFile(
         SETTINGS_FILE,
-        JSON.stringify({ startingBalance: 0 }, null, 2)
+        JSON.stringify(
+          {
+            startingBalance: 0,
+            currentDate: todayStr,
+            forecastEndDate: forecastEndStr,
+          },
+          null,
+          2
+        )
       );
     }
 
@@ -259,8 +275,26 @@ app.delete("/api/credit-cards/:id", async (req, res) => {
 
 // Get settings (starting balance, etc.)
 app.get("/api/settings", async (req, res) => {
-  const settings = await readJsonFile(SETTINGS_FILE);
-  res.json(settings || { startingBalance: 0 });
+  let settings = await readJsonFile(SETTINGS_FILE);
+
+  // Ensure default values if settings exist but are missing fields
+  if (!settings) {
+    settings = { startingBalance: 0 };
+  }
+
+  // Add default dates if missing
+  if (!settings.currentDate) {
+    const today = new Date();
+    settings.currentDate = today.toISOString().split("T")[0];
+  }
+
+  if (!settings.forecastEndDate) {
+    const forecastEnd = new Date(settings.currentDate);
+    forecastEnd.setDate(forecastEnd.getDate() + 30);
+    settings.forecastEndDate = forecastEnd.toISOString().split("T")[0];
+  }
+
+  res.json(settings);
 });
 
 // Update settings

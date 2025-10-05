@@ -54,7 +54,7 @@ function TransactionForm({ onAddTransaction }) {
             value={formData.name}
             onChange={handleChange}
             className="input"
-            placeholder="e.g., Rent payment"
+            placeholder="e.g., 0DTE SPY Call Margin Requirement"
             required
           />
         </div>
