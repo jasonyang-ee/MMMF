@@ -68,13 +68,13 @@ function BalanceDisplay({
         </div>
 
         {/* Balance Change */}
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-600">Net Change</span>
+        <div className="border-t pt-4">
+          <label className="label">Net Change</label>
+          <div className="text-3xl font-bold">
             <span
-              className={`text-lg font-semibold ${
-                balanceChange >= 0 ? "text-green-600" : "text-red-600"
-              }`}
+              className={
+                balanceChange >= 0 ? "balance-positive" : "balance-negative"
+              }
             >
               {balanceChange >= 0 ? "+" : ""}
               {formatCurrency(balanceChange)}

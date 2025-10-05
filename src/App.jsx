@@ -216,6 +216,8 @@ function App() {
               onAddCreditCard={handleAddCreditCard}
               onDeleteCreditCard={handleDeleteCreditCard}
               onUseCreditCard={handleUseCreditCard}
+              currentDate={currentDate}
+              forecastEndDate={forecastEndDate}
             />
           </div>
         </div>

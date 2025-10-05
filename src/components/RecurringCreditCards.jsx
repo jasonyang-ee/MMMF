@@ -1,30 +1,91 @@
 import React, { useState } from "react";
 
-function CreditCardItem({ item, onDelete, onUse }) {
+function CreditCardItem({
+  item,
+  onDelete,
+  onUse,
+  currentDate,
+  forecastEndDate,
+}) {
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
+
+  // Calculate the next occurrence date based on dayOfMonth
+  const getNextOccurrenceDate = () => {
+    if (!item.dayOfMonth) return "";
+
+    const today = new Date(currentDate);
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    const currentDay = today.getDate();
+
+    // Try current month first
+    let targetDate = new Date(
+      currentYear,
+      currentMonth,
+      Math.min(
+        item.dayOfMonth,
+        new Date(currentYear, currentMonth + 1, 0).getDate()
+      )
+    );
+
+    // If the date has passed this month, move to next month
+    if (targetDate <= today) {
+      targetDate = new Date(
+        currentYear,
+        currentMonth + 1,
+        Math.min(
+          item.dayOfMonth,
+          new Date(currentYear, currentMonth + 2, 0).getDate()
+        )
+      );
+    }
+
+    // Check if the date is within forecast range
+    const endDate = new Date(forecastEndDate);
+    if (targetDate > endDate) {
+      return ""; // No upcoming date within forecast range
+    }
+
+    return targetDate.toISOString().split("T")[0];
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!amount || !date) {
-      alert("Please enter amount and date");
+    const nextDate = getNextOccurrenceDate();
+
+    if (!amount) {
+      alert("Please enter amount");
       return;
     }
+
+    if (!nextDate) {
+      alert("No upcoming payment date within forecast range");
+      return;
+    }
+
     onUse({
       name: item.name,
       amount: parseFloat(amount),
-      date: date,
+      date: nextDate,
     });
     setAmount("");
-    setDate("");
     setShowAmountForm(false);
   };
+
+  const nextDate = getNextOccurrenceDate();
 
   return (
     <div className="border border-gray-200 rounded-lg p-3 bg-white">
       <div className="flex items-center justify-between mb-2">
-        <div className="font-medium text-gray-900">{item.name}</div>
+        <div>
+          <div className="font-medium text-gray-900">{item.name}</div>
+          {item.dayOfMonth && (
+            <div className="text-xs text-gray-500">
+              Day {item.dayOfMonth} of month
+            </div>
+          )}
+        </div>
         <button
           onClick={() => onDelete(item.id)}
           className="text-red-600 hover:text-red-700 p-1"
@@ -47,14 +108,26 @@ function CreditCardItem({ item, onDelete, onUse }) {
       </div>
 
       {!showAmountForm ? (
-        <button
-          onClick={() => setShowAmountForm(true)}
-          className="btn btn-primary w-full text-sm"
-        >
-          Add Payment
-        </button>
+        <div>
+          {nextDate && (
+            <p className="text-xs text-blue-600 mb-2">
+              Next: {new Date(nextDate).toLocaleDateString()}
+            </p>
+          )}
+          <button
+            onClick={() => setShowAmountForm(true)}
+            className="btn btn-primary w-full text-sm"
+            disabled={!nextDate}
+          >
+            {nextDate ? "Add Payment" : "No upcoming date"}
+          </button>
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-2">
+          <div className="text-xs text-gray-600 mb-1">
+            Payment date:{" "}
+            {nextDate ? new Date(nextDate).toLocaleDateString() : "N/A"}
+          </div>
           <input
             type="number"
             placeholder="Amount"
@@ -63,15 +136,6 @@ function CreditCardItem({ item, onDelete, onUse }) {
             step="0.01"
             min="0"
             className="input text-sm"
-            required
-          />
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="input text-sm cursor-pointer"
-            style={{ colorScheme: "light" }}
-            onClick={(e) => e.target.showPicker && e.target.showPicker()}
             required
           />
           <div className="flex space-x-2">
@@ -83,7 +147,6 @@ function CreditCardItem({ item, onDelete, onUse }) {
               onClick={() => {
                 setShowAmountForm(false);
                 setAmount("");
-                setDate("");
               }}
               className="btn text-sm flex-1"
             >
@@ -101,32 +164,45 @@ function RecurringCreditCards({
   onAddCreditCard,
   onDeleteCreditCard,
   onUseCreditCard,
+  currentDate,
+  forecastEndDate,
 }) {
   const [showForm, setShowForm] = useState(false);
-  const [cardName, setCardName] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    dayOfMonth: "",
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!cardName) {
-      alert("Please enter a card name");
+    if (!formData.name || !formData.dayOfMonth) {
+      alert("Please enter card name and day of month");
       return;
     }
-    onAddCreditCard({ name: cardName });
-    setCardName("");
+
+    const dayOfMonth = parseInt(formData.dayOfMonth);
+    if (dayOfMonth < 1 || dayOfMonth > 31) {
+      alert("Day of month must be between 1 and 31");
+      return;
+    }
+
+    onAddCreditCard({
+      name: formData.name,
+      dayOfMonth: dayOfMonth,
+    });
+    setFormData({ name: "", dayOfMonth: "" });
     setShowForm(false);
   };
 
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">
-          Recurring Credit Cards ({creditCards.length})
-        </h2>
+        <h2 className="text-xl font-semibold">Recurring Credit Cards</h2>
         <button
           onClick={() => setShowForm(!showForm)}
           className="text-primary-600 hover:text-primary-700 text-sm font-medium"
         >
-          {showForm ? "Cancel" : "+ Add Card"}
+          {showForm ? "Cancel" : "+ Add"}
         </button>
       </div>
 
@@ -138,8 +214,20 @@ function RecurringCreditCards({
           <input
             type="text"
             placeholder="Card Name (e.g., Chase Sapphire)"
-            value={cardName}
-            onChange={(e) => setCardName(e.target.value)}
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="input text-sm"
+            required
+          />
+          <input
+            type="number"
+            placeholder="Day of Month (1-31)"
+            value={formData.dayOfMonth}
+            onChange={(e) =>
+              setFormData({ ...formData, dayOfMonth: e.target.value })
+            }
+            min="1"
+            max="31"
             className="input text-sm"
             required
           />
@@ -164,6 +252,8 @@ function RecurringCreditCards({
               item={item}
               onDelete={onDeleteCreditCard}
               onUse={onUseCreditCard}
+              currentDate={currentDate}
+              forecastEndDate={forecastEndDate}
             />
           ))
         )}

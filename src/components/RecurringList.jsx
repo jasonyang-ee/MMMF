@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { formatCurrency } from "../utils";
 
 function RecurringItem({ item, onDelete }) {
@@ -46,12 +46,124 @@ function RecurringItem({ item, onDelete }) {
   );
 }
 
-function RecurringList({ recurring, onDeleteRecurring }) {
+function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    amount: "",
+    type: "debit",
+    dayOfMonth: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.amount || !formData.dayOfMonth) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const dayOfMonth = parseInt(formData.dayOfMonth);
+    if (dayOfMonth < 1 || dayOfMonth > 31) {
+      alert("Day of month must be between 1 and 31");
+      return;
+    }
+
+    onAddRecurring({
+      name: formData.name,
+      amount: parseFloat(formData.amount),
+      type: formData.type,
+      dayOfMonth: dayOfMonth,
+    });
+
+    setFormData({ name: "", amount: "", type: "debit", dayOfMonth: "" });
+    setShowForm(false);
+  };
+
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Recurring Transactions</h2>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+        >
+          {showForm ? "Cancel" : "+ Add"}
+        </button>
       </div>
+
+      {showForm && (
+        <form
+          onSubmit={handleSubmit}
+          className="mb-4 p-4 bg-gray-50 rounded-lg space-y-3"
+        >
+          <input
+            type="text"
+            placeholder="Description"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="input text-sm"
+            required
+          />
+
+          <input
+            type="number"
+            placeholder="Amount"
+            value={formData.amount}
+            onChange={(e) =>
+              setFormData({ ...formData, amount: e.target.value })
+            }
+            step="0.01"
+            min="0"
+            className="input text-sm"
+            required
+          />
+
+          <input
+            type="number"
+            placeholder="Day of Month (1-31)"
+            value={formData.dayOfMonth}
+            onChange={(e) =>
+              setFormData({ ...formData, dayOfMonth: e.target.value })
+            }
+            min="1"
+            max="31"
+            className="input text-sm"
+            required
+          />
+
+          <div className="flex space-x-3">
+            <label className="flex items-center text-sm">
+              <input
+                type="radio"
+                value="debit"
+                checked={formData.type === "debit"}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
+                className="mr-1"
+              />
+              <span className="text-red-600">Payment</span>
+            </label>
+            <label className="flex items-center text-sm">
+              <input
+                type="radio"
+                value="credit"
+                checked={formData.type === "credit"}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
+                className="mr-1"
+              />
+              <span className="text-green-600">Income</span>
+            </label>
+          </div>
+
+          <button type="submit" className="btn btn-primary w-full text-sm">
+            Save Recurring Transaction
+          </button>
+        </form>
+      )}
 
       <div className="space-y-2 max-h-[600px] overflow-y-auto">
         {recurring.length === 0 ? (
