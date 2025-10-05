@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { formatCurrency, formatDate } from "../utils";
 
 function BalanceDisplay({
@@ -10,6 +10,13 @@ function BalanceDisplay({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [tempBalance, setTempBalance] = useState(startingBalance);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.select();
+    }
+  }, [isEditing]);
 
   const handleBlur = () => {
     if (isEditing) {
@@ -38,6 +45,7 @@ function BalanceDisplay({
           <label className="label">Starting Balance</label>
           {isEditing ? (
             <input
+              ref={inputRef}
               type="number"
               step="0.01"
               value={tempBalance}
