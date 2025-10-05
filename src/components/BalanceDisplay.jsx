@@ -39,13 +39,13 @@ function BalanceDisplay({
               value={tempBalance}
               onChange={(e) => setTempBalance(e.target.value)}
               onBlur={handleBlur}
-              className="input text-2xl font-bold"
+              className="input text-3xl font-bold"
               autoFocus
             />
           ) : (
             <div
               onClick={handleClick}
-              className="text-2xl font-bold cursor-pointer hover:bg-gray-50 p-2 rounded"
+              className="text-3xl font-bold cursor-pointer hover:bg-gray-50 p-2 rounded"
               title="Click to edit"
             >
               {formatCurrency(startingBalance)}

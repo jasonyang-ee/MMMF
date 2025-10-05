@@ -4,15 +4,16 @@ import { formatCurrency } from "../utils";
 function RecurringItem({ item, onDelete }) {
   return (
     <div className="transaction-item">
-      <div className="flex-1">
-        <div className="font-medium text-gray-900">{item.name}</div>
-        <div className="text-sm text-gray-500">
-          {item.type === "credit" ? "Income" : "Payment"}
-          {item.dayOfMonth && ` • Day ${item.dayOfMonth} of month`}
-        </div>
+      <div className="flex-1 min-w-0">
+        <div className="font-medium text-gray-900 mb-1">{item.name}</div>
+        {item.dayOfMonth && (
+          <div className="text-xs text-gray-500">
+            Day {item.dayOfMonth} of month
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 flex-shrink-0">
         <span
           className={`text-lg font-semibold ${
             item.type === "credit" ? "text-green-600" : "text-red-600"

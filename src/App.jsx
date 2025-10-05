@@ -199,7 +199,7 @@ function App() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="lg:w-80 space-y-6">
+          <div className="lg:w-96 space-y-6">
             {/* Add Transaction Form - Top */}
             <TransactionForm onAddTransaction={handleAddTransaction} />
 
@@ -218,6 +218,7 @@ function App() {
               onUseCreditCard={handleUseCreditCard}
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}
+              transactions={transactions}
             />
           </div>
         </div>

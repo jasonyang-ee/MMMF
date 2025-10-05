@@ -6,44 +6,71 @@ function CreditCardItem({
   onUse,
   currentDate,
   forecastEndDate,
+  transactions,
 }) {
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [amount, setAmount] = useState("");
 
-  // Calculate the next occurrence date based on dayOfMonth
+  // Calculate the next occurrence date based on dayOfMonth and existing transactions
   const getNextOccurrenceDate = () => {
     if (!item.dayOfMonth) return "";
 
     const today = new Date(currentDate);
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth();
-    const currentDay = today.getDate();
+    const endDate = new Date(forecastEndDate);
 
-    // Try current month first
-    let targetDate = new Date(
-      currentYear,
-      currentMonth,
-      Math.min(
-        item.dayOfMonth,
-        new Date(currentYear, currentMonth + 1, 0).getDate()
-      )
-    );
+    // Find all existing transactions for this credit card
+    const existingDates = transactions
+      .filter((t) => t.name === item.name)
+      .map((t) => new Date(t.date))
+      .sort((a, b) => b - a); // Sort descending to get most recent first
 
-    // If the date has passed this month, move to next month
-    if (targetDate <= today) {
-      targetDate = new Date(
-        currentYear,
-        currentMonth + 1,
-        Math.min(
-          item.dayOfMonth,
-          new Date(currentYear, currentMonth + 2, 0).getDate()
-        )
-      );
+    // Start from current month
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth();
+
+    // If there are existing transactions, start from the month after the latest one
+    if (existingDates.length > 0) {
+      const latestTransaction = existingDates[0];
+      currentYear = latestTransaction.getFullYear();
+      currentMonth = latestTransaction.getMonth() + 1; // Next month after latest transaction
+
+      // Handle year rollover
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
     }
 
-    // Check if the date is within forecast range
-    const endDate = new Date(forecastEndDate);
-    if (targetDate > endDate) {
+    // Find the next valid date starting from the determined month
+    let targetDate = null;
+    const maxIterations = 12; // Check up to 12 months ahead
+
+    for (let i = 0; i < maxIterations; i++) {
+      const testDate = new Date(
+        currentYear,
+        currentMonth + i,
+        Math.min(
+          item.dayOfMonth,
+          new Date(currentYear, currentMonth + i + 1, 0).getDate()
+        )
+      );
+
+      // Check if this date is valid (after today and not already used)
+      const isAfterToday = testDate > today;
+      const isNotUsed = !existingDates.some(
+        (existing) =>
+          existing.toISOString().split("T")[0] ===
+          testDate.toISOString().split("T")[0]
+      );
+      const isWithinForecast = testDate <= endDate;
+
+      if (isAfterToday && isNotUsed && isWithinForecast) {
+        targetDate = testDate;
+        break;
+      }
+    }
+
+    if (!targetDate) {
       return ""; // No upcoming date within forecast range
     }
 
@@ -166,6 +193,7 @@ function RecurringCreditCards({
   onUseCreditCard,
   currentDate,
   forecastEndDate,
+  transactions,
 }) {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -254,6 +282,7 @@ function RecurringCreditCards({
               onUse={onUseCreditCard}
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}
+              transactions={transactions}
             />
           ))
         )}
