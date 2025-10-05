@@ -5,9 +5,11 @@ function RecurringItem({ item, onDelete }) {
   return (
     <div className="transaction-item">
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-gray-900 mb-1">{item.name}</div>
+        <div className="font-medium text-gray-900 dark:text-gray-100 mb-1">
+          {item.name}
+        </div>
         {item.dayOfMonth && (
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-gray-500 dark:text-gray-400">
             Day {item.dayOfMonth} of month
           </div>
         )}
@@ -16,7 +18,9 @@ function RecurringItem({ item, onDelete }) {
       <div className="flex items-center space-x-2 flex-shrink-0">
         <span
           className={`text-lg font-semibold ${
-            item.type === "credit" ? "text-green-600" : "text-red-600"
+            item.type === "credit"
+              ? "text-green-600 dark:text-green-400"
+              : "text-red-600 dark:text-red-400"
           }`}
         >
           {item.type === "credit" ? "+" : "-"}
@@ -25,7 +29,7 @@ function RecurringItem({ item, onDelete }) {
 
         <button
           onClick={() => onDelete(item.id)}
-          className="text-red-600 hover:text-red-700 p-1"
+          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
           title="Delete recurring transaction"
         >
           <svg
@@ -84,10 +88,12 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">Recurring Transactions</h2>
+        <h2 className="text-xl font-semibold dark:text-gray-100">
+          Recurring Transactions
+        </h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+          className="text-primary-600 hover:text-primary-700 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium"
         >
           {showForm ? "Cancel" : "+ Add"}
         </button>
@@ -96,7 +102,7 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="mb-4 p-4 bg-gray-50 rounded-lg space-y-3"
+          className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg space-y-3"
         >
           <input
             type="text"
@@ -144,7 +150,7 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
                 }
                 className="mr-1"
               />
-              <span className="text-red-600">Payment</span>
+              <span className="text-red-600 dark:text-red-400">Payment</span>
             </label>
             <label className="flex items-center text-sm">
               <input
@@ -156,7 +162,7 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
                 }
                 className="mr-1"
               />
-              <span className="text-green-600">Income</span>
+              <span className="text-green-600 dark:text-green-400">Income</span>
             </label>
           </div>
 
@@ -168,7 +174,7 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
 
       <div className="space-y-2 max-h-[600px] overflow-y-auto">
         {recurring.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>No recurring transactions</p>
             <p className="text-sm mt-2">
               Recurring transactions are auto-generated each month

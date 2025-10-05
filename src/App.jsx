@@ -13,6 +13,7 @@ import RecurringList from "./components/RecurringList";
 import RecurringCreditCards from "./components/RecurringCreditCards";
 import ForecastSettings from "./components/ForecastSettings";
 import BalanceTimeline from "./components/BalanceTimeline";
+import DarkModeToggle from "./components/DarkModeToggle";
 
 function App() {
   const [startingBalance, setStartingBalance] = useState(0);
@@ -156,14 +157,16 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center dark:bg-gray-900">
+        <div className="text-xl text-gray-600 dark:text-gray-400">
+          Loading...
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header />
 
       <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -186,6 +189,9 @@ function App() {
               onForecastEndDateChange={handleForecastEndDateChange}
               onClearCalculations={handleClearCalculations}
             />
+
+            {/* Dark Mode Toggle - Third */}
+            <DarkModeToggle />
           </div>
 
           {/* Center - Balance Timeline */}

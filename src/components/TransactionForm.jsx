@@ -40,7 +40,9 @@ function TransactionForm({ onAddTransaction }) {
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4">Add Transaction</h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+        Add Transaction
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -83,7 +85,9 @@ function TransactionForm({ onAddTransaction }) {
                 onChange={handleChange}
                 className="mr-2"
               />
-              <span className="text-red-600 font-medium">Debit (Payment)</span>
+              <span className="text-red-600 dark:text-red-400 font-medium">
+                Debit (Payment)
+              </span>
             </label>
             <label className="flex items-center">
               <input
@@ -94,7 +98,7 @@ function TransactionForm({ onAddTransaction }) {
                 onChange={handleChange}
                 className="mr-2"
               />
-              <span className="text-green-600 font-medium">
+              <span className="text-green-600 dark:text-green-400 font-medium">
                 Credit (Income)
               </span>
             </label>

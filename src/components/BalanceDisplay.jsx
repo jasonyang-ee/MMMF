@@ -26,7 +26,9 @@ function BalanceDisplay({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4">Account Balance</h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+        Account Balance
+      </h2>
 
       <div className="space-y-4">
         {/* Starting Balance */}
@@ -45,7 +47,7 @@ function BalanceDisplay({
           ) : (
             <div
               onClick={handleClick}
-              className="text-3xl font-bold cursor-pointer hover:bg-gray-50 rounded"
+              className="text-3xl font-bold cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded dark:text-gray-100"
               title="Click to edit"
             >
               {formatCurrency(startingBalance)}
@@ -54,7 +56,7 @@ function BalanceDisplay({
         </div>
 
         {/* Current Balance */}
-        <div className="border-t pt-4">
+        <div className="border-t dark:border-gray-700 pt-4">
           <label className="label">Forecasted Balance</label>
           <div className="text-3xl font-bold">
             <span
@@ -68,7 +70,7 @@ function BalanceDisplay({
         </div>
 
         {/* Balance Change */}
-        <div className="border-t pt-4">
+        <div className="border-t dark:border-gray-700 pt-4">
           <label className="label">Net Change</label>
           <div className="text-3xl font-bold">
             <span

@@ -17,44 +17,44 @@ function BalanceTimeline({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 text-center">
+      <h2 className="text-xl font-semibold mb-4 text-center dark:text-gray-100">
         Balance Timeline
       </h2>
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-100 border-b-2 border-gray-300">
+          <thead className="bg-gray-100 dark:bg-gray-700 border-b-2 border-gray-300 dark:border-gray-600">
             <tr>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Action
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Description
               </th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Amount
               </th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Balance
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Date
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {filteredHistory.map((entry, index) => (
               <tr
                 key={index}
-                className={`hover:bg-gray-50 ${
-                  entry.transaction ? "" : "bg-primary-50"
+                className={`hover:bg-gray-50 dark:hover:bg-gray-700 ${
+                  entry.transaction ? "" : "bg-gray-50 dark:bg-gray-700/50"
                 }`}
               >
                 <td className="px-4 py-3">
                   {entry.transaction && !entry.transaction.isRecurring && (
                     <button
                       onClick={() => onDeleteTransaction(entry.transaction.id)}
-                      className="text-red-600 hover:text-red-700 p-1"
+                      className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
                       title="Delete transaction"
                     >
                       <svg
@@ -73,10 +73,12 @@ function BalanceTimeline({
                     </button>
                   )}
                   {entry.transaction && entry.transaction.isRecurring && (
-                    <span className="text-gray-400 text-xs px-1">Auto</span>
+                    <span className="text-gray-400 dark:text-gray-500 text-xs px-1">
+                      Auto
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-900">
+                <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                   {entry.transaction
                     ? entry.transaction.name
                     : "Starting Balance"}
@@ -86,8 +88,8 @@ function BalanceTimeline({
                     <span
                       className={`font-medium ${
                         entry.transaction.type === "credit"
-                          ? "text-green-600"
-                          : "text-red-600"
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-red-600 dark:text-red-400"
                       }`}
                     >
                       {entry.transaction.type === "credit" ? "+" : "-"}
@@ -98,13 +100,15 @@ function BalanceTimeline({
                 <td className="px-4 py-3 text-right">
                   <span
                     className={`text-lg font-bold ${
-                      entry.balance >= 0 ? "text-green-600" : "text-red-600"
+                      entry.balance >= 0
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400"
                     }`}
                   >
                     {formatCurrency(entry.balance)}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-900 font-medium">
+                <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 font-medium">
                   {formatDate(entry.date)}
                 </td>
               </tr>

@@ -21,7 +21,9 @@ function ForecastSettings({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4">Forecast Settings</h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+        Forecast Settings
+      </h2>
 
       <div className="space-y-4">
         <div>
@@ -78,21 +80,21 @@ function ForecastSettings({
               90 days
             </button>
           </div>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {daysDiff > 0
               ? `${daysDiff} days from current date`
               : "Select a future date"}
           </p>
         </div>
 
-        <div className="pt-4 border-t">
+        <div className="pt-4 border-t dark:border-gray-700">
           <button
             onClick={onClearCalculations}
             className="btn btn-danger w-full"
           >
             Clear All Transactions
           </button>
-          <p className="text-xs text-gray-500 mt-2 text-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
             This will keep your recurring transactions
           </p>
         </div>

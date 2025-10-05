@@ -103,19 +103,21 @@ function CreditCardItem({
   const nextDate = getNextOccurrenceDate();
 
   return (
-    <div className="border border-gray-200 rounded-lg p-2 bg-white">
+    <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-2 bg-white dark:bg-gray-800">
       <div className="flex items-center justify-between mb-2">
         <div>
-          <div className="font-medium text-gray-900">{item.name}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-100">
+            {item.name}
+          </div>
           {item.dayOfMonth && (
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-gray-500 dark:text-gray-400">
               Day {item.dayOfMonth} of month
             </div>
           )}
         </div>
         <button
           onClick={() => onDelete(item.id)}
-          className="text-red-600 hover:text-red-700 p-1"
+          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
           title="Delete credit card"
         >
           <svg
@@ -137,7 +139,7 @@ function CreditCardItem({
       {!showAmountForm ? (
         <div>
           {nextDate && (
-            <p className="text-xs text-blue-600 mb-2">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
               Next: {new Date(nextDate).toLocaleDateString()}
             </p>
           )}
@@ -151,7 +153,7 @@ function CreditCardItem({
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-2">
-          <div className="text-xs text-gray-600 mb-1">
+          <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
             Payment date:{" "}
             {nextDate ? new Date(nextDate).toLocaleDateString() : "N/A"}
           </div>
@@ -225,10 +227,12 @@ function RecurringCreditCards({
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">Recurring Credit Cards</h2>
+        <h2 className="text-xl font-semibold dark:text-gray-100">
+          Recurring Credit Cards
+        </h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+          className="text-primary-600 hover:text-primary-700 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium"
         >
           {showForm ? "Cancel" : "+ Add"}
         </button>
@@ -237,7 +241,7 @@ function RecurringCreditCards({
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="mb-4 p-4 bg-gray-50 rounded-lg space-y-3"
+          className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg space-y-3"
         >
           <input
             type="text"
@@ -267,7 +271,7 @@ function RecurringCreditCards({
 
       <div className="space-y-2 max-h-[600px] overflow-y-auto">
         {creditCards.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>No credit cards</p>
             <p className="text-sm mt-2">
               Add credit cards to quickly enter payments
