@@ -168,9 +168,9 @@ function App() {
 
       <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* New Layout: Sidebar + Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-6">
+        <div className="grid grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px] gap-6">
           {/* Left Sidebar */}
-          <div className="lg:w-80 space-y-6">
+          <div className="space-y-6">
             {/* Account Balance - Top */}
             <BalanceDisplay
               startingBalance={startingBalance}
@@ -199,7 +199,7 @@ function App() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="lg:w-96 space-y-6">
+          <div className="space-y-6">
             {/* Recurring Transactions - First */}
             <RecurringList
               recurring={recurring}

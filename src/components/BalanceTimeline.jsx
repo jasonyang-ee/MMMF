@@ -16,7 +16,7 @@ function BalanceTimeline({
   );
 
   return (
-    <div className="card min-w-[600px]">
+    <div className="card">
       <h2 className="text-xl font-semibold mb-4 text-center">
         Balance Timeline
       </h2>
