@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   mmmf:
     build: .
+    container_name: mmmf
+    restart: unless-stopped
     ports:
       - "5173:5173"
     volumes:
       - ./data:/app/data
-    restart: unless-stopped
-    container_name: mmmf

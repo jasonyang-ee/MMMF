@@ -29,7 +29,6 @@
 ### Run Using Docker Compose
 
 ```yaml
-version: "3.8"
 services:
   mmmf:
     image: jasonyangee/mmmf:latest
@@ -82,3 +81,24 @@ Change to the user ID of your host system if necessary. You can do this by modif
 ### Default View
 
 ![Default View](doc/screenshot.png)
+
+## Local Development
+
+### Run Locally
+
+- Linux
+
+  ```bash
+  ./start.sh
+  ```
+
+- Windows
+
+  ```powerhell
+  start.bat
+  ```
+
+- Docker Compose
+  ```bash
+  docker-compose up -d --build
+  ```
