@@ -1,3 +1,6 @@
+[![DockerPublish](https://github.com/jasonyang-ee/MMMF/actions/workflows/publish.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/publish.yml)
+[![Testing](https://github.com/jasonyang-ee/MMMF/actions/workflows/testing.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/testing.yml)
+
 <h1 align="center">MMMF</h1>
 <h3 align="center">Max Money Market Funds</h3>
 <h4 align="center">A Forecasting Application Predicting Account Balance by Date for Best Money Market Funds Deposit Amount.</h4>
