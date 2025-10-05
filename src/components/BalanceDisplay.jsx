@@ -45,7 +45,7 @@ function BalanceDisplay({
           ) : (
             <div
               onClick={handleClick}
-              className="text-3xl font-bold cursor-pointer hover:bg-gray-50 p-2 rounded"
+              className="text-3xl font-bold cursor-pointer hover:bg-gray-50 rounded"
               title="Click to edit"
             >
               {formatCurrency(startingBalance)}
