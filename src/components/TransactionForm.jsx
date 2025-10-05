@@ -113,7 +113,11 @@ function TransactionForm({ onAddTransaction }) {
             value={formData.date}
             onChange={handleChange}
             className="input cursor-pointer w-full"
-            style={{ colorScheme: "light" }}
+            style={{
+              WebkitAppearance: "none",
+              MozAppearance: "textfield",
+              appearance: "none",
+            }}
             onClick={(e) => e.target.showPicker && e.target.showPicker()}
             required
           />

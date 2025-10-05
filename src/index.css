@@ -22,7 +22,7 @@
   }
 
   .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600;
+    @apply bg-red-600 text-white hover:bg-red-700 dark:bg-red-800 dark:hover:bg-red-700;
   }
 
   .card {
@@ -51,7 +51,17 @@
 
   /* Hide calendar icon on date inputs */
   input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
+    display: none !important;
     -webkit-appearance: none;
+    appearance: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-outer-spin-button {
+    display: none !important;
+    -webkit-appearance: none;
+    appearance: none;
   }
 }

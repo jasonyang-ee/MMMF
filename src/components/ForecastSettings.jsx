@@ -34,9 +34,9 @@ function ForecastSettings({
             onChange={(e) => onCurrentDateChange(e.target.value)}
             className="input cursor-pointer w-full"
             style={{
-              colorScheme: "light",
               WebkitAppearance: "none",
               MozAppearance: "textfield",
+              appearance: "none",
             }}
             onClick={(e) => e.target.showPicker && e.target.showPicker()}
           />
@@ -51,9 +51,9 @@ function ForecastSettings({
             min={currentDate}
             className="input cursor-pointer w-full"
             style={{
-              colorScheme: "light",
               WebkitAppearance: "none",
               MozAppearance: "textfield",
+              appearance: "none",
             }}
             onClick={(e) => e.target.showPicker && e.target.showPicker()}
           />
