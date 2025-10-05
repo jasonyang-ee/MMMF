@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { formatDate } from "../utils";
 
 function CreditCardItem({
   item,
@@ -49,13 +50,19 @@ function CreditCardItem({
   const getNextOccurrenceDate = () => {
     if (!item.dayOfMonth) return "";
 
-    const today = new Date(currentDate);
-    const endDate = new Date(forecastEndDate);
+    // Parse dates in local timezone to avoid off-by-one errors
+    const parseLocalDate = (dateString) => {
+      const [year, month, day] = dateString.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    };
+
+    const today = parseLocalDate(currentDate);
+    const endDate = parseLocalDate(forecastEndDate);
 
     // Find all existing transactions for this credit card
     const existingDates = transactions
       .filter((t) => t.name === item.name)
-      .map((t) => new Date(t.date))
+      .map((t) => parseLocalDate(t.date))
       .sort((a, b) => b - a); // Sort descending to get most recent first
 
     // Start from current month
@@ -80,22 +87,31 @@ function CreditCardItem({
     const maxIterations = 12; // Check up to 12 months ahead
 
     for (let i = 0; i < maxIterations; i++) {
-      const testDate = new Date(
-        currentYear,
-        currentMonth + i,
-        Math.min(
-          item.dayOfMonth,
-          new Date(currentYear, currentMonth + i + 1, 0).getDate()
-        )
-      );
+      const testMonth = currentMonth + i;
+      const testYear = currentYear + Math.floor(testMonth / 12);
+      const normalizedMonth = testMonth % 12;
+
+      // Get the last day of the target month
+      const lastDayOfMonth = new Date(
+        testYear,
+        normalizedMonth + 1,
+        0
+      ).getDate();
+
+      // Use the specified day or the last day of the month, whichever is smaller
+      const dayToUse = Math.min(item.dayOfMonth, lastDayOfMonth);
+
+      const testDate = new Date(testYear, normalizedMonth, dayToUse);
 
       // Check if this date is valid (after today and not already used)
       const isAfterToday = testDate > today;
-      const isNotUsed = !existingDates.some(
-        (existing) =>
-          existing.toISOString().split("T")[0] ===
-          testDate.toISOString().split("T")[0]
-      );
+      const isNotUsed = !existingDates.some((existing) => {
+        return (
+          existing.getFullYear() === testDate.getFullYear() &&
+          existing.getMonth() === testDate.getMonth() &&
+          existing.getDate() === testDate.getDate()
+        );
+      });
       const isWithinForecast = testDate <= endDate;
 
       if (isAfterToday && isNotUsed && isWithinForecast) {
@@ -108,7 +124,11 @@ function CreditCardItem({
       return ""; // No upcoming date within forecast range
     }
 
-    return targetDate.toISOString().split("T")[0];
+    // Format as YYYY-MM-DD
+    const year = targetDate.getFullYear();
+    const month = String(targetDate.getMonth() + 1).padStart(2, "0");
+    const day = String(targetDate.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   const handleSubmit = (e) => {
@@ -191,7 +211,7 @@ function CreditCardItem({
         <div>
           {nextDate && (
             <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-              Next: {new Date(nextDate).toLocaleDateString()}
+              Next: {formatDate(nextDate)}
             </p>
           )}
           <button
@@ -205,8 +225,7 @@ function CreditCardItem({
       ) : (
         <form onSubmit={handleSubmit} className="space-y-1.5">
           <div className="text-xs text-gray-600 dark:text-gray-400">
-            Payment date:{" "}
-            {nextDate ? new Date(nextDate).toLocaleDateString() : "N/A"}
+            Payment date: {nextDate ? formatDate(nextDate) : "N/A"}
           </div>
           <input
             type="number"
