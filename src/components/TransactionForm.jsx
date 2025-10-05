@@ -119,7 +119,10 @@ function TransactionForm({ onAddTransaction }) {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">
+        <button
+          type="submit"
+          className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600"
+        >
           Add Transaction
         </button>
       </form>

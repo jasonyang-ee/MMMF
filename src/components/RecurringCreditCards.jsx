@@ -145,7 +145,7 @@ function CreditCardItem({
           )}
           <button
             onClick={() => setShowAmountForm(true)}
-            className="btn btn-primary w-full text-sm"
+            className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!nextDate}
           >
             {nextDate ? "Add Payment" : "No upcoming date"}
@@ -168,7 +168,10 @@ function CreditCardItem({
             required
           />
           <div className="flex space-x-2">
-            <button type="submit" className="btn btn-primary text-sm flex-1">
+            <button
+              type="submit"
+              className="flex-1 px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm"
+            >
               Add
             </button>
             <button
@@ -177,7 +180,7 @@ function CreditCardItem({
                 setShowAmountForm(false);
                 setAmount("");
               }}
-              className="btn text-sm flex-1"
+              className="btn btn-secondary text-sm flex-1"
             >
               Cancel
             </button>
@@ -263,7 +266,10 @@ function RecurringCreditCards({
             className="input text-sm"
             required
           />
-          <button type="submit" className="btn btn-primary w-full text-sm">
+          <button
+            type="submit"
+            className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm"
+          >
             Save Credit Card
           </button>
         </form>
