@@ -1,11 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { formatCurrency } from "../utils";
 
-function RecurringItem({ item, onDelete }) {
+function RecurringItem({ item, onDelete, onUpdate }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editAmount, setEditAmount] = useState(item.amount);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  const handleClick = () => {
+    setEditAmount(item.amount);
+    setIsEditing(true);
+  };
+
+  const handleBlur = () => {
+    if (isEditing) {
+      const newAmount = parseFloat(editAmount);
+      if (newAmount && newAmount > 0 && newAmount !== item.amount) {
+        onUpdate(item.id, { ...item, amount: newAmount });
+      }
+      setIsEditing(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleBlur();
+    } else if (e.key === "Escape") {
+      setEditAmount(item.amount);
+      setIsEditing(false);
+    }
+  };
+
   return (
-    <div className="transaction-item">
+    <div className="transaction-item py-1.5 px-2">
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-gray-900 dark:text-gray-100 mb-1">
+        <div className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-0.5">
           {item.name}
         </div>
         {item.dayOfMonth && (
@@ -15,25 +49,53 @@ function RecurringItem({ item, onDelete }) {
         )}
       </div>
 
-      <div className="flex items-center space-x-2 flex-shrink-0">
-        <span
-          className={`text-lg font-semibold ${
-            item.type === "credit"
-              ? "text-green-600 dark:text-green-400"
-              : "text-red-600 dark:text-red-400"
-          }`}
-        >
-          {item.type === "credit" ? "+" : "-"}
-          {formatCurrency(item.amount)}
-        </span>
+      <div className="flex items-center space-x-1.5 flex-shrink-0">
+        {isEditing ? (
+          <div className="flex items-center">
+            <span
+              className={`text-sm font-semibold mr-1 ${
+                item.type === "credit"
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
+              }`}
+            >
+              {item.type === "credit" ? "+" : "-"}$
+            </span>
+            <input
+              ref={inputRef}
+              type="number"
+              step="0.01"
+              min="0"
+              value={editAmount}
+              onChange={(e) => setEditAmount(e.target.value)}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              className="input text-sm font-semibold w-20 py-0.5 px-1.5"
+              autoFocus
+            />
+          </div>
+        ) : (
+          <span
+            onClick={handleClick}
+            className={`text-sm font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1.5 py-0.5 rounded ${
+              item.type === "credit"
+                ? "text-green-600 dark:text-green-400"
+                : "text-red-600 dark:text-red-400"
+            }`}
+            title="Click to edit amount"
+          >
+            {item.type === "credit" ? "+" : "-"}
+            {formatCurrency(item.amount)}
+          </span>
+        )}
 
         <button
           onClick={() => onDelete(item.id)}
-          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
+          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-0.5"
           title="Delete recurring transaction"
         >
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -51,7 +113,12 @@ function RecurringItem({ item, onDelete }) {
   );
 }
 
-function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
+function RecurringList({
+  recurring,
+  onAddRecurring,
+  onUpdateRecurring,
+  onDeleteRecurring,
+}) {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -186,6 +253,7 @@ function RecurringList({ recurring, onAddRecurring, onDeleteRecurring }) {
             <RecurringItem
               key={item.id}
               item={item}
+              onUpdate={onUpdateRecurring}
               onDelete={onDeleteRecurring}
             />
           ))

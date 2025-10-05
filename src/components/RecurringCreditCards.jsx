@@ -103,10 +103,10 @@ function CreditCardItem({
   const nextDate = getNextOccurrenceDate();
 
   return (
-    <div className="border border-gray-200 dark:border-[#3a3a3a] rounded-lg p-2 bg-white dark:bg-[#2a2a2a]">
-      <div className="flex items-center justify-between mb-2">
+    <div className="border border-gray-200 dark:border-[#3a3a3a] rounded-lg p-1.5 bg-white dark:bg-[#2a2a2a]">
+      <div className="flex items-center justify-between mb-1">
         <div>
-          <div className="font-medium text-gray-900 dark:text-gray-100">
+          <div className="font-medium text-sm text-gray-900 dark:text-gray-100">
             {item.name}
           </div>
           {item.dayOfMonth && (
@@ -117,11 +117,11 @@ function CreditCardItem({
         </div>
         <button
           onClick={() => onDelete(item.id)}
-          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
+          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-0.5"
           title="Delete credit card"
         >
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -139,21 +139,21 @@ function CreditCardItem({
       {!showAmountForm ? (
         <div>
           {nextDate && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
               Next: {new Date(nextDate).toLocaleDateString()}
             </p>
           )}
           <button
             onClick={() => setShowAmountForm(true)}
-            className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-1.5 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!nextDate}
           >
             {nextDate ? "Add Payment" : "No upcoming date"}
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-2">
-          <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+        <form onSubmit={handleSubmit} className="space-y-1.5">
+          <div className="text-xs text-gray-600 dark:text-gray-400">
             Payment date:{" "}
             {nextDate ? new Date(nextDate).toLocaleDateString() : "N/A"}
           </div>
@@ -164,13 +164,13 @@ function CreditCardItem({
             onChange={(e) => setAmount(e.target.value)}
             step="0.01"
             min="0"
-            className="input text-sm"
+            className="input text-sm py-1"
             required
           />
           <div className="flex space-x-2">
             <button
               type="submit"
-              className="flex-1 px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm"
+              className="flex-1 px-3 py-1.5 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs"
             >
               Add
             </button>
@@ -180,7 +180,7 @@ function CreditCardItem({
                 setShowAmountForm(false);
                 setAmount("");
               }}
-              className="btn btn-secondary text-sm flex-1"
+              className="btn btn-secondary text-xs flex-1 py-1.5"
             >
               Cancel
             </button>

@@ -107,6 +107,11 @@ function App() {
     setRecurring((prev) => [...prev, newRecurring]);
   }
 
+  async function handleUpdateRecurring(id, updatedRecurring) {
+    const updated = await api.updateRecurring(id, updatedRecurring);
+    setRecurring(recurring.map((r) => (r.id === id ? updated : r)));
+  }
+
   async function handleDeleteRecurring(id) {
     await api.deleteRecurring(id);
     setRecurring(recurring.filter((r) => r.id !== id));
@@ -232,14 +237,7 @@ function App() {
 
           {/* Right Sidebar */}
           <div className="space-y-6">
-            {/* Recurring Transactions - First */}
-            <RecurringList
-              recurring={recurring}
-              onAddRecurring={handleAddRecurring}
-              onDeleteRecurring={handleDeleteRecurring}
-            />
-
-            {/* Recurring Credit Cards - Second */}
+            {/* Recurring Credit Cards - First */}
             <RecurringCreditCards
               creditCards={creditCards}
               onAddCreditCard={handleAddCreditCard}
@@ -248,6 +246,14 @@ function App() {
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}
               transactions={transactions}
+            />
+
+            {/* Recurring Transactions - Second */}
+            <RecurringList
+              recurring={recurring}
+              onAddRecurring={handleAddRecurring}
+              onUpdateRecurring={handleUpdateRecurring}
+              onDeleteRecurring={handleDeleteRecurring}
             />
 
             {/* Add Transaction Form - Third */}
