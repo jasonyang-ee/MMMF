@@ -1,5 +1,9 @@
 # Budget Forecast App
 
+<p align="center">
+  <img src="public/icon-500.svg" alt="Budget Forecast App Logo" width="200" height="200">
+</p>
+
 A comprehensive web-based budget forecasting application that helps you track and predict your account balance based on expected future transactions using credit and debit accounting principles.
 
 ## Features

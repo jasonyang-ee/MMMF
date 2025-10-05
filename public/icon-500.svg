@@ -1,0 +1,53 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="250" cy="250" r="240" fill="#0ea5e9"/>
+  
+  <!-- Document outline -->
+  <path 
+    d="M150 120h160l80 80v180a20 20 0 01-20 20H150a20 20 0 01-20-20V140a20 20 0 0120-20z" 
+    fill="white"
+    stroke="#0ea5e9"
+    stroke-width="4"
+  />
+  
+  <!-- Folded corner -->
+  <path 
+    d="M310 120v60a20 20 0 0020 20h60" 
+    stroke="#0ea5e9" 
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  
+  <!-- Header line -->
+  <path 
+    d="M170 230h160" 
+    stroke="#0ea5e9" 
+    stroke-width="6" 
+    stroke-linecap="round"
+  />
+  
+  <!-- Vertical divider -->
+  <path 
+    d="M250 230v130" 
+    stroke="#0ea5e9" 
+    stroke-width="6" 
+    stroke-linecap="round"
+  />
+  
+  <!-- Debit side (left column) -->
+  <path 
+    d="M180 270h50M180 310h45M180 350h50" 
+    stroke="#0ea5e9" 
+    stroke-width="5" 
+    stroke-linecap="round"
+  />
+  
+  <!-- Credit side (right column) -->
+  <path 
+    d="M270 285h50M270 325h45M270 365h50" 
+    stroke="#0ea5e9" 
+    stroke-width="5" 
+    stroke-linecap="round"
+  />
+</svg>
