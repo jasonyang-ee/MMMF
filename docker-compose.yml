@@ -7,8 +7,5 @@ services:
       - "5173:5173"
     volumes:
       - ./data:/app/data
-    environment:
-      - NODE_ENV=production
-      - PORT=5173
     restart: unless-stopped
     container_name: mmmf

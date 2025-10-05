@@ -23,11 +23,11 @@ RUN npm prune --production
 RUN mkdir -p /app/data
 
 # Expose port
-EXPOSE 3600
+EXPOSE 5173
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=3600
+ENV PORT=5173
 
 # Start the application
 CMD ["node", "server/index.js"]
