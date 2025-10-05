@@ -1,42 +1,10 @@
-<svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Document outline -->
-  <path 
-    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
-    stroke="#0ea5e9" 
-    stroke-width="1.5" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-  />
-  <!-- Header line -->
-  <path 
-    d="M9 8h6" 
-    stroke="#0ea5e9" 
-    stroke-width="1.5" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-  />
-  <!-- Vertical divider line -->
-  <path 
-    d="M12 8v8" 
-    stroke="#0ea5e9" 
-    stroke-width="1.5" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-  />
-  <!-- Debit side (left column) -->
-  <path 
-    d="M9.5 10h2M9.5 13h1.8" 
-    stroke="#0ea5e9" 
-    stroke-width="1.5" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-  />
-  <!-- Credit side (right column) -->
-  <path 
-    d="M12.5 11h2M12.5 14h1.6" 
-    stroke="#0ea5e9" 
-    stroke-width="1.5" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-  />
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" width="150" height="150">
+	<defs>
+		<image  width="102" height="114" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGYAAAByCAMAAACWRlTdAAAAAXNSR0IB2cksfwAAAbxQTFRFAAAADaPlDaXpDqXpDqXpDqXpDqXpDaXoDaToDqXpFqjqW8Lwi9T0l9j1mNj2IqzrDqXpDaXoCqTnDqXpPbbt4fT8////MLLsSLvuDaXpDqXpPrft7/n9lNf1FKfpDaXpDKTnDaToDqXpveb5ltj1EabpDaXpDqXoLrHs/f7/oNv2DqXpY8TxDaTpDqXpdczyo932FKfpDaXpDaPoC6PmDaXoDaXoDqXpDaToDaXoMbLsQLftidP0asfxWcHwtOP4Fajq4PP8S7zuSLru8fr+7Pj9OLXtv+f5/v//9vz+Z8bxEabpNrTtDaTo5/b9pd33gtDzOrbtodz2NbPsMrLsWsHwzu36ec3zSbvud8zzq9/33fL8D6XpEKbpeM3zmdn1M7Psntv2reD3c8vyVL/v0u77mdn2mtn2XcLwgM/zmNn24PT8+Pz+3vP88/v+acfxVcDvU7/vqN/3kNX1MrPsk9b1dcvy0O37qt/3O7bt8Pn+vOb5uuX53/P89Pv+RbnuDqXpZcbxZcXxDqXpDqXpDKToP7ftDaTlPLbtDqXpCqLmDqXoDaXoDaXoDqTpCJ/nDaXpDqXpDaTpCZ7lYob4cAAAAJR0Uk5TAAJImMfa23IWsf////////9aCtL//////2up////+GkCIP3///tfaP///4n/V5L///ddAgFbZ/5VZf////////////////////////9S//////////////////////////////////////////////////////////////////+G//9kYx7/C//RChSqqRQBR9lHATepEJQAAAK2SURBVHic7dpNSFRRGAbg7xVtlJiZaoZibrQoCrHoDwlaFLUJmlCUiqKFVCRUYJuklhG0aGHgqsBFQRAYRASpVNSuyH5MKOlPGLKNkpBRU5kNzOnOVEbOOXeune9cNc67nPMNz9x7X+7cYQ6ICPmQTjBWZJ2oXJ9x3/6hCDNP+1ByzLeKIW/GAb5rKoTRqPtZBzwGFgNpXcVlyiNAv8dAJfCeg4nhc0Z93rACw9pKjiEKpRf1KQdWwfPaTYIhZyD6NgCGQnHgiXmGIgj3BsDEMuER6XnjZZQ94GYUPWBn5D3gZ6Q9MMDIemCAkfXACFPYAzNMrgclPeYZtwdzHgfAuD0oe2Secc+bgwcBMOSExPjxGGTcHpSKHvMMxTPxbk5maV+F7OU/PeBhlqmean73gIepxCvFyq8e8DBVwHPF0s8e8DCxBPBMsZa/H/AwtBq91ZA/beR7wMRQtfsM/fGTfG0sOp+LIVoPvFEsLUnxMR5JCMtYZgqYDbjHDGx897qQ2XSbWSFa86KQ2ay8n/+dhfdp60tfk8txp5Dxmy1dlJV+KytiGctYZkYxiZWdqvFa3GRjkl/uqsaT6GJjfMQy056pyd5QjtR0sDGj9R3KkZ3X2RjfsYxlpo6pw2Xp7J7+8Z/+HMx2ueI6VzmZurJLcqX0CifjI5b5d2YXRuTrsQkt0mO+1iuegfa2czJrq+T//qYjE7o6I66NZSyjwzR0p1TjDbjIxuwbDOT3jY9YZtoz+4eeKkeSF9iYHe3qkcPn2ZhGj91GaGNjfMcyATLo3H3NPHNoeEG2rfiYLjPZWMYy/xtzEmeNM01ZnEo91N9w6Z3Y3G0820e9ExYHQE7TOe3NsJ6ZJcQg6PSZY7dUOyQ4cnA2cNz9Nm/BCaDEjCGEWFeLo7n90NSKZv29yvK0NItWHCH6AfM/z9LBP/oTAAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+		.s0 { fill: #0ea5e9 } 
+	</style>
+	<path fill-rule="evenodd" class="s0" d="m75 150c-41.48 0-75-33.53-75-75 0-41.48 33.52-75 75-75 41.47 0 75 33.52 75 75 0 41.47-33.53 75-75 75z"/>
+	<use  href="#img1" x="24" y="18"/>
 </svg>

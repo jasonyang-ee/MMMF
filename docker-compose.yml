@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  budget-forecast:
+  mmmf:
     build: .
     ports:
       - "5173:5173"
@@ -11,4 +11,4 @@ services:
       - NODE_ENV=production
       - PORT=5173
     restart: unless-stopped
-    container_name: budget-forecast-app
+    container_name: mmmf

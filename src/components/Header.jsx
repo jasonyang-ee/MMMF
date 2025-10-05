@@ -4,59 +4,13 @@ function Header() {
   return (
     <header className="bg-white dark:bg-[#2a2a2a] shadow-sm dark:shadow-black/50">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-primary-600 dark:text-gray-100">
-              Budget Forecast
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Track and forecast your account balance
-            </p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <svg
-              className="w-10 h-10 text-primary-600 dark:text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {/* Document outline */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-              {/* Header line */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M9 8h6"
-              />
-              {/* Vertical divider line (separating debit and credit columns) */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M12 8v8"
-              />
-              {/* Debit side (left column) - 2 lines */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M9.5 10h2M9.5 13h1.8"
-              />
-              {/* Credit side (right column) - 2 lines */}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M12.5 11h2M12.5 14h1.6"
-              />
-            </svg>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-primary-600 dark:text-gray-100">
+            MMMF
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Max Money Market Funds. Forecast Best MMF Deposit Amount.
+          </p>
         </div>
       </div>
     </header>
