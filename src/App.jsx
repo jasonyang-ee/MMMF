@@ -200,17 +200,14 @@ function App() {
 
           {/* Right Sidebar */}
           <div className="lg:w-96 space-y-6">
-            {/* Add Transaction Form - Top */}
-            <TransactionForm onAddTransaction={handleAddTransaction} />
-
-            {/* Recurring Transactions - Second */}
+            {/* Recurring Transactions - First */}
             <RecurringList
               recurring={recurring}
               onAddRecurring={handleAddRecurring}
               onDeleteRecurring={handleDeleteRecurring}
             />
 
-            {/* Recurring Credit Cards - Third */}
+            {/* Recurring Credit Cards - Second */}
             <RecurringCreditCards
               creditCards={creditCards}
               onAddCreditCard={handleAddCreditCard}
@@ -220,6 +217,9 @@ function App() {
               forecastEndDate={forecastEndDate}
               transactions={transactions}
             />
+
+            {/* Add Transaction Form - Third */}
+            <TransactionForm onAddTransaction={handleAddTransaction} />
           </div>
         </div>
       </main>

@@ -103,7 +103,7 @@ function CreditCardItem({
   const nextDate = getNextOccurrenceDate();
 
   return (
-    <div className="border border-gray-200 rounded-lg p-3 bg-white">
+    <div className="border border-gray-200 rounded-lg p-2 bg-white">
       <div className="flex items-center justify-between mb-2">
         <div>
           <div className="font-medium text-gray-900">{item.name}</div>

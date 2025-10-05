@@ -31,7 +31,11 @@ function ForecastSettings({
             value={currentDate}
             onChange={(e) => onCurrentDateChange(e.target.value)}
             className="input cursor-pointer w-full"
-            style={{ colorScheme: "light" }}
+            style={{
+              colorScheme: "light",
+              WebkitAppearance: "none",
+              MozAppearance: "textfield",
+            }}
             onClick={(e) => e.target.showPicker && e.target.showPicker()}
           />
         </div>
@@ -44,7 +48,11 @@ function ForecastSettings({
             onChange={(e) => onForecastEndDateChange(e.target.value)}
             min={currentDate}
             className="input cursor-pointer w-full"
-            style={{ colorScheme: "light" }}
+            style={{
+              colorScheme: "light",
+              WebkitAppearance: "none",
+              MozAppearance: "textfield",
+            }}
             onClick={(e) => e.target.showPicker && e.target.showPicker()}
           />
           <div className="flex gap-2 mt-2">

@@ -38,7 +38,7 @@
   }
 
   .transaction-item {
-    @apply flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow;
+    @apply flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow;
   }
 
   .balance-positive {
@@ -47,5 +47,11 @@
 
   .balance-negative {
     @apply text-red-600 font-semibold;
+  }
+
+  /* Hide calendar icon on date inputs */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
   }
 }

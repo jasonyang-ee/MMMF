@@ -16,7 +16,7 @@ function BalanceTimeline({
   );
 
   return (
-    <div className="card">
+    <div className="card min-w-[600px]">
       <h2 className="text-xl font-semibold mb-4 text-center">
         Balance Timeline
       </h2>
@@ -80,11 +80,6 @@ function BalanceTimeline({
                   {entry.transaction
                     ? entry.transaction.name
                     : "Starting Balance"}
-                  {entry.transaction && entry.transaction.isRecurring && (
-                    <span className="ml-2 text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
-                      Recurring
-                    </span>
-                  )}
                 </td>
                 <td className="px-4 py-3 text-sm text-right">
                   {entry.transaction && (
