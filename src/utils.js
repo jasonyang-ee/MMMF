@@ -22,9 +22,21 @@ export function calculateBalance(
   upToDate = null
 ) {
   let balance = parseFloat(startingBalance) || 0;
-  const sortedTransactions = [...transactions].sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
-  );
+  const sortedTransactions = [...transactions].sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    // First, sort by date
+    const dateDiff = dateA - dateB;
+    if (dateDiff !== 0) return dateDiff;
+
+    // If dates are the same, prioritize credits (positive) before debits (negative)
+    // credit should come first (return -1), debit should come second (return 1)
+    if (a.type === "credit" && b.type === "debit") return -1;
+    if (a.type === "debit" && b.type === "credit") return 1;
+
+    return 0;
+  });
 
   const balanceHistory = [
     {
