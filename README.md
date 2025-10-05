@@ -3,7 +3,7 @@
 
 <h1 align="center">MMMF</h1>
 <h3 align="center">Max Money Market Funds</h3>
-<h4 align="center">A Forecasting Application Predicting Account Balance by Date for Best Money Market Funds Deposit Amount.</h4>
+<h4 align="center">A Forecasting Application Predicting Account Balance by Date for Best Money Market Funds Deposit Amount</h4>
 <p align="center"><img src="public/icon-500.png" alt="Logo" width="150" /></p>
 
 ## Features
