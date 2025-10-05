@@ -137,6 +137,22 @@ function App() {
     ) {
       await api.clearTransactions();
       setTransactions([]);
+
+      // Reset current date to today
+      const todayDate = getTodayDate();
+      setCurrentDate(todayDate);
+
+      // Set forecast end date to 30 days from today
+      const endDate = new Date(todayDate);
+      endDate.setDate(endDate.getDate() + 30);
+      const newForecastEndDate = endDate.toISOString().split("T")[0];
+      setForecastEndDate(newForecastEndDate);
+
+      await api.updateSettings({
+        startingBalance: startingBalance,
+        currentDate: todayDate,
+        forecastEndDate: newForecastEndDate,
+      });
     }
   }
 
