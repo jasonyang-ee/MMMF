@@ -85,6 +85,15 @@ export const api = {
     return res.json();
   },
 
+  async updateCreditCard(id, card) {
+    const res = await fetch(`${API_BASE}/credit-cards/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(card),
+    });
+    return res.json();
+  },
+
   async deleteCreditCard(id) {
     const res = await fetch(`${API_BASE}/credit-cards/${id}`, {
       method: "DELETE",

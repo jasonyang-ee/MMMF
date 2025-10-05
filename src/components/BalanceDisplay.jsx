@@ -26,6 +26,15 @@ function BalanceDisplay({
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleBlur();
+    } else if (e.key === "Escape") {
+      setTempBalance(startingBalance);
+      setIsEditing(false);
+    }
+  };
+
   const handleClick = () => {
     setTempBalance(startingBalance);
     setIsEditing(true);
@@ -51,6 +60,7 @@ function BalanceDisplay({
               value={tempBalance}
               onChange={(e) => setTempBalance(e.target.value)}
               onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
               className="input text-3xl font-bold"
               autoFocus
             />

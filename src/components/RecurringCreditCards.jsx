@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 function CreditCardItem({
   item,
   onDelete,
+  onUpdate,
   onUse,
   currentDate,
   forecastEndDate,
@@ -10,6 +11,39 @@ function CreditCardItem({
 }) {
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [amount, setAmount] = useState("");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState(item.name);
+  const nameInputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditingName && nameInputRef.current) {
+      nameInputRef.current.select();
+    }
+  }, [isEditingName]);
+
+  const handleNameClick = () => {
+    setEditName(item.name);
+    setIsEditingName(true);
+  };
+
+  const handleNameBlur = () => {
+    if (isEditingName) {
+      const trimmedName = editName.trim();
+      if (trimmedName && trimmedName !== item.name) {
+        onUpdate(item.id, { ...item, name: trimmedName });
+      }
+      setIsEditingName(false);
+    }
+  };
+
+  const handleNameKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleNameBlur();
+    } else if (e.key === "Escape") {
+      setEditName(item.name);
+      setIsEditingName(false);
+    }
+  };
 
   // Calculate the next occurrence date based on dayOfMonth and existing transactions
   const getNextOccurrenceDate = () => {
@@ -105,10 +139,27 @@ function CreditCardItem({
   return (
     <div className="border border-gray-200 dark:border-[#3a3a3a] rounded-lg p-1.5 bg-white dark:bg-[#2a2a2a]">
       <div className="flex items-center justify-between mb-1">
-        <div>
-          <div className="font-medium text-sm text-gray-900 dark:text-gray-100">
-            {item.name}
-          </div>
+        <div className="flex-1 min-w-0">
+          {isEditingName ? (
+            <input
+              ref={nameInputRef}
+              type="text"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              onBlur={handleNameBlur}
+              onKeyDown={handleNameKeyDown}
+              className="input text-sm font-medium w-full py-0.5 px-1.5"
+              autoFocus
+            />
+          ) : (
+            <div
+              onClick={handleNameClick}
+              className="font-medium text-sm text-gray-900 dark:text-gray-100 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
+              title="Click to edit name"
+            >
+              {item.name}
+            </div>
+          )}
           {item.dayOfMonth && (
             <div className="text-xs text-gray-500 dark:text-gray-400">
               Day {item.dayOfMonth} of month
@@ -194,6 +245,7 @@ function CreditCardItem({
 function RecurringCreditCards({
   creditCards,
   onAddCreditCard,
+  onUpdateCreditCard,
   onDeleteCreditCard,
   onUseCreditCard,
   currentDate,
@@ -289,6 +341,7 @@ function RecurringCreditCards({
               key={item.id}
               item={item}
               onDelete={onDeleteCreditCard}
+              onUpdate={onUpdateCreditCard}
               onUse={onUseCreditCard}
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}

@@ -223,6 +223,28 @@ app.post("/api/credit-cards", async (req, res) => {
   }
 });
 
+// Update a credit card
+app.put("/api/credit-cards/:id", async (req, res) => {
+  const creditCards = await readJsonFile(CREDIT_CARDS_FILE);
+  const index = creditCards.findIndex((c) => c.id === req.params.id);
+
+  if (index !== -1) {
+    creditCards[index] = {
+      ...creditCards[index],
+      ...req.body,
+      id: req.params.id, // Ensure ID doesn't change
+    };
+
+    if (await writeJsonFile(CREDIT_CARDS_FILE, creditCards)) {
+      res.json(creditCards[index]);
+    } else {
+      res.status(500).json({ error: "Failed to update credit card" });
+    }
+  } else {
+    res.status(404).json({ error: "Credit card not found" });
+  }
+});
+
 // Delete a credit card
 app.delete("/api/credit-cards/:id", async (req, res) => {
   const creditCards = await readJsonFile(CREDIT_CARDS_FILE);

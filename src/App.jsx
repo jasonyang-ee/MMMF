@@ -122,6 +122,11 @@ function App() {
     setCreditCards((prev) => [...prev, newCard]);
   }
 
+  async function handleUpdateCreditCard(id, updatedCard) {
+    const updated = await api.updateCreditCard(id, updatedCard);
+    setCreditCards(creditCards.map((c) => (c.id === id ? updated : c)));
+  }
+
   async function handleDeleteCreditCard(id) {
     await api.deleteCreditCard(id);
     setCreditCards(creditCards.filter((c) => c.id !== id));
@@ -241,6 +246,7 @@ function App() {
             <RecurringCreditCards
               creditCards={creditCards}
               onAddCreditCard={handleAddCreditCard}
+              onUpdateCreditCard={handleUpdateCreditCard}
               onDeleteCreditCard={handleDeleteCreditCard}
               onUseCreditCard={handleUseCreditCard}
               currentDate={currentDate}

@@ -2,46 +2,96 @@ import React, { useState, useRef, useEffect } from "react";
 import { formatCurrency } from "../utils";
 
 function RecurringItem({ item, onDelete, onUpdate }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditingAmount, setIsEditingAmount] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
   const [editAmount, setEditAmount] = useState(item.amount);
-  const inputRef = useRef(null);
+  const [editName, setEditName] = useState(item.name);
+  const amountInputRef = useRef(null);
+  const nameInputRef = useRef(null);
 
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.select();
+    if (isEditingAmount && amountInputRef.current) {
+      amountInputRef.current.select();
     }
-  }, [isEditing]);
+  }, [isEditingAmount]);
 
-  const handleClick = () => {
+  useEffect(() => {
+    if (isEditingName && nameInputRef.current) {
+      nameInputRef.current.select();
+    }
+  }, [isEditingName]);
+
+  const handleAmountClick = () => {
     setEditAmount(item.amount);
-    setIsEditing(true);
+    setIsEditingAmount(true);
   };
 
-  const handleBlur = () => {
-    if (isEditing) {
+  const handleNameClick = () => {
+    setEditName(item.name);
+    setIsEditingName(true);
+  };
+
+  const handleAmountBlur = () => {
+    if (isEditingAmount) {
       const newAmount = parseFloat(editAmount);
       if (newAmount && newAmount > 0 && newAmount !== item.amount) {
         onUpdate(item.id, { ...item, amount: newAmount });
       }
-      setIsEditing(false);
+      setIsEditingAmount(false);
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleNameBlur = () => {
+    if (isEditingName) {
+      const trimmedName = editName.trim();
+      if (trimmedName && trimmedName !== item.name) {
+        onUpdate(item.id, { ...item, name: trimmedName });
+      }
+      setIsEditingName(false);
+    }
+  };
+
+  const handleAmountKeyDown = (e) => {
     if (e.key === "Enter") {
-      handleBlur();
+      handleAmountBlur();
     } else if (e.key === "Escape") {
       setEditAmount(item.amount);
-      setIsEditing(false);
+      setIsEditingAmount(false);
+    }
+  };
+
+  const handleNameKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleNameBlur();
+    } else if (e.key === "Escape") {
+      setEditName(item.name);
+      setIsEditingName(false);
     }
   };
 
   return (
     <div className="transaction-item py-1.5 px-2">
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-0.5">
-          {item.name}
-        </div>
+        {isEditingName ? (
+          <input
+            ref={nameInputRef}
+            type="text"
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            onBlur={handleNameBlur}
+            onKeyDown={handleNameKeyDown}
+            className="input text-sm font-medium w-full py-0.5 px-1.5 mb-0.5"
+            autoFocus
+          />
+        ) : (
+          <div
+            onClick={handleNameClick}
+            className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-0.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
+            title="Click to edit description"
+          >
+            {item.name}
+          </div>
+        )}
         {item.dayOfMonth && (
           <div className="text-xs text-gray-500 dark:text-gray-400">
             Day {item.dayOfMonth} of month
@@ -50,7 +100,7 @@ function RecurringItem({ item, onDelete, onUpdate }) {
       </div>
 
       <div className="flex items-center space-x-1.5 flex-shrink-0">
-        {isEditing ? (
+        {isEditingAmount ? (
           <div className="flex items-center">
             <span
               className={`text-sm font-semibold mr-1 ${
@@ -62,21 +112,21 @@ function RecurringItem({ item, onDelete, onUpdate }) {
               {item.type === "credit" ? "+" : "-"}$
             </span>
             <input
-              ref={inputRef}
+              ref={amountInputRef}
               type="number"
               step="0.01"
               min="0"
               value={editAmount}
               onChange={(e) => setEditAmount(e.target.value)}
-              onBlur={handleBlur}
-              onKeyDown={handleKeyDown}
+              onBlur={handleAmountBlur}
+              onKeyDown={handleAmountKeyDown}
               className="input text-sm font-semibold w-20 py-0.5 px-1.5"
               autoFocus
             />
           </div>
         ) : (
           <span
-            onClick={handleClick}
+            onClick={handleAmountClick}
             className={`text-sm font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1.5 py-0.5 rounded ${
               item.type === "credit"
                 ? "text-green-600 dark:text-green-400"
