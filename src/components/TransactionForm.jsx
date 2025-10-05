@@ -108,7 +108,9 @@ function TransactionForm({ onAddTransaction }) {
             name="date"
             value={formData.date}
             onChange={handleChange}
-            className="input"
+            className="input cursor-pointer w-full"
+            style={{ colorScheme: "light" }}
+            onClick={(e) => e.target.showPicker && e.target.showPicker()}
             required
           />
         </div>

@@ -168,9 +168,9 @@ function App() {
 
       <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* New Layout: Sidebar + Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-6">
           {/* Left Sidebar */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:w-80 space-y-6">
             {/* Account Balance - Top */}
             <BalanceDisplay
               startingBalance={startingBalance}
@@ -189,7 +189,7 @@ function App() {
           </div>
 
           {/* Center - Balance Timeline */}
-          <div className="lg:col-span-6">
+          <div className="min-w-0">
             <BalanceTimeline
               balanceHistory={balanceHistory}
               currentDate={currentDate}
@@ -199,7 +199,7 @@ function App() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:w-80 space-y-6">
             {/* Add Transaction Form - Top */}
             <TransactionForm onAddTransaction={handleAddTransaction} />
 

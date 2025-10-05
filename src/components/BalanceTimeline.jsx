@@ -16,7 +16,7 @@ function BalanceTimeline({
   );
 
   return (
-    <div className="card max-w-4xl mx-auto">
+    <div className="card">
       <h2 className="text-xl font-semibold mb-4 text-center">
         Balance Timeline
       </h2>
@@ -29,9 +29,6 @@ function BalanceTimeline({
                 Action
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                Date
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                 Description
               </th>
               <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">
@@ -39,6 +36,9 @@ function BalanceTimeline({
               </th>
               <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">
                 Balance
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Date
               </th>
             </tr>
           </thead>
@@ -76,9 +76,6 @@ function BalanceTimeline({
                     <span className="text-gray-400 text-xs px-1">Auto</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-900 font-medium">
-                  {formatDate(entry.date)}
-                </td>
                 <td className="px-4 py-3 text-sm text-gray-900">
                   {entry.transaction
                     ? entry.transaction.name
@@ -111,6 +108,9 @@ function BalanceTimeline({
                   >
                     {formatCurrency(entry.balance)}
                   </span>
+                </td>
+                <td className="px-4 py-3 text-sm text-gray-900 font-medium">
+                  {formatDate(entry.date)}
                 </td>
               </tr>
             ))}

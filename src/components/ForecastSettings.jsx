@@ -23,7 +23,9 @@ function ForecastSettings({
             type="date"
             value={currentDate}
             onChange={(e) => onCurrentDateChange(e.target.value)}
-            className="input cursor-pointer"
+            className="input cursor-pointer w-full"
+            style={{ colorScheme: "light" }}
+            onClick={(e) => e.target.showPicker && e.target.showPicker()}
           />
         </div>
 
@@ -34,7 +36,9 @@ function ForecastSettings({
             value={forecastEndDate}
             onChange={(e) => onForecastEndDateChange(e.target.value)}
             min={currentDate}
-            className="input cursor-pointer"
+            className="input cursor-pointer w-full"
+            style={{ colorScheme: "light" }}
+            onClick={(e) => e.target.showPicker && e.target.showPicker()}
           />
           <p className="text-sm text-gray-500 mt-1">
             {daysDiff > 0

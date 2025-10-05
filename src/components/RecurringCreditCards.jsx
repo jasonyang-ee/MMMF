@@ -70,6 +70,8 @@ function CreditCardItem({ item, onDelete, onUse }) {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="input text-sm cursor-pointer"
+            style={{ colorScheme: "light" }}
+            onClick={(e) => e.target.showPicker && e.target.showPicker()}
             required
           />
           <div className="flex space-x-2">

@@ -9,14 +9,17 @@ function BalanceDisplay({
   const [isEditing, setIsEditing] = useState(false);
   const [tempBalance, setTempBalance] = useState(startingBalance);
 
-  const handleSave = () => {
-    onStartingBalanceChange(parseFloat(tempBalance) || 0);
-    setIsEditing(false);
+  const handleBlur = () => {
+    if (isEditing) {
+      const newValue = parseFloat(tempBalance) || 0;
+      onStartingBalanceChange(newValue);
+      setIsEditing(false);
+    }
   };
 
-  const handleCancel = () => {
+  const handleClick = () => {
     setTempBalance(startingBalance);
-    setIsEditing(false);
+    setIsEditing(true);
   };
 
   const balanceChange = currentBalance - startingBalance;
@@ -30,33 +33,22 @@ function BalanceDisplay({
         <div>
           <label className="label">Starting Balance</label>
           {isEditing ? (
-            <div className="flex space-x-2">
-              <input
-                type="number"
-                step="0.01"
-                value={tempBalance}
-                onChange={(e) => setTempBalance(e.target.value)}
-                className="input flex-1"
-                autoFocus
-              />
-              <button onClick={handleSave} className="btn btn-primary">
-                Save
-              </button>
-              <button onClick={handleCancel} className="btn btn-secondary">
-                Cancel
-              </button>
-            </div>
+            <input
+              type="number"
+              step="0.01"
+              value={tempBalance}
+              onChange={(e) => setTempBalance(e.target.value)}
+              onBlur={handleBlur}
+              className="input text-2xl font-bold"
+              autoFocus
+            />
           ) : (
-            <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold">
-                {formatCurrency(startingBalance)}
-              </span>
-              <button
-                onClick={() => setIsEditing(true)}
-                className="text-primary-600 hover:text-primary-700 text-sm font-medium"
-              >
-                Edit
-              </button>
+            <div
+              onClick={handleClick}
+              className="text-2xl font-bold cursor-pointer hover:bg-gray-50 p-2 rounded"
+              title="Click to edit"
+            >
+              {formatCurrency(startingBalance)}
             </div>
           )}
         </div>

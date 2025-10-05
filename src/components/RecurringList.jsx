@@ -50,9 +50,7 @@ function RecurringList({ recurring, onDeleteRecurring }) {
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">
-          Recurring Transactions ({recurring.length})
-        </h2>
+        <h2 className="text-xl font-semibold">Recurring Transactions</h2>
       </div>
 
       <div className="space-y-2 max-h-[600px] overflow-y-auto">
