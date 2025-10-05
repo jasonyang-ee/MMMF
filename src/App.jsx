@@ -155,6 +155,14 @@ function App() {
     forecastEndDate
   );
 
+  // Calculate lowest balance and its date from balance history
+  const lowestBalanceInfo =
+    balanceHistory.length > 0
+      ? balanceHistory.reduce((lowest, entry) => {
+          return entry.balance < lowest.balance ? entry : lowest;
+        }, balanceHistory[0])
+      : { balance: startingBalance, date: currentDate };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center dark:bg-[#1f1f1f]">
@@ -178,6 +186,8 @@ function App() {
             <BalanceDisplay
               startingBalance={startingBalance}
               currentBalance={currentBalance}
+              lowestBalance={lowestBalanceInfo.balance}
+              lowestBalanceDate={lowestBalanceInfo.date}
               onStartingBalanceChange={handleStartingBalanceChange}
             />
 

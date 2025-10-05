@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { formatCurrency } from "../utils";
+import { formatCurrency, formatDate } from "../utils";
 
 function BalanceDisplay({
   startingBalance,
   currentBalance,
+  lowestBalance,
+  lowestBalanceDate,
   onStartingBalanceChange,
 }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -81,6 +83,23 @@ function BalanceDisplay({
               {balanceChange >= 0 ? "+" : ""}
               {formatCurrency(balanceChange)}
             </span>
+          </div>
+        </div>
+
+        {/* Lowest Balance */}
+        <div className="border-t dark:border-[#3a3a3a] pt-4">
+          <label className="label">Lowest Balance</label>
+          <div className="text-3xl font-bold">
+            <span
+              className={
+                lowestBalance >= 0 ? "balance-positive" : "balance-negative"
+              }
+            >
+              {formatCurrency(lowestBalance)}
+            </span>
+          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            on {formatDate(lowestBalanceDate)}
           </div>
         </div>
       </div>
