@@ -8,13 +8,15 @@
 
 ## Features
 
-- **Balance Forecasting**: Visualize your account balance over time
-- **Starting Balance**: Set and adjust your initial account balance
-- **Lowest Balance Tracking**: Monitor the lowest balance and its date
+- **Balance Forecasting**: Visualize your account balance for future dates
 - **Future Date Based Transactions**: Add income and expenses with specific dates
+- **Starting Balance**: Click to set and adjust your initial account balance
+- **Lowest Balance Tracking**: Monitor the lowest balance and its date
 - **Recurring Transactions**: Reuse repeating transactions
-- **Persistent Storage**: All data stored in file based json database
-- **Clear Calculations**: Remove all transactions while keeping recurring ones
+- **Persistent Storage**: Simple file based json data storage
+- **Edit on Click**: Click on recurring transaction items to edit
+- **Clear Calculations**: Remove all transactions while keeping recurring items
+- **Global Currency and Date Format**: Set your preferred currency and date format
 
 ## Getting Started
 
@@ -22,9 +24,9 @@
 
 - Access the web interface at `http://<host_ip>:5173`
 
-### Example Screenshot
+### Demo
 
-![Populated View](doc/screenshotFull.png)
+![Demo](doc/demo.gif)
 
 ### Run Using Docker Compose
 
@@ -66,21 +68,13 @@ services:
 
 - Bind mounts to preserve data: `/app/data/`
 
-### Folder Permissions
-
-It is recommended to run the container with a non-root user. The default user ID is `1000`.
-
-Change to the user ID of your host system if necessary. You can do this by modifying the `user` field in the Docker Compose file.
-
 ## Screenshots
 
-### Demo
+- Populated View
+  ![Populated View](doc/screenshotFull.png)
 
-![Demo](doc/demo.gif)
-
-### Default View
-
-![Default View](doc/screenshot.png)
+- Empty View
+- ![Empty View](doc/screenshot.png)
 
 ## Local Development
 
