@@ -5,6 +5,8 @@ function BalanceTimeline({
   balanceHistory,
   forecastEndDate,
   onDeleteTransaction,
+  currencySymbol = "USD",
+  dateFormat = "MMM dd, yyyy",
 }) {
   if (balanceHistory.length === 0) {
     return null;
@@ -93,7 +95,7 @@ function BalanceTimeline({
                       }`}
                     >
                       {entry.transaction.type === "credit" ? "+" : "-"}
-                      {formatCurrency(entry.transaction.amount)}
+                      {formatCurrency(entry.transaction.amount, currencySymbol)}
                     </span>
                   )}
                 </td>
@@ -105,11 +107,11 @@ function BalanceTimeline({
                         : "text-red-600 dark:text-red-400"
                     }`}
                   >
-                    {formatCurrency(entry.balance)}
+                    {formatCurrency(entry.balance, currencySymbol)}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 font-medium">
-                  {formatDate(entry.date)}
+                  {formatDate(entry.date, dateFormat)}
                 </td>
               </tr>
             ))}

@@ -9,6 +9,7 @@ function CreditCardItem({
   currentDate,
   forecastEndDate,
   transactions,
+  dateFormat = "MMM dd, yyyy",
 }) {
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [amount, setAmount] = useState("");
@@ -211,7 +212,7 @@ function CreditCardItem({
         <div>
           {nextDate && (
             <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-              Next: {formatDate(nextDate)}
+              Next: {formatDate(nextDate, dateFormat)}
             </p>
           )}
           <button
@@ -225,7 +226,7 @@ function CreditCardItem({
       ) : (
         <form onSubmit={handleSubmit} className="space-y-1.5">
           <div className="text-xs text-gray-600 dark:text-gray-400">
-            Payment date: {nextDate ? formatDate(nextDate) : "N/A"}
+            Payment date: {nextDate ? formatDate(nextDate, dateFormat) : "N/A"}
           </div>
           <input
             type="number"
@@ -270,6 +271,7 @@ function RecurringCreditCards({
   currentDate,
   forecastEndDate,
   transactions,
+  dateFormat = "MMM dd, yyyy",
 }) {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -365,6 +367,7 @@ function RecurringCreditCards({
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}
               transactions={transactions}
+              dateFormat={dateFormat}
             />
           ))
         )}

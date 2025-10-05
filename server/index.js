@@ -54,6 +54,8 @@ async function initializeDataDir() {
             startingBalance: 0,
             currentDate: todayStr,
             forecastEndDate: forecastEndStr,
+            currencySymbol: "USD",
+            dateFormat: "MMM dd, yyyy",
           },
           null,
           2
@@ -292,6 +294,15 @@ app.get("/api/settings", async (req, res) => {
     const forecastEnd = new Date(settings.currentDate);
     forecastEnd.setDate(forecastEnd.getDate() + 30);
     settings.forecastEndDate = forecastEnd.toISOString().split("T")[0];
+  }
+
+  // Add default currency and date format if missing
+  if (!settings.currencySymbol) {
+    settings.currencySymbol = "USD";
+  }
+
+  if (!settings.dateFormat) {
+    settings.dateFormat = "MMM dd, yyyy";
   }
 
   res.json(settings);

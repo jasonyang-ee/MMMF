@@ -1,15 +1,15 @@
 import { format, parseISO } from "date-fns";
 
-export function formatCurrency(amount) {
+export function formatCurrency(amount, currencyCode = "USD") {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: currencyCode,
   }).format(amount);
 }
 
-export function formatDate(dateString) {
+export function formatDate(dateString, dateFormat = "MMM dd, yyyy") {
   try {
-    return format(parseISO(dateString), "MMM dd, yyyy");
+    return format(parseISO(dateString), dateFormat);
   } catch {
     return dateString;
   }

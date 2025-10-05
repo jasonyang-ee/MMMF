@@ -7,6 +7,8 @@ function BalanceDisplay({
   lowestBalance,
   lowestBalanceDate,
   onStartingBalanceChange,
+  currencySymbol = "USD",
+  dateFormat = "MMM dd, yyyy",
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [tempBalance, setTempBalance] = useState(startingBalance);
@@ -70,7 +72,7 @@ function BalanceDisplay({
               className="text-3xl font-bold cursor-pointer hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded dark:text-gray-100"
               title="Click to edit"
             >
-              {formatCurrency(startingBalance)}
+              {formatCurrency(startingBalance, currencySymbol)}
             </div>
           )}
         </div>
@@ -84,7 +86,7 @@ function BalanceDisplay({
                 currentBalance >= 0 ? "balance-positive" : "balance-negative"
               }
             >
-              {formatCurrency(currentBalance)}
+              {formatCurrency(currentBalance, currencySymbol)}
             </span>
           </div>
         </div>
@@ -99,7 +101,7 @@ function BalanceDisplay({
               }
             >
               {balanceChange >= 0 ? "+" : ""}
-              {formatCurrency(balanceChange)}
+              {formatCurrency(balanceChange, currencySymbol)}
             </span>
           </div>
         </div>
@@ -113,11 +115,11 @@ function BalanceDisplay({
                 lowestBalance >= 0 ? "balance-positive" : "balance-negative"
               }
             >
-              {formatCurrency(lowestBalance)}
+              {formatCurrency(lowestBalance, currencySymbol)}
             </span>
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            on {formatDate(lowestBalanceDate)}
+            on {formatDate(lowestBalanceDate, dateFormat)}
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ import RecurringList from "./components/RecurringList";
 import RecurringCreditCards from "./components/RecurringCreditCards";
 import ForecastSettings from "./components/ForecastSettings";
 import BalanceTimeline from "./components/BalanceTimeline";
-import DarkModeToggle from "./components/DarkModeToggle";
+import GlobalSettings from "./components/GlobalSettings";
 
 function App() {
   const [startingBalance, setStartingBalance] = useState(0);
@@ -22,6 +22,8 @@ function App() {
   const [creditCards, setCreditCards] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
   const [forecastEndDate, setForecastEndDate] = useState("");
+  const [currencySymbol, setCurrencySymbol] = useState("USD");
+  const [dateFormat, setDateFormat] = useState("MMM dd, yyyy");
   const [loading, setLoading] = useState(true);
 
   // Load data on mount
@@ -44,6 +46,10 @@ function App() {
       setTransactions(transactionsData || []);
       setRecurring(recurringData || []);
       setCreditCards(creditCardsData || []);
+
+      // Load currency and date format settings
+      setCurrencySymbol(settingsData.currencySymbol || "USD");
+      setDateFormat(settingsData.dateFormat || "MMM dd, yyyy");
 
       // Load dates from settings or use defaults
       const todayDate = getTodayDate();
@@ -71,6 +77,8 @@ function App() {
       startingBalance: newBalance,
       currentDate: currentDate,
       forecastEndDate: forecastEndDate,
+      currencySymbol: currencySymbol,
+      dateFormat: dateFormat,
     });
   }
 
@@ -80,6 +88,8 @@ function App() {
       startingBalance: startingBalance,
       currentDate: newDate,
       forecastEndDate: forecastEndDate,
+      currencySymbol: currencySymbol,
+      dateFormat: dateFormat,
     });
   }
 
@@ -89,6 +99,30 @@ function App() {
       startingBalance: startingBalance,
       currentDate: currentDate,
       forecastEndDate: newDate,
+      currencySymbol: currencySymbol,
+      dateFormat: dateFormat,
+    });
+  }
+
+  async function handleCurrencyChange(newCurrency) {
+    setCurrencySymbol(newCurrency);
+    await api.updateSettings({
+      startingBalance: startingBalance,
+      currentDate: currentDate,
+      forecastEndDate: forecastEndDate,
+      currencySymbol: newCurrency,
+      dateFormat: dateFormat,
+    });
+  }
+
+  async function handleDateFormatChange(newFormat) {
+    setDateFormat(newFormat);
+    await api.updateSettings({
+      startingBalance: startingBalance,
+      currentDate: currentDate,
+      forecastEndDate: forecastEndDate,
+      currencySymbol: currencySymbol,
+      dateFormat: newFormat,
     });
   }
 
@@ -162,6 +196,8 @@ function App() {
         startingBalance: startingBalance,
         currentDate: todayDate,
         forecastEndDate: newForecastEndDate,
+        currencySymbol: currencySymbol,
+        dateFormat: dateFormat,
       });
     }
   }
@@ -215,6 +251,8 @@ function App() {
               lowestBalance={lowestBalanceInfo.balance}
               lowestBalanceDate={lowestBalanceInfo.date}
               onStartingBalanceChange={handleStartingBalanceChange}
+              currencySymbol={currencySymbol}
+              dateFormat={dateFormat}
             />
 
             {/* Forecast Settings - Second */}
@@ -226,8 +264,13 @@ function App() {
               onClearCalculations={handleClearCalculations}
             />
 
-            {/* Dark Mode Toggle - Third */}
-            <DarkModeToggle />
+            {/* Global Settings - Third */}
+            <GlobalSettings
+              currencySymbol={currencySymbol}
+              dateFormat={dateFormat}
+              onCurrencyChange={handleCurrencyChange}
+              onDateFormatChange={handleDateFormatChange}
+            />
           </div>
 
           {/* Center - Balance Timeline */}
@@ -237,6 +280,8 @@ function App() {
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}
               onDeleteTransaction={handleDeleteTransaction}
+              currencySymbol={currencySymbol}
+              dateFormat={dateFormat}
             />
           </div>
 
@@ -252,6 +297,7 @@ function App() {
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}
               transactions={transactions}
+              dateFormat={dateFormat}
             />
 
             {/* Recurring Transactions - Second */}
