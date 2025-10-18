@@ -21,17 +21,29 @@ function BalanceTimeline({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 text-center dark:text-gray-100">{t("timeline:title")}</h2>
+      <h2 className="text-xl font-semibold mb-4 text-center dark:text-gray-100">
+        {t("timeline:title")}
+      </h2>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto custom-scrollbar">
         <table className="w-full">
           <thead className="bg-gray-100 dark:bg-[#2a2a2a] border-b-2 border-gray-300 dark:border-[#3a3a3a]">
             <tr>
-              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700 dark:text-gray-400 w-20">{t("timeline:action")}</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:description")}</th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:amount")}</th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:balance")}</th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:date")}</th>
+              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700 dark:text-gray-400 w-20">
+                {t("timeline:action")}
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
+                {t("timeline:description")}
+              </th>
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">
+                {t("timeline:amount")}
+              </th>
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">
+                {t("timeline:balance")}
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
+                {t("timeline:date")}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-[#3a3a3a]">
@@ -68,7 +80,9 @@ function BalanceTimeline({
                       </button>
                     )}
                     {entry.transaction && entry.transaction.isRecurring && (
-                      <span className="text-gray-400 dark:text-gray-500 text-xs px-1">{t("common:auto")}</span>
+                      <span className="text-gray-400 dark:text-gray-500 text-xs px-1">
+                        {t("common:auto")}
+                      </span>
                     )}
                   </div>
                 </td>

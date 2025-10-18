@@ -2,7 +2,12 @@ import React from "react";
 import { formatCurrency, formatDate } from "../utils";
 import { useI18n } from "../i18n";
 
-function TransactionList({ transactions, onDeleteTransaction, currencySymbol = "USD", dateFormat = "MMM dd, yyyy" }) {
+function TransactionList({
+  transactions,
+  onDeleteTransaction,
+  currencySymbol = "USD",
+  dateFormat = "MMM dd, yyyy",
+}) {
   const { t } = useI18n();
   const sortedTransactions = [...transactions].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
@@ -10,7 +15,9 @@ function TransactionList({ transactions, onDeleteTransaction, currencySymbol = "
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4">{t("transactions:listTitle", transactions.length)}</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        {t("transactions:listTitle", transactions.length)}
+      </h2>
 
       {sortedTransactions.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
@@ -18,17 +25,17 @@ function TransactionList({ transactions, onDeleteTransaction, currencySymbol = "
           <p className="text-sm mt-2">{t("transactions:getStarted")}</p>
         </div>
       ) : (
-        <div className="space-y-2 max-h-[600px] overflow-y-auto">
+        <div className="space-y-2 max-h-[600px] overflow-y-auto custom-scrollbar">
           {sortedTransactions.map((transaction) => (
             <div
               key={transaction.id}
-              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors dark:bg-[#2a2a2a] dark:hover:bg-[#333333]"
             >
               <div className="flex-1">
-                <div className="font-medium text-gray-900">
+                <div className="font-medium text-gray-900 dark:text-gray-100">
                   {transaction.name}
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   {formatDate(transaction.date, dateFormat)}
                 </div>
               </div>
@@ -37,8 +44,8 @@ function TransactionList({ transactions, onDeleteTransaction, currencySymbol = "
                 <span
                   className={`text-lg font-semibold ${
                     transaction.type === "credit"
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-red-600 dark:text-red-400"
                   }`}
                 >
                   {transaction.type === "credit" ? "+" : "-"}
@@ -47,7 +54,7 @@ function TransactionList({ transactions, onDeleteTransaction, currencySymbol = "
 
                 <button
                   onClick={() => onDeleteTransaction(transaction.id)}
-                  className="text-red-600 hover:text-red-700 p-1"
+                  className="text-red-600 hover:text-red-700 p-1 dark:text-red-400 dark:hover:text-red-300"
                   title={t("transactions:delete")}
                 >
                   <svg

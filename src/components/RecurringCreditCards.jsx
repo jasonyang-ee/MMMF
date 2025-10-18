@@ -184,7 +184,9 @@ function CreditCardItem({
             </div>
           )}
           {item.dayOfMonth && (
-            <div className="text-xs text-gray-500 dark:text-gray-400">{t("cards:dayOfMonth", item.dayOfMonth)}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              {t("cards:dayOfMonth", item.dayOfMonth)}
+            </div>
           )}
         </div>
         <button
@@ -211,7 +213,9 @@ function CreditCardItem({
       {!showAmountForm ? (
         <div>
           {nextDate && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">{t("cards:next")} {formatDate(nextDate, dateFormat)}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+              {t("cards:next")} {formatDate(nextDate, dateFormat)}
+            </p>
           )}
           <button
             onClick={() => setShowAmountForm(true)}
@@ -223,7 +227,10 @@ function CreditCardItem({
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-1.5">
-          <div className="text-xs text-gray-600 dark:text-gray-400">{t("cards:paymentDate")} {nextDate ? formatDate(nextDate, dateFormat) : "N/A"}</div>
+          <div className="text-xs text-gray-600 dark:text-gray-400">
+            {t("cards:paymentDate")}{" "}
+            {nextDate ? formatDate(nextDate, dateFormat) : "N/A"}
+          </div>
           <input
             type="number"
             placeholder={t("recurring:amountPh")}
@@ -307,7 +314,9 @@ function RecurringCreditCards({
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold dark:text-gray-100">{t("cards:title")}</h2>
+        <h2 className="text-xl font-semibold dark:text-gray-100">
+          {t("cards:title")}
+        </h2>
         <button
           onClick={() => setShowForm(!showForm)}
           className="text-primary-600 hover:text-primary-700 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium"
@@ -351,7 +360,7 @@ function RecurringCreditCards({
         </form>
       )}
 
-      <div className="space-y-2 max-h-[600px] overflow-y-auto">
+      <div className="space-y-2 max-h-[600px] overflow-y-auto custom-scrollbar">
         {creditCards.length === 0 ? (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>{t("cards:noCards")}</p>
