@@ -1,5 +1,6 @@
 import React from "react";
 import DatePicker from "./DatePicker";
+import { useI18n } from "../i18n";
 
 function ForecastSettings({
   currentDate,
@@ -8,6 +9,7 @@ function ForecastSettings({
   onForecastEndDateChange,
   onClearCalculations,
 }) {
+  const { t } = useI18n();
   // Calculate days between dates
   const startDate = new Date(currentDate);
   const endDate = new Date(forecastEndDate);
@@ -22,13 +24,11 @@ function ForecastSettings({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
-        Forecast Settings
-      </h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">{t("forecast:settings")}</h2>
 
       <div className="space-y-4">
         <div>
-          <label className="label">Current Date</label>
+          <label className="label">{t("forecast:currentDate")}</label>
           <DatePicker
             value={currentDate}
             onChange={onCurrentDateChange}
@@ -37,7 +37,7 @@ function ForecastSettings({
         </div>
 
         <div>
-          <label className="label">Forecast Until</label>
+          <label className="label">{t("forecast:forecastUntil")}</label>
           <DatePicker
             value={forecastEndDate}
             onChange={onForecastEndDateChange}
@@ -48,29 +48,29 @@ function ForecastSettings({
             <button
               onClick={() => handleQuickSelect(30)}
               className="btn btn-secondary text-xs flex-1"
-              title="Set to 30 days from current date"
+              title={t("forecast:quick30")}
             >
-              30 days
+              {t("forecast:quick30")}
             </button>
             <button
               onClick={() => handleQuickSelect(60)}
               className="btn btn-secondary text-xs flex-1"
-              title="Set to 60 days from current date"
+              title={t("forecast:quick60")}
             >
-              60 days
+              {t("forecast:quick60")}
             </button>
             <button
               onClick={() => handleQuickSelect(90)}
               className="btn btn-secondary text-xs flex-1"
-              title="Set to 90 days from current date"
+              title={t("forecast:quick90")}
             >
-              90 days
+              {t("forecast:quick90")}
             </button>
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {daysDiff > 0
-              ? `${daysDiff} days from current date`
-              : "Select a future date"}
+              ? `${daysDiff} ${t("forecast:daysFromCurrent")}`
+              : t("forecast:selectFutureDate")}
           </p>
         </div>
 
@@ -79,10 +79,10 @@ function ForecastSettings({
             onClick={onClearCalculations}
             className="btn btn-danger w-full"
           >
-            Clear All Transactions
+            {t("forecast:clearAll")}
           </button>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-            This will keep your recurring transactions
+            {t("forecast:clearNote")}
           </p>
         </div>
       </div>

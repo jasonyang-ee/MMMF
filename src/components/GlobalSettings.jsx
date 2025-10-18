@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useI18n } from "../i18n";
 
 function GlobalSettings({
   currencySymbol,
@@ -6,6 +7,7 @@ function GlobalSettings({
   onCurrencyChange,
   onDateFormatChange,
 }) {
+  const { t, language, setLanguage } = useI18n();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Load dark mode preference from localStorage on mount
@@ -47,6 +49,7 @@ function GlobalSettings({
     { value: "AUD", label: "$ (AUD)", symbol: "$" },
     { value: "CHF", label: "Fr (CHF)", symbol: "Fr" },
     { value: "KRW", label: "₩ (KRW)", symbol: "₩" },
+    { value: "GTQ", label: "Q (GTQ)", symbol: "Q" },
   ];
 
   const dateFormatOptions = [
@@ -58,7 +61,7 @@ function GlobalSettings({
   return (
     <div className="card space-y-4">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-        Global Settings
+        {t("settings:globalSettings")}
       </h2>
 
       {/* Dark Mode Toggle */}
@@ -88,7 +91,7 @@ function GlobalSettings({
               )}
             </svg>
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {isDarkMode ? "Dark Mode" : "Light Mode"}
+              {isDarkMode ? t("settings:darkMode") : t("settings:lightMode")}
             </span>
           </div>
 
@@ -109,9 +112,23 @@ function GlobalSettings({
         </div>
       </div>
 
-      {/* Currency Symbol Selection */}
+      {/* Currency Symbol Selection */
+      }
       <div className="pb-3 border-b border-gray-200 dark:border-[#3a3a3a]">
-        <label className="label">Currency</label>
+        <div className="flex items-center justify-between">
+          <label className="label">{t("settings:currency")}</label>
+          <div className="flex items-center gap-2">
+            <label className="label text-xs">Lang</label>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="input cursor-pointer text-xs py-1 px-2"
+            >
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+        </div>
         <select
           value={currencySymbol}
           onChange={(e) => onCurrencyChange(e.target.value)}
@@ -127,7 +144,7 @@ function GlobalSettings({
 
       {/* Date Format Selection */}
       <div>
-        <label className="label">Date Format</label>
+        <label className="label">{t("settings:dateFormat")}</label>
         <select
           value={dateFormat}
           onChange={(e) => onDateFormatChange(e.target.value)}

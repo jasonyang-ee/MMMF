@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { formatDate } from "../utils";
+import { useI18n } from "../i18n";
 
 function CreditCardItem({
   item,
@@ -11,6 +12,7 @@ function CreditCardItem({
   transactions,
   dateFormat = "MMM dd, yyyy",
 }) {
+  const { t } = useI18n();
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [amount, setAmount] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
@@ -176,21 +178,19 @@ function CreditCardItem({
             <div
               onClick={handleNameClick}
               className="font-medium text-sm text-gray-900 dark:text-gray-100 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
-              title="Click to edit name"
+              title={t("cards:clickToEditName")}
             >
               {item.name}
             </div>
           )}
           {item.dayOfMonth && (
-            <div className="text-xs text-gray-500 dark:text-gray-400">
-              Day {item.dayOfMonth} of month
-            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{t("cards:dayOfMonth", item.dayOfMonth)}</div>
           )}
         </div>
         <button
           onClick={() => onDelete(item.id)}
           className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-0.5"
-          title="Delete credit card"
+          title={t("cards:deleteCard")}
         >
           <svg
             className="w-4 h-4"
@@ -211,26 +211,22 @@ function CreditCardItem({
       {!showAmountForm ? (
         <div>
           {nextDate && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-              Next: {formatDate(nextDate, dateFormat)}
-            </p>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">{t("cards:next")} {formatDate(nextDate, dateFormat)}</p>
           )}
           <button
             onClick={() => setShowAmountForm(true)}
             className="w-full px-3 py-1.5 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!nextDate}
           >
-            {nextDate ? "Add Payment" : "No upcoming date"}
+            {nextDate ? t("cards:addPayment") : t("cards:noUpcoming")}
           </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-1.5">
-          <div className="text-xs text-gray-600 dark:text-gray-400">
-            Payment date: {nextDate ? formatDate(nextDate, dateFormat) : "N/A"}
-          </div>
+          <div className="text-xs text-gray-600 dark:text-gray-400">{t("cards:paymentDate")} {nextDate ? formatDate(nextDate, dateFormat) : "N/A"}</div>
           <input
             type="number"
-            placeholder="Amount"
+            placeholder={t("recurring:amountPh")}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             step="0.01"
@@ -243,7 +239,7 @@ function CreditCardItem({
               type="submit"
               className="flex-1 px-3 py-1.5 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs"
             >
-              Add
+              {t("common:add")}
             </button>
             <button
               type="button"
@@ -253,7 +249,7 @@ function CreditCardItem({
               }}
               className="btn btn-secondary text-xs flex-1 py-1.5"
             >
-              Cancel
+              {t("common:cancel")}
             </button>
           </div>
         </form>
@@ -273,6 +269,7 @@ function RecurringCreditCards({
   transactions,
   dateFormat = "MMM dd, yyyy",
 }) {
+  const { t } = useI18n();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -289,13 +286,13 @@ function RecurringCreditCards({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.dayOfMonth) {
-      alert("Please enter card name and day of month");
+      alert(t("recurring:validationAll"));
       return;
     }
 
     const dayOfMonth = parseInt(formData.dayOfMonth);
     if (dayOfMonth < 1 || dayOfMonth > 31) {
-      alert("Day of month must be between 1 and 31");
+      alert(t("recurring:validationDayRange"));
       return;
     }
 
@@ -310,14 +307,12 @@ function RecurringCreditCards({
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold dark:text-gray-100">
-          Recurring Credit Cards
-        </h2>
+        <h2 className="text-xl font-semibold dark:text-gray-100">{t("cards:title")}</h2>
         <button
           onClick={() => setShowForm(!showForm)}
           className="text-primary-600 hover:text-primary-700 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium"
         >
-          {showForm ? "Cancel" : "+ Add"}
+          {showForm ? t("common:cancel") : t("recurring:addButton")}
         </button>
       </div>
 
@@ -329,7 +324,7 @@ function RecurringCreditCards({
           <input
             ref={nameInputRef}
             type="text"
-            placeholder="Card Name (e.g., Chase Sapphire)"
+            placeholder={t("cards:cardNamePh")}
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className="input text-sm"
@@ -337,7 +332,7 @@ function RecurringCreditCards({
           />
           <input
             type="number"
-            placeholder="Day of Month (1-31)"
+            placeholder={t("recurring:dayOfMonthPh")}
             value={formData.dayOfMonth}
             onChange={(e) =>
               setFormData({ ...formData, dayOfMonth: e.target.value })
@@ -351,7 +346,7 @@ function RecurringCreditCards({
             type="submit"
             className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm"
           >
-            Save Credit Card
+            {t("cards:saveCard")}
           </button>
         </form>
       )}
@@ -359,10 +354,8 @@ function RecurringCreditCards({
       <div className="space-y-2 max-h-[600px] overflow-y-auto">
         {creditCards.length === 0 ? (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>No credit cards</p>
-            <p className="text-sm mt-2">
-              Add credit cards to quickly enter payments
-            </p>
+            <p>{t("cards:noCards")}</p>
+            <p className="text-sm mt-2">{t("cards:addNote")}</p>
           </div>
         ) : (
           creditCards.map((item) => (

@@ -1,23 +1,21 @@
 import React from "react";
 import { formatCurrency, formatDate } from "../utils";
+import { useI18n } from "../i18n";
 
-function TransactionList({ transactions, onDeleteTransaction }) {
+function TransactionList({ transactions, onDeleteTransaction, currencySymbol = "USD", dateFormat = "MMM dd, yyyy" }) {
+  const { t } = useI18n();
   const sortedTransactions = [...transactions].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4">
-        Transactions ({transactions.length})
-      </h2>
+      <h2 className="text-xl font-semibold mb-4">{t("transactions:listTitle", transactions.length)}</h2>
 
       {sortedTransactions.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          <p>No transactions yet</p>
-          <p className="text-sm mt-2">
-            Add your first transaction to get started
-          </p>
+          <p>{t("transactions:noneYet")}</p>
+          <p className="text-sm mt-2">{t("transactions:getStarted")}</p>
         </div>
       ) : (
         <div className="space-y-2 max-h-[600px] overflow-y-auto">
@@ -31,7 +29,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
                   {transaction.name}
                 </div>
                 <div className="text-sm text-gray-500">
-                  {formatDate(transaction.date)}
+                  {formatDate(transaction.date, dateFormat)}
                 </div>
               </div>
 
@@ -44,13 +42,13 @@ function TransactionList({ transactions, onDeleteTransaction }) {
                   }`}
                 >
                   {transaction.type === "credit" ? "+" : "-"}
-                  {formatCurrency(transaction.amount)}
+                  {formatCurrency(transaction.amount, currencySymbol)}
                 </span>
 
                 <button
                   onClick={() => onDeleteTransaction(transaction.id)}
                   className="text-red-600 hover:text-red-700 p-1"
-                  title="Delete transaction"
+                  title={t("transactions:delete")}
                 >
                   <svg
                     className="w-5 h-5"

@@ -18,6 +18,11 @@ const RECURRING_FILE = path.join(DATA_DIR, "recurring.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 const CREDIT_CARDS_FILE = path.join(DATA_DIR, "credit-cards.json");
 
+// Resolve default language from environment
+const DEFAULT_LANGUAGE = ["en", "es"].includes(process.env.DEFAULT_LANGUAGE)
+  ? process.env.DEFAULT_LANGUAGE
+  : "en";
+
 // Ensure data directory exists
 async function initializeDataDir() {
   try {
@@ -56,6 +61,7 @@ async function initializeDataDir() {
             forecastEndDate: forecastEndStr,
             currencySymbol: "USD",
             dateFormat: "MMM dd, yyyy",
+            language: DEFAULT_LANGUAGE,
           },
           null,
           2
@@ -303,6 +309,10 @@ app.get("/api/settings", async (req, res) => {
 
   if (!settings.dateFormat) {
     settings.dateFormat = "MMM dd, yyyy";
+  }
+
+  if (!settings.language) {
+    settings.language = DEFAULT_LANGUAGE;
   }
 
   res.json(settings);
