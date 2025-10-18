@@ -1,9 +1,26 @@
 import { format, parseISO } from "date-fns";
 
 export function formatCurrency(amount, currencyCode = "USD") {
-  return new Intl.NumberFormat("en-US", {
+  // Use locale based on currency when possible; default to en-US
+  // Q (GTQ) supported as currency code GTQ
+  const currencyToLocale = {
+    USD: "en-US",
+    EUR: "de-DE",
+    GBP: "en-GB",
+    JPY: "ja-JP",
+    CNY: "zh-CN",
+    INR: "en-IN",
+    CAD: "en-CA",
+    AUD: "en-AU",
+    CHF: "de-CH",
+    KRW: "ko-KR",
+    GTQ: "es-GT",
+  };
+  const locale = currencyToLocale[currencyCode] || "en-US";
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: currencyCode,
+    currencyDisplay: "symbol",
   }).format(amount);
 }
 

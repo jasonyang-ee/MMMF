@@ -96,3 +96,23 @@ services:
   ```bash
   docker-compose up -d --build
   ```
+
+### Manual (Node) Development
+
+1. Install dependencies
+   ```bash
+   npm install
+   ```
+2. Start dev servers (API + Vite)
+   ```bash
+   npm run dev
+   ```
+3. Open the app at `http://localhost:5173` (API at `http://localhost:3600`).
+
+### Internationalization (i18n)
+- Use the language toggle in the header to switch between English and Español.
+- The selected language persists in settings.
+
+### Currency
+- Configure currency under Global Settings.
+- Support added for Guatemalan Quetzal: `GTQ` (symbol `Q`).

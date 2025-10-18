@@ -14,6 +14,7 @@ import RecurringCreditCards from "./components/RecurringCreditCards";
 import ForecastSettings from "./components/ForecastSettings";
 import BalanceTimeline from "./components/BalanceTimeline";
 import GlobalSettings from "./components/GlobalSettings";
+import { I18nProvider } from "./i18n";
 
 function App() {
   const [startingBalance, setStartingBalance] = useState(0);
@@ -24,12 +25,27 @@ function App() {
   const [forecastEndDate, setForecastEndDate] = useState("");
   const [currencySymbol, setCurrencySymbol] = useState("USD");
   const [dateFormat, setDateFormat] = useState("MMM dd, yyyy");
+  const [language, setLanguage] = useState("en");
   const [loading, setLoading] = useState(true);
 
   // Load data on mount
   useEffect(() => {
     loadData();
   }, []);
+
+  function getCookie(name) {
+    if (typeof document === "undefined") return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null;
+  }
+
+  function setCookie(name, val, days = 365) {
+    if (typeof document === "undefined") return;
+    const maxAge = days * 24 * 60 * 60;
+    document.cookie = `${name}=${val}; path=/; max-age=${maxAge}`;
+  }
 
   async function loadData() {
     try {
@@ -47,9 +63,22 @@ function App() {
       setRecurring(recurringData || []);
       setCreditCards(creditCardsData || []);
 
-      // Load currency and date format settings
+      // Load currency, date format and language settings
       setCurrencySymbol(settingsData.currencySymbol || "USD");
       setDateFormat(settingsData.dateFormat || "MMM dd, yyyy");
+      const cookieLang = getCookie("lang");
+      const serverLang = settingsData.language || "en";
+      const initialLang = cookieLang && ["en", "es"].includes(cookieLang)
+        ? cookieLang
+        : serverLang;
+      setLanguage(initialLang);
+      // If cookie overrides server, sync back once
+      if (initialLang !== serverLang) {
+        await api.updateSettings({
+          ...settingsData,
+          language: initialLang,
+        });
+      }
 
       // Load dates from settings or use defaults
       const todayDate = getTodayDate();
@@ -79,6 +108,7 @@ function App() {
       forecastEndDate: forecastEndDate,
       currencySymbol: currencySymbol,
       dateFormat: dateFormat,
+      language: language,
     });
   }
 
@@ -90,6 +120,7 @@ function App() {
       forecastEndDate: forecastEndDate,
       currencySymbol: currencySymbol,
       dateFormat: dateFormat,
+      language: language,
     });
   }
 
@@ -101,6 +132,7 @@ function App() {
       forecastEndDate: newDate,
       currencySymbol: currencySymbol,
       dateFormat: dateFormat,
+      language: language,
     });
   }
 
@@ -112,6 +144,7 @@ function App() {
       forecastEndDate: forecastEndDate,
       currencySymbol: newCurrency,
       dateFormat: dateFormat,
+      language: language,
     });
   }
 
@@ -123,6 +156,21 @@ function App() {
       forecastEndDate: forecastEndDate,
       currencySymbol: currencySymbol,
       dateFormat: newFormat,
+      language: language,
+    });
+  }
+
+  async function handleLanguageChange(newLanguage) {
+    const nextLang = ["en", "es"].includes(newLanguage) ? newLanguage : "en";
+    setCookie("lang", nextLang);
+    setLanguage(nextLang);
+    await api.updateSettings({
+      startingBalance: startingBalance,
+      currentDate: currentDate,
+      forecastEndDate: forecastEndDate,
+      currencySymbol: currencySymbol,
+      dateFormat: dateFormat,
+      language: nextLang,
     });
   }
 
@@ -198,6 +246,7 @@ function App() {
         forecastEndDate: newForecastEndDate,
         currencySymbol: currencySymbol,
         dateFormat: dateFormat,
+        language: language,
       });
     }
   }
@@ -236,8 +285,9 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#1f1f1f]">
-      <Header />
+    <I18nProvider language={language} setLanguage={handleLanguageChange}>
+      <div className="min-h-screen bg-gray-50 dark:bg-[#1f1f1f]">
+        <Header />
 
       <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* New Layout: Sidebar + Main Content */}
@@ -305,7 +355,8 @@ function App() {
               recurring={recurring}
               onAddRecurring={handleAddRecurring}
               onUpdateRecurring={handleUpdateRecurring}
-              onDeleteRecurring={handleDeleteRecurring}
+            onDeleteRecurring={handleDeleteRecurring}
+            currencySymbol={currencySymbol}
             />
 
             {/* Add Transaction Form - Third */}
@@ -313,7 +364,8 @@ function App() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </I18nProvider>
   );
 }
 

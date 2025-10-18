@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { formatCurrency } from "../utils";
+import { useI18n } from "../i18n";
 
-function RecurringItem({ item, onDelete, onUpdate }) {
+function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
+  const { t } = useI18n();
   const [isEditingAmount, setIsEditingAmount] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editAmount, setEditAmount] = useState(item.amount);
@@ -87,14 +89,14 @@ function RecurringItem({ item, onDelete, onUpdate }) {
           <div
             onClick={handleNameClick}
             className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-0.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
-            title="Click to edit description"
+            title={t("recurring:clickToEditDesc")}
           >
             {item.name}
           </div>
         )}
         {item.dayOfMonth && (
           <div className="text-xs text-gray-500 dark:text-gray-400">
-            Day {item.dayOfMonth} of month
+            {t("recurring:dayOfMonth", item.dayOfMonth)}
           </div>
         )}
       </div>
@@ -109,7 +111,7 @@ function RecurringItem({ item, onDelete, onUpdate }) {
                   : "text-red-600 dark:text-red-400"
               }`}
             >
-              {item.type === "credit" ? "+" : "-"}$
+              {item.type === "credit" ? "+" : "-"}
             </span>
             <input
               ref={amountInputRef}
@@ -132,17 +134,17 @@ function RecurringItem({ item, onDelete, onUpdate }) {
                 ? "text-green-600 dark:text-green-400"
                 : "text-red-600 dark:text-red-400"
             }`}
-            title="Click to edit amount"
+            title={t("recurring:clickToEditAmount")}
           >
             {item.type === "credit" ? "+" : "-"}
-            {formatCurrency(item.amount)}
+            {formatCurrency(item.amount, currencySymbol)}
           </span>
         )}
 
         <button
           onClick={() => onDelete(item.id)}
           className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-0.5"
-          title="Delete recurring transaction"
+          title={t("recurring:deleteRecurring")}
         >
           <svg
             className="w-4 h-4"
@@ -168,7 +170,9 @@ function RecurringList({
   onAddRecurring,
   onUpdateRecurring,
   onDeleteRecurring,
+  currencySymbol = "USD",
 }) {
+  const { t } = useI18n();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -188,13 +192,13 @@ function RecurringList({
     e.preventDefault();
 
     if (!formData.name || !formData.amount || !formData.dayOfMonth) {
-      alert("Please fill in all fields");
+      alert(t("recurring:validationAll"));
       return;
     }
 
     const dayOfMonth = parseInt(formData.dayOfMonth);
     if (dayOfMonth < 1 || dayOfMonth > 31) {
-      alert("Day of month must be between 1 and 31");
+      alert(t("recurring:validationDayRange"));
       return;
     }
 
@@ -212,14 +216,12 @@ function RecurringList({
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold dark:text-gray-100">
-          Recurring Transactions
-        </h2>
+        <h2 className="text-xl font-semibold dark:text-gray-100">{t("recurring:title")}</h2>
         <button
           onClick={() => setShowForm(!showForm)}
           className="text-primary-600 hover:text-primary-700 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium"
         >
-          {showForm ? "Cancel" : "+ Add"}
+          {showForm ? t("common:cancel") : t("recurring:addButton")}
         </button>
       </div>
 
@@ -231,7 +233,7 @@ function RecurringList({
           <input
             ref={nameInputRef}
             type="text"
-            placeholder="Description"
+            placeholder={t("recurring:descriptionPh")}
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className="input text-sm"
@@ -240,7 +242,7 @@ function RecurringList({
 
           <input
             type="number"
-            placeholder="Amount"
+            placeholder={t("recurring:amountPh")}
             value={formData.amount}
             onChange={(e) =>
               setFormData({ ...formData, amount: e.target.value })
@@ -253,7 +255,7 @@ function RecurringList({
 
           <input
             type="number"
-            placeholder="Day of Month (1-31)"
+            placeholder={t("recurring:dayOfMonthPh")}
             value={formData.dayOfMonth}
             onChange={(e) =>
               setFormData({ ...formData, dayOfMonth: e.target.value })
@@ -274,7 +276,7 @@ function RecurringList({
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
               }`}
             >
-              Payment
+              {t("recurring:payment")}
             </button>
             <button
               type="button"
@@ -285,7 +287,7 @@ function RecurringList({
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
               }`}
             >
-              Income
+              {t("recurring:income")}
             </button>
           </div>
 
@@ -293,7 +295,7 @@ function RecurringList({
             type="submit"
             className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm"
           >
-            Save Recurring Transaction
+            {t("recurring:saveRecurring")}
           </button>
         </form>
       )}
@@ -301,10 +303,8 @@ function RecurringList({
       <div className="space-y-2 max-h-[600px] overflow-y-auto">
         {recurring.length === 0 ? (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>No recurring transactions</p>
-            <p className="text-sm mt-2">
-              Recurring transactions are auto-generated each month
-            </p>
+            <p>{t("recurring:noRecurring")}</p>
+            <p className="text-sm mt-2">{t("recurring:autoNote")}</p>
           </div>
         ) : (
           recurring.map((item) => (
@@ -313,6 +313,7 @@ function RecurringList({
               item={item}
               onUpdate={onUpdateRecurring}
               onDelete={onDeleteRecurring}
+              currencySymbol={currencySymbol}
             />
           ))
         )}

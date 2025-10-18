@@ -31,6 +31,8 @@ EXPOSE 5173
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=5173
+# Default language for server-side defaults (en|es)
+ENV DEFAULT_LANGUAGE=en
 
 HEALTHCHECK --interval=5m --timeout=10s --start-period=10s --retries=3 \
 	CMD curl -f http://127.0.0.1:5173/ || exit 1

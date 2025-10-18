@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { getTodayDate } from "../utils";
 import DatePicker from "./DatePicker";
+import { useI18n } from "../i18n";
 
 function TransactionForm({ onAddTransaction }) {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
     name: "",
     amount: "",
@@ -14,7 +16,7 @@ function TransactionForm({ onAddTransaction }) {
     e.preventDefault();
 
     if (!formData.name || !formData.amount || !formData.date) {
-      alert("Please fill in all fields");
+      alert(t("transactions:fillAllFields"));
       return;
     }
 
@@ -41,13 +43,11 @@ function TransactionForm({ onAddTransaction }) {
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
-        Add Transaction
-      </h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">{t("transactions:addTransaction")}</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="label">Description</label>
+          <label className="label">{t("transactions:description")}</label>
           <input
             type="text"
             name="name"
@@ -60,7 +60,7 @@ function TransactionForm({ onAddTransaction }) {
         </div>
 
         <div>
-          <label className="label">Amount</label>
+          <label className="label">{t("transactions:amount")}</label>
           <input
             type="number"
             name="amount"
@@ -75,7 +75,7 @@ function TransactionForm({ onAddTransaction }) {
         </div>
 
         <div>
-          <label className="label">Type</label>
+          <label className="label">{t("transactions:type")}</label>
           <div className="flex gap-2">
             <button
               type="button"
@@ -86,7 +86,7 @@ function TransactionForm({ onAddTransaction }) {
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
               }`}
             >
-              Debit (Payment)
+              {t("transactions:debitPayment")}
             </button>
             <button
               type="button"
@@ -97,13 +97,13 @@ function TransactionForm({ onAddTransaction }) {
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
               }`}
             >
-              Credit (Income)
+              {t("transactions:creditIncome")}
             </button>
           </div>
         </div>
 
         <div>
-          <label className="label">Date</label>
+          <label className="label">{t("transactions:date")}</label>
           <DatePicker
             value={formData.date}
             onChange={(date) => setFormData({ ...formData, date })}
@@ -115,7 +115,7 @@ function TransactionForm({ onAddTransaction }) {
           type="submit"
           className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600"
         >
-          Add Transaction
+          {t("transactions:addBtn")}
         </button>
       </form>
     </div>

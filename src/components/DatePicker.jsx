@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { format, parse, isValid } from "date-fns";
+import { useI18n } from "../i18n";
 
 export default function DatePicker({ value, onChange, min, className = "" }) {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -114,7 +116,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
   };
 
   const days = getDaysInMonth(currentMonth);
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const weekDays = t("datepicker:weekdaysShort");
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -124,7 +126,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
         readOnly
         onClick={() => setIsOpen(!isOpen)}
         className={`input cursor-pointer ${className}`}
-        placeholder="Select a date"
+        placeholder={t("common:selectDate")}
       />
 
       {isOpen && (
@@ -151,9 +153,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
               </svg>
             </button>
 
-            <div className="text-lg font-semibold">
-              {format(currentMonth, "MMMM yyyy")}
-            </div>
+            <div className="text-lg font-semibold">{format(currentMonth, "MMMM yyyy")}</div>
 
             <button
               type="button"
@@ -224,7 +224,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
               onClick={() => handleDateClick(new Date())}
               className="w-full py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
             >
-              Today
+              {t("common:today")}
             </button>
           </div>
         </div>

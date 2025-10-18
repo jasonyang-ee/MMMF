@@ -1,5 +1,6 @@
 import React from "react";
 import { formatCurrency, formatDate } from "../utils";
+import { useI18n } from "../i18n";
 
 function BalanceTimeline({
   balanceHistory,
@@ -8,6 +9,7 @@ function BalanceTimeline({
   currencySymbol = "USD",
   dateFormat = "MMM dd, yyyy",
 }) {
+  const { t } = useI18n();
   if (balanceHistory.length === 0) {
     return null;
   }
@@ -19,29 +21,17 @@ function BalanceTimeline({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 text-center dark:text-gray-100">
-        Balance Timeline
-      </h2>
+      <h2 className="text-xl font-semibold mb-4 text-center dark:text-gray-100">{t("timeline:title")}</h2>
 
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-100 dark:bg-[#2a2a2a] border-b-2 border-gray-300 dark:border-[#3a3a3a]">
             <tr>
-              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700 dark:text-gray-400 w-20">
-                Action
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
-                Description
-              </th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">
-                Amount
-              </th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">
-                Balance
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">
-                Date
-              </th>
+              <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700 dark:text-gray-400 w-20">{t("timeline:action")}</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:description")}</th>
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:amount")}</th>
+              <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:balance")}</th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-400">{t("timeline:date")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-[#3a3a3a]">
@@ -60,7 +50,7 @@ function BalanceTimeline({
                           onDeleteTransaction(entry.transaction.id)
                         }
                         className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1"
-                        title="Delete transaction"
+                        title={t("timeline:delete")}
                       >
                         <svg
                           className="w-5 h-5"
@@ -78,16 +68,14 @@ function BalanceTimeline({
                       </button>
                     )}
                     {entry.transaction && entry.transaction.isRecurring && (
-                      <span className="text-gray-400 dark:text-gray-500 text-xs px-1">
-                        Auto
-                      </span>
+                      <span className="text-gray-400 dark:text-gray-500 text-xs px-1">{t("common:auto")}</span>
                     )}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                   {entry.transaction
                     ? entry.transaction.name
-                    : "Starting Balance"}
+                    : t("balance:startingBalanceRow")}
                 </td>
                 <td className="px-4 py-3 text-sm text-right">
                   {entry.transaction && (
