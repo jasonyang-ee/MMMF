@@ -8,4 +8,5 @@ services:
     volumes:
       - ./data:/app/data
     environment:
-      - DEFAULT_LANGUAGE=en # change to 'es' for Spanish by default
+      TZ: America/Los_Angeles
+      DEFAULT_LANGUAGE: en # supported lanugage values: en, zht, ja, es

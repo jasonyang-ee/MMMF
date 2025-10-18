@@ -43,7 +43,9 @@ function TransactionForm({ onAddTransaction }) {
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">{t("transactions:addTransaction")}</h2>
+      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+        {t("transactions:addTransaction")}
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -54,7 +56,7 @@ function TransactionForm({ onAddTransaction }) {
             value={formData.name}
             onChange={handleChange}
             className="input"
-            placeholder="e.g., 0DTE SPY Call Margin Requirement"
+            placeholder={t("transactions:descriptionPh")}
             required
           />
         </div>
@@ -69,7 +71,7 @@ function TransactionForm({ onAddTransaction }) {
             step="0.01"
             min="0"
             className="input"
-            placeholder="0.00"
+            placeholder={t("transactions:amountPh")}
             required
           />
         </div>

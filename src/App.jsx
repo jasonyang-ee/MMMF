@@ -68,9 +68,10 @@ function App() {
       setDateFormat(settingsData.dateFormat || "MMM dd, yyyy");
       const cookieLang = getCookie("lang");
       const serverLang = settingsData.language || "en";
-      const initialLang = cookieLang && ["en", "es"].includes(cookieLang)
-        ? cookieLang
-        : serverLang;
+      const initialLang =
+        cookieLang && ["en", "es"].includes(cookieLang)
+          ? cookieLang
+          : serverLang;
       setLanguage(initialLang);
       // If cookie overrides server, sync back once
       if (initialLang !== serverLang) {
@@ -161,7 +162,9 @@ function App() {
   }
 
   async function handleLanguageChange(newLanguage) {
-    const nextLang = ["en", "es"].includes(newLanguage) ? newLanguage : "en";
+    const nextLang = ["en", "es", "zht", "ja"].includes(newLanguage)
+      ? newLanguage
+      : "en";
     setCookie("lang", nextLang);
     setLanguage(nextLang);
     await api.updateSettings({
@@ -289,81 +292,81 @@ function App() {
       <div className="min-h-screen bg-gray-50 dark:bg-[#1f1f1f]">
         <Header />
 
-      <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* New Layout: Sidebar + Main Content */}
-        <div className="grid grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px] gap-6">
-          {/* Left Sidebar */}
-          <div className="space-y-6">
-            {/* Account Balance - Top */}
-            <BalanceDisplay
-              startingBalance={startingBalance}
-              currentBalance={currentBalance}
-              lowestBalance={lowestBalanceInfo.balance}
-              lowestBalanceDate={lowestBalanceInfo.date}
-              onStartingBalanceChange={handleStartingBalanceChange}
-              currencySymbol={currencySymbol}
-              dateFormat={dateFormat}
-            />
+        <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* New Layout: Sidebar + Main Content */}
+          <div className="grid grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px] gap-6">
+            {/* Left Sidebar */}
+            <div className="space-y-6">
+              {/* Account Balance - Top */}
+              <BalanceDisplay
+                startingBalance={startingBalance}
+                currentBalance={currentBalance}
+                lowestBalance={lowestBalanceInfo.balance}
+                lowestBalanceDate={lowestBalanceInfo.date}
+                onStartingBalanceChange={handleStartingBalanceChange}
+                currencySymbol={currencySymbol}
+                dateFormat={dateFormat}
+              />
 
-            {/* Forecast Settings - Second */}
-            <ForecastSettings
-              currentDate={currentDate}
-              forecastEndDate={forecastEndDate}
-              onCurrentDateChange={handleCurrentDateChange}
-              onForecastEndDateChange={handleForecastEndDateChange}
-              onClearCalculations={handleClearCalculations}
-            />
+              {/* Forecast Settings - Second */}
+              <ForecastSettings
+                currentDate={currentDate}
+                forecastEndDate={forecastEndDate}
+                onCurrentDateChange={handleCurrentDateChange}
+                onForecastEndDateChange={handleForecastEndDateChange}
+                onClearCalculations={handleClearCalculations}
+              />
 
-            {/* Global Settings - Third */}
-            <GlobalSettings
-              currencySymbol={currencySymbol}
-              dateFormat={dateFormat}
-              onCurrencyChange={handleCurrencyChange}
-              onDateFormatChange={handleDateFormatChange}
-            />
+              {/* Global Settings - Third */}
+              <GlobalSettings
+                currencySymbol={currencySymbol}
+                dateFormat={dateFormat}
+                onCurrencyChange={handleCurrencyChange}
+                onDateFormatChange={handleDateFormatChange}
+              />
+            </div>
+
+            {/* Center - Balance Timeline */}
+            <div className="min-w-0">
+              <BalanceTimeline
+                balanceHistory={balanceHistory}
+                currentDate={currentDate}
+                forecastEndDate={forecastEndDate}
+                onDeleteTransaction={handleDeleteTransaction}
+                currencySymbol={currencySymbol}
+                dateFormat={dateFormat}
+              />
+            </div>
+
+            {/* Right Sidebar */}
+            <div className="space-y-6">
+              {/* Recurring Credit Cards - First */}
+              <RecurringCreditCards
+                creditCards={creditCards}
+                onAddCreditCard={handleAddCreditCard}
+                onUpdateCreditCard={handleUpdateCreditCard}
+                onDeleteCreditCard={handleDeleteCreditCard}
+                onUseCreditCard={handleUseCreditCard}
+                currentDate={currentDate}
+                forecastEndDate={forecastEndDate}
+                transactions={transactions}
+                dateFormat={dateFormat}
+              />
+
+              {/* Recurring Transactions - Second */}
+              <RecurringList
+                recurring={recurring}
+                onAddRecurring={handleAddRecurring}
+                onUpdateRecurring={handleUpdateRecurring}
+                onDeleteRecurring={handleDeleteRecurring}
+                currencySymbol={currencySymbol}
+              />
+
+              {/* Add Transaction Form - Third */}
+              <TransactionForm onAddTransaction={handleAddTransaction} />
+            </div>
           </div>
-
-          {/* Center - Balance Timeline */}
-          <div className="min-w-0">
-            <BalanceTimeline
-              balanceHistory={balanceHistory}
-              currentDate={currentDate}
-              forecastEndDate={forecastEndDate}
-              onDeleteTransaction={handleDeleteTransaction}
-              currencySymbol={currencySymbol}
-              dateFormat={dateFormat}
-            />
-          </div>
-
-          {/* Right Sidebar */}
-          <div className="space-y-6">
-            {/* Recurring Credit Cards - First */}
-            <RecurringCreditCards
-              creditCards={creditCards}
-              onAddCreditCard={handleAddCreditCard}
-              onUpdateCreditCard={handleUpdateCreditCard}
-              onDeleteCreditCard={handleDeleteCreditCard}
-              onUseCreditCard={handleUseCreditCard}
-              currentDate={currentDate}
-              forecastEndDate={forecastEndDate}
-              transactions={transactions}
-              dateFormat={dateFormat}
-            />
-
-            {/* Recurring Transactions - Second */}
-            <RecurringList
-              recurring={recurring}
-              onAddRecurring={handleAddRecurring}
-              onUpdateRecurring={handleUpdateRecurring}
-            onDeleteRecurring={handleDeleteRecurring}
-            currencySymbol={currencySymbol}
-            />
-
-            {/* Add Transaction Form - Third */}
-            <TransactionForm onAddTransaction={handleAddTransaction} />
-          </div>
-        </div>
-      </main>
+        </main>
       </div>
     </I18nProvider>
   );

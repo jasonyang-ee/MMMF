@@ -17,6 +17,8 @@
 - **Edit on Click**: Click on recurring transaction items to edit
 - **Clear Calculations**: Remove all transactions while keeping recurring items
 - **Global Currency and Date Format**: Set your preferred currency and date format
+- **Internationalization (i18n)**: Support for multiple languages including English, Español, 日本語, and 繁體中文
+  > Looking for contributors to help translate to more languages!
 
 ## Getting Started
 
@@ -42,6 +44,7 @@ services:
       - ./mmmf/data:/app/data
     environment:
       TZ: America/Los_Angeles
+      DEFAULT_LANGUAGE: en # supported lanugage values: en, zht, ja, es
 ```
 
 ### Docker Image
@@ -110,9 +113,11 @@ services:
 3. Open the app at `http://localhost:5173` (API at `http://localhost:3600`).
 
 ### Internationalization (i18n)
+
 - Use the language toggle in the header to switch between English and Español.
 - The selected language persists in settings.
 
 ### Currency
+
 - Configure currency under Global Settings.
 - Support added for Guatemalan Quetzal: `GTQ` (symbol `Q`).

@@ -112,23 +112,24 @@ function GlobalSettings({
         </div>
       </div>
 
-      {/* Currency Symbol Selection */
-      }
+      {/* Language Selection */}
       <div className="pb-3 border-b border-gray-200 dark:border-[#3a3a3a]">
-        <div className="flex items-center justify-between">
-          <label className="label">{t("settings:currency")}</label>
-          <div className="flex items-center gap-2">
-            <label className="label text-xs">Lang</label>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="input cursor-pointer text-xs py-1 px-2"
-            >
-              <option value="en">English</option>
-              <option value="es">Español</option>
-            </select>
-          </div>
-        </div>
+        <label className="label">{t("settings:language")}</label>
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          className="input cursor-pointer"
+        >
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="zht">繁體中文</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+
+      {/* Currency Symbol Selection */}
+      <div className="pb-3 border-b border-gray-200 dark:border-[#3a3a3a]">
+        <label className="label">{t("settings:currency")}</label>
         <select
           value={currencySymbol}
           onChange={(e) => onCurrencyChange(e.target.value)}

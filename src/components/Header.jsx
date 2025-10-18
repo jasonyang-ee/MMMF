@@ -2,24 +2,20 @@ import React from "react";
 import { useI18n } from "../i18n";
 
 function Header() {
-  const { t, language, setLanguage } = useI18n();
-  const nextLang = language === "en" ? "es" : "en";
+  const { t } = useI18n();
   return (
     <header className="bg-gray-50 dark:bg-[#2a2a2a] shadow-sm dark:shadow-black/50">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-primary-600 dark:text-gray-100">{t("header:title")}</h1>
-            <p className="text-xs text-gray-600 dark:text-gray-400">{t("header:tagline")}</p>
+            <h1 className="text-xl font-bold text-primary-600 dark:text-gray-100">
+              {t("header:title")}
+            </h1>
+            <p className="text-xs text-gray-600 dark:text-gray-400">
+              {t("header:tagline")}
+            </p>
           </div>
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => setLanguage(nextLang)}
-              className="px-3 py-1.5 rounded-md text-sm font-medium bg-gray-200 dark:bg-[#3a3a3a] text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-[#4a4a4a]"
-              title={t("header:toggleTo")}
-            >
-              {t("header:toggleTo")}
-            </button>
             <a
               href="https://github.com/jasonyang-ee/MMMF"
               target="_blank"
