@@ -1,4 +1,27 @@
-# Use Debian-based Node.js image
+# Stage 1: Build stage
+FROM node:20-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies for build)
+RUN npm install
+
+# Copy source files needed for build
+COPY vite.config.js ./
+COPY tailwind.config.js ./
+COPY postcss.config.cjs ./
+COPY index.html ./
+COPY src ./src
+COPY public ./public
+
+# Build frontend
+RUN npm run build
+
+# Stage 2: Production stage
 FROM node:20-alpine
 
 # Install curl for health checks
@@ -10,17 +33,14 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm install
+# Install only production dependencies
+RUN npm install --production
 
-# Copy application files
-COPY . .
+# Copy built frontend from builder stage
+COPY --from=builder /app/dist ./dist
 
-# Build frontend
-RUN npm run build
-
-# Remove dev dependencies to reduce image size
-RUN npm prune --production
+# Copy server files
+COPY server ./server
 
 # Create data directory for file-based database
 RUN mkdir -p /app/data
