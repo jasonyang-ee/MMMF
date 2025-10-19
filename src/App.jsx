@@ -59,9 +59,9 @@ function App() {
         ]);
 
       setStartingBalance(settingsData.startingBalance || 0);
-      setTransactions(transactionsData || []);
-      setRecurring(recurringData || []);
-      setCreditCards(creditCardsData || []);
+      setTransactions(Array.isArray(transactionsData) ? transactionsData : []);
+      setRecurring(Array.isArray(recurringData) ? recurringData : []);
+      setCreditCards(Array.isArray(creditCardsData) ? creditCardsData : []);
 
       // Load currency, date format and language settings
       setCurrencySymbol(settingsData.currencySymbol || "USD");
@@ -69,7 +69,7 @@ function App() {
       const cookieLang = getCookie("lang");
       const serverLang = settingsData.language || "en";
       const initialLang =
-        cookieLang && ["en", "es"].includes(cookieLang)
+        cookieLang && ["en", "es", "zht", "jp"].includes(cookieLang)
           ? cookieLang
           : serverLang;
       setLanguage(initialLang);

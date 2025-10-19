@@ -9,10 +9,11 @@ function CreditCardItem({
   onUse,
   currentDate,
   forecastEndDate,
-  transactions,
+  transactions = [],
   dateFormat = "MMM dd, yyyy",
 }) {
   const { t } = useI18n();
+  const safeTransactions = Array.isArray(transactions) ? transactions : [];
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [amount, setAmount] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
@@ -63,7 +64,7 @@ function CreditCardItem({
     const endDate = parseLocalDate(forecastEndDate);
 
     // Find all existing transactions for this credit card
-    const existingDates = transactions
+    const existingDates = safeTransactions
       .filter((t) => t.name === item.name)
       .map((t) => parseLocalDate(t.date))
       .sort((a, b) => b - a); // Sort descending to get most recent first
@@ -266,17 +267,19 @@ function CreditCardItem({
 }
 
 function RecurringCreditCards({
-  creditCards,
+  creditCards = [],
   onAddCreditCard,
   onUpdateCreditCard,
   onDeleteCreditCard,
   onUseCreditCard,
   currentDate,
   forecastEndDate,
-  transactions,
+  transactions = [],
   dateFormat = "MMM dd, yyyy",
 }) {
   const { t } = useI18n();
+  const safeCreditCards = Array.isArray(creditCards) ? creditCards : [];
+  const safeTransactions = Array.isArray(transactions) ? transactions : [];
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -361,13 +364,13 @@ function RecurringCreditCards({
       )}
 
       <div className="space-y-2 max-h-[600px] overflow-y-auto custom-scrollbar">
-        {creditCards.length === 0 ? (
+        {safeCreditCards.length === 0 ? (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>{t("cards:noCards")}</p>
             <p className="text-sm mt-2">{t("cards:addNote")}</p>
           </div>
         ) : (
-          creditCards.map((item) => (
+          safeCreditCards.map((item) => (
             <CreditCardItem
               key={item.id}
               item={item}
@@ -376,7 +379,7 @@ function RecurringCreditCards({
               onUse={onUseCreditCard}
               currentDate={currentDate}
               forecastEndDate={forecastEndDate}
-              transactions={transactions}
+              transactions={safeTransactions}
               dateFormat={dateFormat}
             />
           ))

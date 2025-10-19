@@ -3,19 +3,23 @@ import { formatCurrency, formatDate } from "../utils";
 import { useI18n } from "../i18n";
 
 function BalanceTimeline({
-  balanceHistory,
+  balanceHistory = [],
   forecastEndDate,
   onDeleteTransaction,
   currencySymbol = "USD",
   dateFormat = "MMM dd, yyyy",
 }) {
   const { t } = useI18n();
-  if (balanceHistory.length === 0) {
+  const safeBalanceHistory = Array.isArray(balanceHistory)
+    ? balanceHistory
+    : [];
+
+  if (safeBalanceHistory.length === 0) {
     return null;
   }
 
   // Filter to only show entries up to forecast end date
-  const filteredHistory = balanceHistory.filter(
+  const filteredHistory = safeBalanceHistory.filter(
     (entry) => new Date(entry.date) <= new Date(forecastEndDate)
   );
 

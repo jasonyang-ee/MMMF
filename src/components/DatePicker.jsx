@@ -116,7 +116,10 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
   };
 
   const days = getDaysInMonth(currentMonth);
-  const weekDays = t("datepicker:weekdaysShort");
+  const weekDaysTranslation = t("datepicker:weekdaysShort");
+  const weekDays = Array.isArray(weekDaysTranslation)
+    ? weekDaysTranslation
+    : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -153,7 +156,9 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
               </svg>
             </button>
 
-            <div className="text-lg font-semibold">{format(currentMonth, "MMMM yyyy")}</div>
+            <div className="text-lg font-semibold">
+              {format(currentMonth, "MMMM yyyy")}
+            </div>
 
             <button
               type="button"

@@ -166,13 +166,14 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
 }
 
 function RecurringList({
-  recurring,
+  recurring = [],
   onAddRecurring,
   onUpdateRecurring,
   onDeleteRecurring,
   currencySymbol = "USD",
 }) {
   const { t } = useI18n();
+  const safeRecurring = Array.isArray(recurring) ? recurring : [];
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -303,13 +304,13 @@ function RecurringList({
       )}
 
       <div className="space-y-2 max-h-[600px] overflow-y-auto custom-scrollbar">
-        {recurring.length === 0 ? (
+        {safeRecurring.length === 0 ? (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>{t("recurring:noRecurring")}</p>
             <p className="text-sm mt-2">{t("recurring:autoNote")}</p>
           </div>
         ) : (
-          recurring.map((item) => (
+          safeRecurring.map((item) => (
             <RecurringItem
               key={item.id}
               item={item}

@@ -456,6 +456,9 @@ export function I18nProvider({ language, setLanguage, children }) {
       if (typeof node === "string") {
         return node;
       }
+      if (Array.isArray(node)) {
+        return node;
+      }
       return key; // fallback to key
     };
   }, [language]);

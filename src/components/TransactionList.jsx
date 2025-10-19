@@ -3,20 +3,21 @@ import { formatCurrency, formatDate } from "../utils";
 import { useI18n } from "../i18n";
 
 function TransactionList({
-  transactions,
+  transactions = [],
   onDeleteTransaction,
   currencySymbol = "USD",
   dateFormat = "MMM dd, yyyy",
 }) {
   const { t } = useI18n();
-  const sortedTransactions = [...transactions].sort(
+  const safeTransactions = Array.isArray(transactions) ? transactions : [];
+  const sortedTransactions = [...safeTransactions].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
 
   return (
     <div className="card">
       <h2 className="text-xl font-semibold mb-4">
-        {t("transactions:listTitle", transactions.length)}
+        {t("transactions:listTitle", safeTransactions.length)}
       </h2>
 
       {sortedTransactions.length === 0 ? (
