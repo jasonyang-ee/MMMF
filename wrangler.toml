@@ -4,5 +4,4 @@ pages_build_output_dir = "dist"
 
 [[kv_namespaces]]
 binding = "MMMF_KV"
-id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # Replace with your KV Namespace ID
-preview_id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # Replace with your Preview KV Namespace ID
+id = "9e7bfc690528464f991e4ec210b54094" # Replace with your KV Namespace ID

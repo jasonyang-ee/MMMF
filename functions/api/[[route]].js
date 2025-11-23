@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { handle } from "hono/cloudflare-pages";
 
 const app = new Hono().basePath("/api");
 
@@ -181,4 +182,4 @@ app.put("/settings", async (c) => {
   return c.json(body);
 });
 
-export const onRequest = app.fetch;
+export const onRequest = handle(app);
