@@ -1,0 +1,8 @@
+name = "mmmf"
+compatibility_date = "2023-12-01"
+pages_build_output_dir = "dist"
+
+[[kv_namespaces]]
+binding = "MMMF_KV"
+id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # Replace with your KV Namespace ID
+preview_id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # Replace with your Preview KV Namespace ID

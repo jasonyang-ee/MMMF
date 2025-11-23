@@ -1,28 +1,14 @@
 #!/bin/bash
-
 echo "🚀 Starting Budget Forecast App..."
-echo ""
 
-# Check if node_modules exists
 if [ ! -d "node_modules" ]; then
     echo "📦 Installing dependencies..."
-    npm install
-    echo ""
+    npm install > /dev/null 2>&1
 fi
 
-# Create data directory if it doesn't exist
 if [ ! -d "data" ]; then
-    echo "📁 Creating data directory..."
     mkdir -p data
-    echo ""
 fi
 
-# Start the application
-echo "✨ Starting development servers..."
-echo "   - Backend API: http://localhost:3600"
-echo "   - Frontend: http://localhost:5173"
-echo ""
-echo "Press Ctrl+C to stop"
-echo ""
-
+echo "✨ Servers: API http://localhost:3600 | Frontend http://localhost:5173"
 npm run dev

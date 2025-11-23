@@ -15,7 +15,7 @@ COPY vite.config.js ./
 COPY tailwind.config.js ./
 COPY postcss.config.cjs ./
 COPY index.html ./
-COPY src ./src
+COPY client ./client
 COPY public ./public
 
 # Build frontend
