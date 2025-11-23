@@ -71,6 +71,39 @@ services:
 
 - Bind mounts to preserve data: `/app/data/`
 
+## Deployment
+
+### Cloudflare Pages
+
+1. **Build Configuration**:
+
+   - **Framework Preset**: React (Vite)
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+   - **Root directory**: `/` (leave empty)
+   - **Build comments**: Enabled
+
+2. **Environment Variables**:
+
+   - Set up your KV Namespace binding with name `MMMF_KV`.
+
+3. **Deploy**:
+   ```bash
+   npm run build
+   npx wrangler pages deploy dist
+   ```
+
+### Cloudflare Workers
+
+1. **Configuration**:
+
+   - Ensure `wrangler.worker.toml` has the correct KV Namespace ID.
+
+2. **Deploy**:
+   ```bash
+   npm run deploy:worker
+   ```
+
 ## Screenshots
 
 - Populated View

@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "docker:build": "docker build -t balance-forecast .",
     "docker:run": "docker run -p 3600:3600 -v ./data:/app/data balance-forecast",
-    "preview:cf": "npm run build && wrangler pages dev dist"
+    "preview:cf": "npm run build && wrangler pages dev dist",
+    "deploy:worker": "wrangler deploy --config wrangler.worker.toml"
   },
   "keywords": [
     "budget",
