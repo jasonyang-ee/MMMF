@@ -96,22 +96,21 @@ jobs:
 
       - name: Validate Wrangler Configuration
         run: |
-          echo "Validating wrangler.toml configuration..."
-          npx wrangler pages project list --help > /dev/null 2>&1 || echo "Wrangler CLI is available"
+          echo "Validating wrangler configuration..."
+          npx wrangler pages project list --help > /dev/null 2>&1 && echo "✓ Wrangler CLI is available" || echo "✗ Wrangler CLI check failed"
           
           echo "Checking wrangler configuration files..."
           if [ -f "wrangler.toml" ]; then
-            echo "✓ wrangler.toml found"
+            echo "✓ wrangler.toml found (Pages deployment)"
           else
             echo "✗ wrangler.toml not found"
             exit 1
           fi
           
           if [ -f "wrangler.worker.toml" ]; then
-            echo "✓ wrangler.worker.toml found"
+            echo "✓ wrangler.worker.toml found (Workers deployment)"
           else
-            echo "✗ wrangler.worker.toml not found"
-            exit 1
+            echo "Note: wrangler.worker.toml not found (optional for Workers deployment)"
           fi
 
       - name: Dry Run Pages Deployment
