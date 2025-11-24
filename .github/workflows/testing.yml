@@ -70,7 +70,7 @@ jobs:
 
   Image_Test:
     runs-on: ubuntu-22.04
-    needs: Build_Upload
+    needs: Build_Image
 
     steps:
       - name: Checkout Project
