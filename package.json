@@ -1,7 +1,7 @@
 {
-  "name": "balance-forecast",
-  "version": "1.0.0",
-  "description": "Budget forecasting application with account balance tracking",
+  "name": "mmmf",
+  "version": "1.0.6",
+  "description": "MMMF - Max Money Market Funds",
   "main": "server/index.js",
   "type": "module",
   "scripts": {
@@ -17,12 +17,13 @@
     "deploy:pages": "wrangler pages deploy dist"
   },
   "keywords": [
+    "mmmf",
     "budget",
     "forecast",
     "accounting",
     "balance"
   ],
-  "author": "",
+  "author": "Jason Yang",
   "license": "MIT",
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.4",
