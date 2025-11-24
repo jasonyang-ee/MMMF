@@ -6,7 +6,7 @@ on:
       - "test*"
 
 jobs:
-  Build_Upload:
+  Build_Image:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -68,7 +68,7 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-  Docker_Test:
+  Image_Test:
     runs-on: ubuntu-22.04
     needs: Build_Upload
 
@@ -170,7 +170,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
 
       - name: Install Dependencies
         run: npm install
