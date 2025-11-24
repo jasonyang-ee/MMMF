@@ -80,7 +80,7 @@ services:
 **Fill in the Cloudflare Workers setup page as follows:**
 
 1. Fork this repository to your GitHub account.
-2. Create a [KV namespace](https://developers.cloudflare.com/kv/) (under **Storage & Databases** -> **KV**), and copy the namespace ID.
+2. Create a `MMMF_KV` [KV namespace](https://developers.cloudflare.com/kv/) (under **Storage & Databases** -> **KV**), and copy the namespace ID.
 3. Update the `kv_namespaces` ID in `wrangler.jsonc` with your own namespace ID, then commit and push the change to your forked repository.
 4. Configure the [GitHub integration for cloudflare application](https://github.com/apps/cloudflare-workers-and-pages/installations/new) to connect your forked repository.
 5. Create a project in [Cloudflare Workers](https://developers.cloudflare.com/workers/).

@@ -68,8 +68,100 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-  Cloudflare_Build_Check:
+  Docker_Test:
     runs-on: ubuntu-22.04
+    needs: Build_Upload
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t mmmf-test:latest .
+
+      - name: Create test data directory
+        run: mkdir -p ./test-data
+
+      - name: Start Docker Container
+        run: |
+          docker run -d --name mmmf-test \
+            -p 5173:5173 \
+            -v $PWD/test-data:/app/data \
+            -e NODE_ENV=production \
+            -e DEFAULT_LANGUAGE=en \
+            mmmf-test:latest
+
+      - name: Wait for server to start
+        run: |
+          echo "Waiting for server to be ready..."
+          timeout 30 bash -c 'until curl -f http://localhost:5173/api/settings > /dev/null 2>&1; do sleep 2; done' || exit 1
+          echo "Server is ready!"
+
+      - name: Check server logs
+        run: |
+          echo "=== Server Logs ==="
+          docker logs mmmf-test
+
+          # Verify expected log messages
+          docker logs mmmf-test 2>&1 | grep -q "Server running on port" || (echo "ERROR: Server start message not found" && exit 1)
+          docker logs mmmf-test 2>&1 | grep -q "Environment: production" || (echo "ERROR: Environment message not found" && exit 1)
+
+          echo "✅ Server logs verification passed"
+
+      - name: Test API endpoints
+        run: |
+          echo "Testing API endpoints..."
+
+          # Test GET /api/settings
+          curl -f http://localhost:5173/api/settings || (echo "ERROR: GET /api/settings failed" && exit 1)
+          echo "✅ GET /api/settings passed"
+
+          # Test GET /api/transactions
+          RESPONSE=$(curl -s http://localhost:5173/api/transactions)
+          if [ "$RESPONSE" != "[]" ]; then
+            echo "ERROR: Expected empty array from /api/transactions"
+            exit 1
+          fi
+          echo "✅ GET /api/transactions passed"
+
+          # Test GET /api/recurring
+          RESPONSE=$(curl -s http://localhost:5173/api/recurring)
+          if [ "$RESPONSE" != "[]" ]; then
+            echo "ERROR: Expected empty array from /api/recurring"
+            exit 1
+          fi
+          echo "✅ GET /api/recurring passed"
+
+          # Test GET /api/credit-cards
+          RESPONSE=$(curl -s http://localhost:5173/api/credit-cards)
+          if [ "$RESPONSE" != "[]" ]; then
+            echo "ERROR: Expected empty array from /api/credit-cards"
+            exit 1
+          fi
+          echo "✅ GET /api/credit-cards passed"
+
+      - name: Test frontend
+        run: |
+          echo "Testing frontend..."
+          curl -f http://localhost:5173/ || (echo "ERROR: Frontend not accessible" && exit 1)
+          curl -s http://localhost:5173/ | grep -q "<title>Budget Forecast App</title>" || (echo "ERROR: Frontend HTML not correct" && exit 1)
+          echo "✅ Frontend test passed"
+
+      - name: Test health check
+        run: |
+          echo "Testing health check..."
+          curl -f http://localhost:5173/ || (echo "ERROR: Health check failed" && exit 1)
+          echo "✅ Health check passed"
+
+      - name: Stop and remove container
+        if: always()
+        run: |
+          docker stop mmmf-test || true
+          docker rm mmmf-test || true
+
+  Cloudflare_Build_Test:
+    runs-on: ubuntu-22.04
+
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
@@ -78,46 +170,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build Project
+      - name: Build Frontend
         run: npm run build
 
-      - name: Check Build Output
+      - name: Verify build output
         run: |
-          if [ ! -d "dist" ]; then
-            echo "Error: dist directory not found"
-            exit 1
-          fi
-          echo "Build output verified successfully"
-          ls -la dist
+          echo "Checking build artifacts..."
+          test -d dist || (echo "ERROR: dist directory not found" && exit 1)
+          test -f dist/index.html || (echo "ERROR: index.html not found" && exit 1)
+          test -d dist/assets || (echo "ERROR: assets directory not found" && exit 1)
+          echo "✅ Build artifacts verified"
 
-      - name: Validate Wrangler Configuration
+      - name: Check wrangler configuration
         run: |
-          echo "Validating wrangler configuration..."
-          npx wrangler pages project list --help > /dev/null 2>&1 && echo "✓ Wrangler CLI is available" || echo "✗ Wrangler CLI check failed"
-          
-          echo "Checking wrangler configuration files..."
-          if [ -f "wrangler.toml" ]; then
-            echo "✓ wrangler.toml found (Pages deployment)"
-          else
-            echo "✗ wrangler.toml not found"
-            exit 1
-          fi
-          
-          if [ -f "wrangler.worker.toml" ]; then
-            echo "✓ wrangler.worker.toml found (Workers deployment)"
-          else
-            echo "Note: wrangler.worker.toml not found (optional for Workers deployment)"
-          fi
-
-      - name: Dry Run Pages Deployment
-        run: |
-          echo "Performing dry-run validation of Cloudflare Pages deployment..."
-          echo "Build output directory: dist"
-          echo "Configuration file: wrangler.toml"
-          echo "Note: Actual deployment requires CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID"
-          echo "Deployment command would be: npx wrangler pages deploy dist"
-          echo "✓ Cloudflare Pages deployment configuration validated"
+          echo "Validating wrangler.jsonc..."
+          test -f wrangler.jsonc || (echo "ERROR: wrangler.jsonc not found" && exit 1)
+          npx wrangler --version
+          echo "✅ Wrangler configuration valid"
