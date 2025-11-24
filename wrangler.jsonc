@@ -19,11 +19,6 @@
     }
   ],
 
-  // Environment variables
-  "vars": {
-    "DEMO": "false"
-  },
-
   "observability": {
     "enabled": false
   }
