@@ -121,18 +121,6 @@ services:
 
 9. Deploy the project again.
 
-## Demo Mode
-
-When `DEMO=true` environment variable is set:
-
-- **Session Isolation**: Each user gets a unique session with their own data
-- **Cookie-Based**: Session ID stored in `mmmf_demo_session` HttpOnly cookie
-- **Auto-Cleanup**: Sessions older than 5 days are automatically deleted from KV
-- **Same KV Space**: All demo sessions share the same `MMMF_KV` namespace with prefixed keys
-- **Session Format**: Keys are prefixed as `demo_{nanoid}_{timestamp}:{baseKey}`
-
-This is perfect for public demo sites where you want each visitor to have an isolated experience without affecting other users.
-
 ## Local Development
 
 - Linux
