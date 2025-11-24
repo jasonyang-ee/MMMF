@@ -112,7 +112,26 @@ services:
    1. Variable name: `MMMF_KV`
    2. Namespace: Select the namespace created in step 2.
 
-8. Deploy the project again.
+8. **(Optional)** Enable Demo Mode for public demos:
+
+   1. Go to **Settings** -> **Environment Variables**
+   2. Add variable: `DEMO` with value `true`
+   3. This enables session-based data isolation where each user gets their own data
+   4. Session data automatically expires after 5 days
+
+9. Deploy the project again.
+
+## Demo Mode
+
+When `DEMO=true` environment variable is set:
+
+- **Session Isolation**: Each user gets a unique session with their own data
+- **Cookie-Based**: Session ID stored in `mmmf_demo_session` HttpOnly cookie
+- **Auto-Cleanup**: Sessions older than 5 days are automatically deleted from KV
+- **Same KV Space**: All demo sessions share the same `MMMF_KV` namespace with prefixed keys
+- **Session Format**: Keys are prefixed as `demo_{nanoid}_{timestamp}:{baseKey}`
+
+This is perfect for public demo sites where you want each visitor to have an isolated experience without affecting other users.
 
 ## Local Development
 

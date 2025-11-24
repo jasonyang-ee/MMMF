@@ -1,20 +1,47 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import {
+  demoSessionMiddlewareHono,
+  cleanupExpiredSessions,
+} from "./demo-session.js";
 
 const app = new Hono();
+
+// Demo mode session middleware (must be before API routes)
+app.use("*", async (c, next) => {
+  await demoSessionMiddlewareHono(c, next);
+});
 
 // API routes with CORS
 app.use("/api/*", cors());
 
-// Helper to get data from KV with default
+// Periodic cleanup of expired sessions (run on first API call after startup)
+let lastCleanup = 0;
+const CLEANUP_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
+
+app.use("/api/*", async (c, next) => {
+  const now = Date.now();
+  if (now - lastCleanup > CLEANUP_INTERVAL) {
+    lastCleanup = now;
+    // Run cleanup in background
+    cleanupExpiredSessions(c.env.MMMF_KV).catch(console.error);
+  }
+  return next();
+});
+
+// Helper to get data from KV with default (session-aware)
 async function getData(c, key, defaultValue = []) {
-  const data = await c.env.MMMF_KV.get(key);
+  const getKVKey = c.get("getKVKey");
+  const sessionKey = getKVKey(key);
+  const data = await c.env.MMMF_KV.get(sessionKey);
   return data ? JSON.parse(data) : defaultValue;
 }
 
-// Helper to save data to KV
+// Helper to save data to KV (session-aware)
 async function saveData(c, key, data) {
-  await c.env.MMMF_KV.put(key, JSON.stringify(data));
+  const getKVKey = c.get("getKVKey");
+  const sessionKey = getKVKey(key);
+  await c.env.MMMF_KV.put(sessionKey, JSON.stringify(data));
 }
 
 // --- Transactions ---
