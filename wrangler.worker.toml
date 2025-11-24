@@ -1,7 +1,0 @@
-name = "mmmf-worker"
-main = "worker.js"
-compatibility_date = "2023-12-01"
-
-[[kv_namespaces]]
-binding = "MMMF_KV"
-id = "9e7bfc690528464f991e4ec210b54094" # Replace with your KV Namespace ID

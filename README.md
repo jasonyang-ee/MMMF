@@ -20,17 +20,23 @@
 - **Internationalization (i18n)**: Support for multiple languages including English, Español, 日本語, and 繁體中文
   > Looking for contributors to help translate to more languages!
 
-## Getting Started
+## Demo
+
+### Demo Website: https://mmmf-demo.jasony.org
+
+![Demo](doc/demo.gif)
+
+## Deployment (Docker)
 
 ### Web Interface
 
 - Access the web interface at `http://<host_ip>:5173`
 
-### Demo
+### Data Persistence
 
-![Demo](doc/demo.gif)
+- Bind mounts to preserve data: `/app/data/`
 
-### Run Using Docker Compose
+### Docker Compose Configuration
 
 ```yaml
 services:
@@ -67,54 +73,48 @@ services:
 - Linux ARM64
 - Linux ARMv7
 
-### Data Persistence
+## Deployment (Cloudflare Workers)
 
-- Bind mounts to preserve data: `/app/data/`
+#### Deploy via Cloudflare Dashboard (GitHub Integration)
 
-## Deployment
+**Fill in the Cloudflare Workers setup page as follows:**
 
-### Cloudflare Pages
+1. Fork this repository to your GitHub account.
+2. Create a [KV namespace](https://developers.cloudflare.com/kv/) (under **Storage & Databases** -> **KV**), and copy the namespace ID.
+3. Update the `kv_namespaces` ID in `wrangler.jsonc` with your own namespace ID, then commit and push the change to your forked repository.
+4. Configure the [GitHub integration for cloudflare application](https://github.com/apps/cloudflare-workers-and-pages/installations/new) to connect your forked repository.
+5. Create a project in [Cloudflare Workers](https://developers.cloudflare.com/workers/).
 
-1. **Build Configuration**:
+   1. Select **Continue with GitHub** as the deployment method.
+   2. Select your forked repository.
+   3. Make a project name.
+   4. **Build command**: `npm run build`
+   5. **Deploy command**: `npx wrangler deploy`
 
-   - **Framework Preset**: React (Vite)
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-   - **Root directory**: `/` (leave empty)
-   - **Build comments**: Enabled
+## Deployment (Cloudflare Pages)
 
-2. **Environment Variables**:
+1. Fork this repository to your GitHub account.
+2. Create a [KV namespace](https://developers.cloudflare.com/kv/) (under **Storage & Databases** -> **KV**), and copy the namespace ID.
+3. Update the `kv_namespaces` ID in `wrangler.jsonc` with your own namespace ID, then commit and push the change to your forked repository.
+4. Configure the [GitHub integration for cloudflare application](https://github.com/apps/cloudflare-workers-and-pages/installations/new) to connect your forked repository.
+5. Create a project in [Cloudflare Workers](https://developers.cloudflare.com/workers/).
+6. Force Pages deployment by clicking the footnote: `Looking to deploy Pages? Get started`
 
-   - Set up your KV Namespace binding with name `MMMF_KV`.
+   1. Select **Import an existing Git repository** as the deployment method.
+   2. Select your forked repository.
+   3. Make a project name.
+   4. Select **Framework preset**: React (Vite)
+   5. **Build command**: `npm run build`
+   6. **Build output directory**: `dist`
 
-3. **Deploy**:
-   ```bash
-   npm run build
-   npx wrangler pages deploy dist
-   ```
+7. Force update KV binding in **Settings** -> **Bindings** -> **Add** -> **KV Namespace**.
 
-### Cloudflare Workers
+   1. Variable name: `MMMF_KV`
+   2. Namespace: Select the namespace created in step 2.
 
-1. **Configuration**:
-
-   - Ensure `wrangler.worker.toml` has the correct KV Namespace ID.
-
-2. **Deploy**:
-   ```bash
-   npm run deploy:worker
-   ```
-
-## Screenshots
-
-- Populated View
-  ![Populated View](doc/screenshotFull.png)
-
-- Empty View
-- ![Empty View](doc/screenshot.png)
+8. Deploy the project again.
 
 ## Local Development
-
-### Run Locally
 
 - Linux
 
@@ -133,24 +133,12 @@ services:
   docker-compose up -d --build
   ```
 
-### Manual (Node) Development
+## Screenshots
 
-1. Install dependencies
-   ```bash
-   npm install
-   ```
-2. Start dev servers (API + Vite)
-   ```bash
-   npm run dev
-   ```
-3. Open the app at `http://localhost:5173` (API at `http://localhost:3600`).
+> Populated View
 
-### Internationalization (i18n)
+![Populated View](doc/screenshotFull.png)
 
-- Use the language toggle in the header to switch between English and Español.
-- The selected language persists in settings.
+> Empty View
 
-### Currency
-
-- Configure currency under Global Settings.
-- Support added for Guatemalan Quetzal: `GTQ` (symbol `Q`).
+![Empty View](doc/screenshot.png)

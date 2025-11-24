@@ -1,9 +1,10 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-const app = new Hono().basePath("/api");
+const app = new Hono();
 
-app.use("/*", cors());
+// API routes with CORS
+app.use("/api/*", cors());
 
 // Helper to get data from KV with default
 async function getData(c, key, defaultValue = []) {
@@ -18,12 +19,12 @@ async function saveData(c, key, data) {
 
 // --- Transactions ---
 
-app.get("/transactions", async (c) => {
+app.get("/api/transactions", async (c) => {
   const transactions = await getData(c, "transactions");
   return c.json(transactions);
 });
 
-app.post("/transactions", async (c) => {
+app.post("/api/transactions", async (c) => {
   const transactions = await getData(c, "transactions");
   const body = await c.req.json();
   const newTransaction = {
@@ -36,7 +37,7 @@ app.post("/transactions", async (c) => {
   return c.json(newTransaction, 201);
 });
 
-app.put("/transactions/:id", async (c) => {
+app.put("/api/transactions/:id", async (c) => {
   const id = c.req.param("id");
   const transactions = await getData(c, "transactions");
   const index = transactions.findIndex((t) => t.id === id);
@@ -50,7 +51,7 @@ app.put("/transactions/:id", async (c) => {
   return c.json({ error: "Transaction not found" }, 404);
 });
 
-app.delete("/transactions/:id", async (c) => {
+app.delete("/api/transactions/:id", async (c) => {
   const id = c.req.param("id");
   const transactions = await getData(c, "transactions");
   const filtered = transactions.filter((t) => t.id !== id);
@@ -58,19 +59,19 @@ app.delete("/transactions/:id", async (c) => {
   return c.json({ success: true });
 });
 
-app.delete("/transactions", async (c) => {
+app.delete("/api/transactions", async (c) => {
   await saveData(c, "transactions", []);
   return c.json({ success: true });
 });
 
 // --- Recurring ---
 
-app.get("/recurring", async (c) => {
+app.get("/api/recurring", async (c) => {
   const recurring = await getData(c, "recurring");
   return c.json(recurring);
 });
 
-app.post("/recurring", async (c) => {
+app.post("/api/recurring", async (c) => {
   const recurring = await getData(c, "recurring");
   const body = await c.req.json();
   const newRecurring = {
@@ -83,7 +84,7 @@ app.post("/recurring", async (c) => {
   return c.json(newRecurring, 201);
 });
 
-app.put("/recurring/:id", async (c) => {
+app.put("/api/recurring/:id", async (c) => {
   const id = c.req.param("id");
   const recurring = await getData(c, "recurring");
   const index = recurring.findIndex((r) => r.id === id);
@@ -97,7 +98,7 @@ app.put("/recurring/:id", async (c) => {
   return c.json({ error: "Recurring transaction not found" }, 404);
 });
 
-app.delete("/recurring/:id", async (c) => {
+app.delete("/api/recurring/:id", async (c) => {
   const id = c.req.param("id");
   const recurring = await getData(c, "recurring");
   const filtered = recurring.filter((r) => r.id !== id);
@@ -107,12 +108,12 @@ app.delete("/recurring/:id", async (c) => {
 
 // --- Credit Cards ---
 
-app.get("/credit-cards", async (c) => {
+app.get("/api/credit-cards", async (c) => {
   const cards = await getData(c, "credit-cards");
   return c.json(cards);
 });
 
-app.post("/credit-cards", async (c) => {
+app.post("/api/credit-cards", async (c) => {
   const cards = await getData(c, "credit-cards");
   const body = await c.req.json();
   const newCard = {
@@ -125,7 +126,7 @@ app.post("/credit-cards", async (c) => {
   return c.json(newCard, 201);
 });
 
-app.put("/credit-cards/:id", async (c) => {
+app.put("/api/credit-cards/:id", async (c) => {
   const id = c.req.param("id");
   const cards = await getData(c, "credit-cards");
   const index = cards.findIndex((c) => c.id === id);
@@ -139,7 +140,7 @@ app.put("/credit-cards/:id", async (c) => {
   return c.json({ error: "Credit card not found" }, 404);
 });
 
-app.delete("/credit-cards/:id", async (c) => {
+app.delete("/api/credit-cards/:id", async (c) => {
   const id = c.req.param("id");
   const cards = await getData(c, "credit-cards");
   const filtered = cards.filter((c) => c.id !== id);
@@ -149,7 +150,7 @@ app.delete("/credit-cards/:id", async (c) => {
 
 // --- Settings ---
 
-app.get("/settings", async (c) => {
+app.get("/api/settings", async (c) => {
   let settings = await getData(c, "settings", null);
 
   // Default settings logic (mirrored from server/index.js)
@@ -175,7 +176,7 @@ app.get("/settings", async (c) => {
   return c.json(settings);
 });
 
-app.put("/settings", async (c) => {
+app.put("/api/settings", async (c) => {
   const body = await c.req.json();
   await saveData(c, "settings", body);
   return c.json(body);
