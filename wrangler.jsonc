@@ -21,7 +21,7 @@
 
   // Environment variables
   "vars": {
-    "DEMO": "true"
+    "DEMO": "false"
   },
 
   "observability": {
