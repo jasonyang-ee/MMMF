@@ -1,6 +1,6 @@
 {
   "name": "mmmf",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "MMMF - Max Money Market Funds",
   "main": "server/index.js",
   "type": "module",
@@ -26,27 +26,27 @@
   "author": "Jason Yang",
   "license": "MIT",
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.4",
+    "@cloudflare/kv-asset-handler": "^0.4.1",
     "cors": "^2.8.5",
-    "date-fns": "^2.30.0",
-    "express": "^4.18.2",
+    "date-fns": "^4.1.0",
+    "express": "^5.2.1",
     "hono": "^4.10.6",
     "nanoid": "^5.1.6"
   },
   "devDependencies": {
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.16",
-    "concurrently": "^8.2.2",
-    "postcss": "^8.4.32",
-    "react": "^18.2.0",
-    "react-datepicker": "^8.7.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.22",
+    "concurrently": "^9.2.1",
+    "postcss": "^8.5.6",
+    "react": "^19.2.1",
+    "react-datepicker": "^8.10.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "^18.2.0",
-    "tailwindcss": "^3.3.6",
-    "vite": "^5.0.8",
-    "wrangler": "^4.50.0"
+    "react-dom": "^19.2.1",
+    "@tailwindcss/postcss": "^4.1.17",
+    "vite": "^7.2.6",
+    "wrangler": "^4.53.0"
   }
 }
