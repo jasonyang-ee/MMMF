@@ -165,7 +165,7 @@ jobs:
         run: |
           echo "Testing frontend..."
           curl -f http://localhost:5173/ || (echo "ERROR: Frontend not accessible" && exit 1)
-          curl -s http://localhost:5173/ | grep -q "<title>Budget Forecast App</title>" || (echo "ERROR: Frontend HTML not correct" && exit 1)
+          curl -s http://localhost:5173/ | grep -q "<title>MMMF</title>" || (echo "ERROR: Frontend HTML not correct" && exit 1)
           echo "✅ Frontend test passed"
 
       - name: Test health check
