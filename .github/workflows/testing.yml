@@ -94,9 +94,28 @@ jobs:
       - name: Wait for server to be ready
         run: |
           echo "Waiting for server to be ready..."
-          sleep 5
-          timeout 90 bash -c 'until curl -f http://127.0.0.1:5173 > /dev/null 2>&1; do sleep 3; done' || exit 1
-          timeout 30 bash -c 'until curl -f http://127.0.0.1:5173/api/settings > /dev/null 2>&1; do sleep 2; done' || exit 1
+          sleep 10
+
+          # Check if container is running
+          echo "Checking container status..."
+          docker ps -a | grep mmmf-test
+
+          # Check container logs to see if server started
+          echo "Container logs:"
+          docker logs mmmf-test || echo "Could not get logs"
+
+          echo "Waiting for HTTP response on port 5173..."
+          timeout 120 bash -c 'until curl -f http://127.0.0.1:5173 > /dev/null 2>&1; do 
+            echo "Still waiting... (curl exit code: $?)"
+            sleep 3
+          done' || (echo "ERROR: Server health check failed after 120 seconds" && docker logs mmmf-test && exit 1)
+
+          echo "Server responding on root endpoint, checking /api/settings..."
+          timeout 30 bash -c 'until curl -f http://127.0.0.1:5173/api/settings > /dev/null 2>&1; do 
+            echo "Still waiting for /api/settings..."
+            sleep 2
+          done' || (echo "ERROR: API endpoint /api/settings not responding" && docker logs mmmf-test && exit 1)
+
           echo "Server is ready!"
 
       - name: Check server logs
