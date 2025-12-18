@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -91,10 +91,12 @@ jobs:
             -e DEFAULT_LANGUAGE=en \
             mmmf-test:latest
 
-      - name: Wait for server to start
+      - name: Wait for server to be ready
         run: |
           echo "Waiting for server to be ready..."
-          timeout 30 bash -c 'until curl -f http://localhost:5173/api/settings > /dev/null 2>&1; do sleep 2; done' || exit 1
+          sleep 5
+          timeout 90 bash -c 'until curl -f http://127.0.0.1:5173 > /dev/null 2>&1; do sleep 3; done' || exit 1
+          timeout 30 bash -c 'until curl -f http://127.0.0.1:5173/api/settings > /dev/null 2>&1; do sleep 2; done' || exit 1
           echo "Server is ready!"
 
       - name: Check server logs
