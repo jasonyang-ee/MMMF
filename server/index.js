@@ -329,7 +329,13 @@ app.put("/api/settings", async (req, res) => {
 
 // Serve React app for all other routes in production
 if (process.env.NODE_ENV === "production") {
-  app.get("*", (req, res) => {
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+  });
+} else {
+  // Development: also serve the dist folder as fallback
+  app.use(express.static(path.join(__dirname, "..", "dist")));
+  app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
   });
 }
