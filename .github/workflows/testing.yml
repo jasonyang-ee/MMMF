@@ -3,7 +3,7 @@ name: "Testing"
 on:
   push:
     branches:
-      - "test*"
+      - "*"
 
 jobs:
   Build_Image:
@@ -23,7 +23,7 @@ jobs:
           images: |
             ${{ secrets.USERNAME_DOCKERHUB }}/mmmf
             ghcr.io/${{ github.actor }}/mmmf
-          tags: type=ref,event=branch
+          tags: type=raw,value=test
           flavor: onlatest=false
 
       - name: Login to Docker Hub
