@@ -1,6 +1,6 @@
 {
   "name": "mmmf",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "MMMF - Max Money Market Funds",
   "main": "server/index.js",
   "type": "module",
