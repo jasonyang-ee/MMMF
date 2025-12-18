@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all dependencies (including dev dependencies for build)
-RUN npm install
+RUN npm ci --ignore-scripts
 
 # Copy source files needed for build
 COPY vite.config.js ./
@@ -34,7 +34,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm install --production
+RUN npm ci --only=production --ignore-scripts \
+	&& npm cache clean --force
 
 # Copy built frontend from builder stage
 COPY --from=builder /app/dist ./dist
