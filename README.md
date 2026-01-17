@@ -71,7 +71,6 @@ services:
 
 - Linux AMD64
 - Linux ARM64
-- Linux ARMv7
 
 ## Deployment (Cloudflare Workers)
 
@@ -84,7 +83,6 @@ services:
 3. Update the `kv_namespaces` ID in `wrangler.jsonc` with your own namespace ID, then commit and push the change to your forked repository.
 4. Configure the [GitHub integration for cloudflare application](https://github.com/apps/cloudflare-workers-and-pages/installations/new) to connect your forked repository.
 5. Create a project in [Cloudflare Workers](https://developers.cloudflare.com/workers/).
-
    1. Select **Continue with GitHub** as the deployment method.
    2. Select your forked repository.
    3. Make a project name.
@@ -99,7 +97,6 @@ services:
 4. Configure the [GitHub integration for cloudflare application](https://github.com/apps/cloudflare-workers-and-pages/installations/new) to connect your forked repository.
 5. Create a project in [Cloudflare Workers](https://developers.cloudflare.com/workers/).
 6. Force Pages deployment by clicking the footnote: `Looking to deploy Pages? Get started`
-
    1. Select **Import an existing Git repository** as the deployment method.
    2. Select your forked repository.
    3. Make a project name.
@@ -108,12 +105,10 @@ services:
    6. **Build output directory**: `dist`
 
 7. Force update KV binding in **Settings** -> **Bindings** -> **Add** -> **KV Namespace**.
-
    1. Variable name: `MMMF_KV`
    2. Namespace: Select the namespace created in step 2.
 
 8. **(Optional)** Enable Demo Mode for public demos:
-
    1. Go to **Settings** -> **Environment Variables**
    2. Add variable: `DEMO` with value `true`
    3. This enables session-based data isolation where each user gets their own data

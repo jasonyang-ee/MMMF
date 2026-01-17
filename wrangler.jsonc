@@ -8,15 +8,13 @@
   // Deployment Options:
   // 1. Workers: npm run deploy:worker
   // 2. Pages: npm run deploy:pages
-  //
-  // For more organized setup, see cloudflare/wrangler.jsonc
   // =============================================================================
 
   "name": "mmmf",
   "compatibility_date": "2024-01-01",
   "main": "cloudflare/worker.js",
 
-  // Assets configuration for Workers
+  // Assets configuration for Workers (built output)
   "assets": {
     "directory": "./dist",
   },

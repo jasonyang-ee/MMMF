@@ -1,4 +1,4 @@
-name: "Testing"
+name: Testing
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
       - "*"
 
 jobs:
-  Build_Image:
+  build:
+    name: Build Image
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -15,6 +16,8 @@ jobs:
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Docker Meta
         id: meta
@@ -68,7 +71,8 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-  Image_Test:
+  test:
+    name: Test Docker Image
     runs-on: ubuntu-22.04
     needs: Build_Image
 
@@ -186,6 +190,8 @@ jobs:
     steps:
       - name: Checkout Project
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

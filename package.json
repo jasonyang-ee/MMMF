@@ -7,12 +7,12 @@
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node server/index.js",
-    "client": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "client": "vite --config client/vite.config.js",
+    "build": "vite build --config client/vite.config.js",
+    "preview": "vite preview --config client/vite.config.js",
     "docker:build": "docker build -t mmmf .",
     "docker:run": "docker run -p 5173:5173 -v ./data:/app/data mmmf",
-    "deploy:worker": "wrangler deploy --config cloudflare/wrangler.jsonc",
+    "deploy:worker": "wrangler deploy",
     "deploy:pages": "wrangler pages deploy dist",
     "preview:cf": "npm run build && wrangler pages dev dist"
   },
