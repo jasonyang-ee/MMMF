@@ -1,3 +1,11 @@
+# =============================================================================
+# MMMF Docker Build Configuration
+# =============================================================================
+# Multi-stage build for optimal image size
+# Stage 1: Build the frontend
+# Stage 2: Production runtime with only necessary files
+# =============================================================================
+
 # Stage 1: Build stage
 FROM node:24-alpine AS builder
 
@@ -22,7 +30,7 @@ COPY public ./public
 RUN npm run build
 
 # Stage 2: Production stage
-FROM node:24-alpine
+FROM node:24-alpine AS runtime
 
 # Install curl for health checks
 RUN apk add --no-cache curl

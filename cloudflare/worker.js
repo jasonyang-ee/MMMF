@@ -1,4 +1,9 @@
-import app from "./server/hono-app.js";
+// Cloudflare Worker Entry Point
+// This file handles requests for Cloudflare Workers deployment
+// For API routes, it forwards to the Hono app
+// For static assets, it serves from the dist folder
+
+import app from "../server/hono-app.js";
 import { serveStatic } from "hono/cloudflare-workers";
 
 export default {

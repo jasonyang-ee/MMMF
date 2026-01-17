@@ -1,7 +1,7 @@
 {
   "name": "mmmf",
   "version": "1.0.8",
-  "description": "MMMF - Max Money Market Funds",
+  "description": "MMMF - Max Money Market Funds. Balance forecasting tool.",
   "main": "server/index.js",
   "type": "module",
   "scripts": {
@@ -10,21 +10,26 @@
     "client": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "docker:build": "docker build -t balance-forecast .",
-    "docker:run": "docker run -p 3600:3600 -v ./data:/app/data balance-forecast",
-    "preview:cf": "npm run build && wrangler pages dev dist",
-    "deploy:worker": "wrangler deploy",
-    "deploy:pages": "wrangler pages deploy dist"
+    "docker:build": "docker build -t mmmf .",
+    "docker:run": "docker run -p 5173:5173 -v ./data:/app/data mmmf",
+    "deploy:worker": "wrangler deploy --config cloudflare/wrangler.jsonc",
+    "deploy:pages": "wrangler pages deploy dist",
+    "preview:cf": "npm run build && wrangler pages dev dist"
   },
   "keywords": [
     "mmmf",
     "budget",
     "forecast",
     "accounting",
-    "balance"
+    "balance",
+    "money-market-funds"
   ],
   "author": "Jason Yang",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonyang-ee/MMMF.git"
+  },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.4.1",
     "cors": "^2.8.5",
@@ -34,6 +39,7 @@
     "nanoid": "^5.1.6"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
@@ -45,8 +51,10 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.2.3",
-    "@tailwindcss/postcss": "^4.1.17",
     "vite": "^7.2.6",
     "wrangler": "^4.53.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }

@@ -9,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+// Use PORT env var for production (Docker), fallback to 3600 for local dev
 const PORT = process.env.PORT || 3600;
 
 // Database file paths
@@ -64,8 +65,8 @@ async function initializeDataDir() {
             language: DEFAULT_LANGUAGE,
           },
           null,
-          2
-        )
+          2,
+        ),
       );
     }
 
