@@ -70,8 +70,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_NAME }}
-            ${{ env.REGISTRY_DOCKER }}/${{ secrets.DOCKERHUB_USERNAME }}/mmmf
+            ${{ secrets.USERNAME_DOCKERHUB }}/mmmf
+            ghcr.io/${{ github.actor }}/mmmf
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}

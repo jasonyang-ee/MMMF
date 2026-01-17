@@ -7,31 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- 
-
-### Changed
-
-- 
-
 ### Fixed
 
-- 
+- minor ci bug
 
 ## [1.1.0] - 2026-01-17
 
 ### Added
 
--
+- More blank i18n keys for future translations
 
 ### Changed
 
--
-
-### Fixed
-
--
+- Refactored project structure for better maintainability
+- Updated dependencies to latest versions
 
 ## [1.0.8] - 2025-12-17
 
