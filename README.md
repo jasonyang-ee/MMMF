@@ -1,4 +1,4 @@
-[![DockerPublish](https://github.com/jasonyang-ee/MMMF/actions/workflows/publish.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/publish.yml)
+[![Release](https://github.com/jasonyang-ee/MMMF/actions/workflows/release.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/release.yml)
 [![Testing](https://github.com/jasonyang-ee/MMMF/actions/workflows/testing.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/testing.yml)
 
 <h1 align="center">MMMF</h1>
