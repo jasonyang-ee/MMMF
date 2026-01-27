@@ -35,7 +35,7 @@
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "express": "^5.2.1",
-    "hono": "^4.11.4",
+    "hono": "^4.11.7",
     "nanoid": "^5.1.6"
   },
   "devDependencies": {
