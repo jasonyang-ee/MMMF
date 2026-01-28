@@ -4,6 +4,22 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import fs from "fs/promises";
+import rateLimit from "express-rate-limit";
+
+// Helper to check if IP is loopback (for Docker health checks)
+function isLoopbackIp(ip) {
+  if (!ip) return false;
+  // Express may provide IPv4-mapped IPv6 form like ::ffff:127.0.0.1
+  return ip === "127.0.0.1" || ip === "::1" || ip.startsWith("::ffff:127.");
+}
+
+// Rate limiter for static file serving (exempts loopback for health checks)
+const staticFsLimiter = rateLimit({
+  windowMs: 1_000, // 1 second window
+  max: 50, // 50 requests per second
+  skip: (req) => isLoopbackIp(req.ip),
+  message: { error: "Too many requests, slow down" },
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -330,13 +346,13 @@ app.put("/api/settings", async (req, res) => {
 
 // Serve React app for all other routes in production
 if (process.env.NODE_ENV === "production") {
-  app.get(/.*/, (req, res) => {
+  app.get(/.*/, staticFsLimiter, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
   });
 } else {
   // Development: also serve the dist folder as fallback
   app.use(express.static(path.join(__dirname, "..", "dist")));
-  app.get(/.*/, (req, res) => {
+  app.get(/.*/, staticFsLimiter, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
   });
 }
