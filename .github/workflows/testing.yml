@@ -74,6 +74,9 @@ jobs:
   test:
     name: Test Docker Image
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
     needs: [build]
 
     steps:
@@ -186,6 +189,8 @@ jobs:
 
   Cloudflare_Build_Test:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout Project

@@ -3,17 +3,15 @@ name: Release
 on:
   push:
     tags:
-      - "v*"
-
-env:
-  REGISTRY_GHCR: ghcr.io
-  REGISTRY_DOCKER: docker.io
-  IMAGE_NAME: ${{ github.repository }}
+      - "v*.*.*"
 
 jobs:
   # Build and test before release
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
