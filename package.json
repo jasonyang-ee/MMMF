@@ -1,21 +1,11 @@
 {
   "name": "mmmf",
   "version": "1.1.2",
+  "type": "module",
   "description": "MMMF - Max Money Market Funds. Balance forecasting tool.",
   "main": "server/index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server/index.js",
-    "client": "vite --config client/vite.config.js",
-    "build": "vite build --config client/vite.config.js",
-    "preview": "vite preview --config client/vite.config.js",
-    "docker:build": "docker build -t mmmf .",
-    "docker:run": "docker run -p 5173:5173 -v ./data:/app/data mmmf",
-    "deploy:worker": "wrangler deploy",
-    "deploy:pages": "wrangler pages deploy dist",
-    "preview:cf": "npm run build && wrangler pages dev dist"
-  },
+  "author": "Jason Yang",
+  "license": "MIT",
   "keywords": [
     "mmmf",
     "budget",
@@ -24,11 +14,19 @@
     "balance",
     "money-market-funds"
   ],
-  "author": "Jason Yang",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/jasonyang-ee/MMMF.git"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "cd client && vite",
+    "build": "cd client && vite build",
+    "start": "node server/index.js"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.4.1",
@@ -54,8 +52,5 @@
     "react-dom": "^19.2.3",
     "vite": "^7.2.6",
     "wrangler": "^4.53.0"
-  },
-  "engines": {
-    "node": ">=20.0.0"
   }
 }

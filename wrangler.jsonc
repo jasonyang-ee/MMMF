@@ -1,39 +1,34 @@
 {
-  // =============================================================================
-  // Cloudflare Workers Configuration for MMMF
-  // =============================================================================
-  // This configuration supports both Workers and Pages deployment.
-  // Both methods serve the full app (frontend + API).
-  //
-  // Deployment Options:
-  // 1. Workers: npm run deploy:worker
-  // 2. Pages: npm run deploy:pages
-  // =============================================================================
-
-  "name": "mmmf",
-  "compatibility_date": "2024-01-01",
-  "main": "cloudflare/worker.js",
-
-  // Assets configuration for Workers (built output)
-  "assets": {
-    "directory": "./dist",
-  },
-
-  // KV namespace for data storage (session-based for demo mode)
-  "kv_namespaces": [
-    {
-      "binding": "MMMF_KV",
-      "id": "9e7bfc690528464f991e4ec210b54094",
-    },
-  ],
-
-  // Environment variables
-  "vars": {
-    "DEMO": "false",
-  },
-
-  // Observability settings
-  "observability": {
-    "enabled": false,
-  },
+	// =============================================================================
+	// Cloudflare Workers Configuration for MMMF
+	// =============================================================================
+	// This configuration supports both Workers and Pages deployment.
+	// Both methods serve the full app (frontend + API).
+	//
+	// Deployment Options:
+	// 1. Workers: wrangler deploy
+	// 2. Pages: wrangler pages deploy client/dist
+	// =============================================================================
+	"name": "mmmf",
+	"compatibility_date": "2024-01-01",
+	"main": "cloudflare/worker.js",
+	// Assets configuration for Workers (built output)
+	"assets": {
+		"directory": "./client/dist",
+	},
+	// KV namespace for data storage (session-based for demo mode)
+	"kv_namespaces": [
+		{
+			"binding": "MMMF_KV",
+			"id": "9e7bfc690528464f991e4ec210b54094",
+		},
+	],
+	// Environment variables
+	"vars": {
+		"DEMO": "false",
+	},
+	// Observability settings
+	"observability": {
+		"enabled": false,
+	},
 }

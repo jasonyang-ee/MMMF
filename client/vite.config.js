@@ -8,7 +8,7 @@ export default defineConfig({
   root: path.resolve(__dirname),
   publicDir: "public",
   build: {
-    outDir: "../dist",
+    outDir: "dist",
     emptyOutDir: true,
   },
   server: {

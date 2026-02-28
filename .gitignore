@@ -1,19 +1,13 @@
-# Dependencies
+# Development
 node_modules/
-
-# Production
 dist/
-
-# Database
-/data
+data/
 
 # Environment
 .env
 
 # Logs
-logs
 *.log
-npm-debug.log*
 
 # IDE
 .vscode/

@@ -37,6 +37,10 @@ MMMF/
 - Inline editing pattern: useRef + useEffect for focus/select, Enter to save, Escape to cancel.
 - Tailwind utility classes for styling; dark mode via class-based toggle.
 - Config files (vite, postcss, tailwind) live inside `client/`, not root.
+- Server logs: ASCII only, format `[LEVEL] [ServiceName] Message`
+- Server files: `{entity}Controller.js`, `{name}Service.js`, `{entity}.js` (routes)
+- Client files: `{PageName}.jsx` (pages), `{ComponentName}.jsx` (components)
+- Naming: camelCase (vars/functions), PascalCase (components), snake_case (DB columns/tables)
 
 ## Data Format
 

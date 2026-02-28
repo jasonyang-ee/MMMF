@@ -27,9 +27,9 @@ NC='\033[0m' # No Color
 # -----------------------------------------------------------------------------
 
 # Check if the script is being run from the root of the project
-if [ ! -f package.json ] || [ ! -f CHANGELOG.md ]; then
+if [ ! -f CHANGELOG.md ]; then
     echo -e "${RED}Error: This script must be run from the root of the project.${NC}"
-    echo "Required files: package.json, CHANGELOG.md"
+    echo "Required files: CHANGELOG.md"
     exit 1
 fi
 
@@ -73,9 +73,13 @@ fi
 # Version Helpers
 # -----------------------------------------------------------------------------
 
-# Read current version from package.json
+# Read current version from package.json with fallback
 get_current_version() {
-    node -p "require('./package.json').version"
+    if [ -f package.json ]; then
+        node -p "require('./package.json').version" 2>/dev/null || echo "1.0.0"
+    else
+        echo "1.0.0"
+    fi
 }
 
 # Increment version
@@ -84,7 +88,7 @@ increment_version() {
     local part=$2
 
     IFS='.' read -r -a parts <<< "$version"
-    
+
     case "$part" in
         major)
             parts[0]=$((parts[0] + 1))
@@ -99,7 +103,7 @@ increment_version() {
             parts[2]=$((parts[2] + 1))
             ;;
     esac
-    
+
     echo "${parts[0]}.${parts[1]}.${parts[2]}"
 }
 
@@ -144,9 +148,9 @@ for arg in "$@"; do
             echo "  --help, -h    Show this help message"
             echo ""
             echo "If no type is specified, the script will auto-detect based on commits:"
-            echo "  - 'feat:' commits → minor release"
-            echo "  - 'fix:' commits → patch release"
-            echo "  - 'BREAKING CHANGE:' → major release"
+            echo "  - 'feat:' commits -> minor release"
+            echo "  - 'fix:' commits -> patch release"
+            echo "  - 'BREAKING CHANGE:' -> major release"
             echo ""
             echo "Examples:"
             echo "  $0              # Auto-detect release type"
@@ -175,21 +179,21 @@ if [ -n "$FORCE_TYPE" ]; then
 else
     # Get the latest tag
     LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-    
+
     if [ -z "$LATEST_TAG" ]; then
         echo -e "${YELLOW}No previous tags found. Defaulting to patch release.${NC}"
         RELEASE_TYPE="patch"
     else
         echo -e "${BLUE}Latest tag: ${BOLD}$LATEST_TAG${NC}"
-        
+
         # Check commit messages since last tag
         COMMITS_SINCE_TAG=$(git log "$LATEST_TAG"..HEAD --oneline 2>/dev/null || echo "")
-        
+
         if [ -z "$COMMITS_SINCE_TAG" ]; then
             echo -e "${YELLOW}No commits since last tag. Nothing to release.${NC}"
             exit 0
         fi
-        
+
         # Auto-detect release type
         if echo "$COMMITS_SINCE_TAG" | grep -qi "BREAKING CHANGE\|breaking:"; then
             RELEASE_TYPE="major"
@@ -201,7 +205,7 @@ else
             echo -e "${YELLOW}No conventional commits found (feat:/fix:). Defaulting to patch.${NC}"
             RELEASE_TYPE="patch"
         fi
-        
+
         echo -e "${CYAN}Release type (auto-detected): ${BOLD}$RELEASE_TYPE${NC}"
     fi
 fi
@@ -215,7 +219,7 @@ echo -e "${GREEN}New version: ${BOLD}$NEW_VERSION${NC}"
 # -----------------------------------------------------------------------------
 
 if [ "$SKIP_CONFIRM" != true ]; then
-	read -p "Do you want to proceed? (y/n) " CONFIRM
+    read -p "Do you want to proceed? (y/n) " CONFIRM
     if [[ "$CONFIRM" != "y" ]]; then
         echo -e "${RED}Release process canceled.${NC}"
         exit 1
@@ -230,8 +234,8 @@ echo -e "${BOLD}Starting release process...${NC}"
 # -----------------------------------------------------------------------------
 
 echo -e "${BLUE}Updating package.json...${NC}"
-npm version "$NEW_VERSION" --no-git-tag-version --allow-same-version
-git add package.json package-lock.json
+npm version "$NEW_VERSION" --no-git-tag-version --allow-same-version 2>/dev/null || true
+git add package.json package-lock.json 2>/dev/null || true
 
 # -----------------------------------------------------------------------------
 # Update CHANGELOG.md
@@ -306,14 +310,14 @@ if gh release create "v$NEW_VERSION" \
     --notes "$CHANGELOG_CONTENT" \
     --draft; then
     echo ""
-    echo -e "${GREEN}${BOLD}✓ Release v$NEW_VERSION created successfully!${NC}"
+    echo -e "${GREEN}${BOLD}Release v$NEW_VERSION created successfully!${NC}"
     echo ""
     echo -e "The release has been created as a ${YELLOW}draft${NC}."
     echo -e "Visit the GitHub releases page to review and publish it."
     echo ""
     gh release view "v$NEW_VERSION" --web 2>/dev/null || true
 else
-    echo -e "${RED}Error: Failed to create GitHub release.${NC}"
+    echo -e "${RED}Failed to create GitHub release.${NC}"
     echo "The git tag was pushed successfully. You can create the release manually."
     exit 1
 fi

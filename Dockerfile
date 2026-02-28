@@ -41,7 +41,7 @@ RUN npm ci --only=production --ignore-scripts \
 	&& npm cache clean --force
 
 # Copy built frontend from builder stage
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/client/dist ./client/dist
 
 # Copy server files
 COPY server ./server

@@ -92,7 +92,10 @@ async function initializeDataDir() {
       await fs.writeFile(CREDIT_CARDS_FILE, JSON.stringify([], null, 2));
     }
   } catch (error) {
-    console.error("Error initializing data directory:", error);
+    console.error(
+      "[ERROR] [DataStore] Failed to initialize data directory:",
+      error,
+    );
   }
 }
 
@@ -102,7 +105,7 @@ app.use(express.json());
 
 // Serve static files in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "dist")));
+  app.use(express.static(path.join(__dirname, "..", "client", "dist")));
 }
 
 // Helper functions for file operations
@@ -111,7 +114,7 @@ async function readJsonFile(filePath) {
     const data = await fs.readFile(filePath, "utf-8");
     return JSON.parse(data);
   } catch (error) {
-    console.error(`Error reading ${filePath}:`, error);
+    console.error(`[ERROR] [DataStore] Failed to read ${filePath}:`, error);
     return null;
   }
 }
@@ -121,7 +124,7 @@ async function writeJsonFile(filePath, data) {
     await fs.writeFile(filePath, JSON.stringify(data, null, 2));
     return true;
   } catch (error) {
-    console.error(`Error writing ${filePath}:`, error);
+    console.error(`[ERROR] [DataStore] Failed to write ${filePath}:`, error);
     return false;
   }
 }
@@ -347,13 +350,13 @@ app.put("/api/settings", async (req, res) => {
 // Serve React app for all other routes in production
 if (process.env.NODE_ENV === "production") {
   app.get(/.*/, staticFsLimiter, (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "..", "client", "dist", "index.html"));
   });
 } else {
   // Development: also serve the dist folder as fallback
-  app.use(express.static(path.join(__dirname, "..", "dist")));
+  app.use(express.static(path.join(__dirname, "..", "client", "dist")));
   app.get(/.*/, staticFsLimiter, (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "..", "client", "dist", "index.html"));
   });
 }
 
@@ -361,6 +364,8 @@ if (process.env.NODE_ENV === "production") {
 await initializeDataDir();
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log(`[INFO] [Server] Running on port ${PORT}`);
+  console.log(
+    `[INFO] [Server] Environment: ${process.env.NODE_ENV || "development"}`,
+  );
 });

@@ -36,7 +36,7 @@ export function getSessionId(request, response) {
 
     response.setHeader(
       "Set-Cookie",
-      `${DEMO_SESSION_COOKIE}=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires.toUTCString()}`
+      `${DEMO_SESSION_COOKIE}=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires.toUTCString()}`,
     );
   }
 
@@ -100,7 +100,7 @@ export async function cleanupExpiredSessions(KV) {
   if (!KV) return;
 
   try {
-    console.log("Starting cleanup of expired demo sessions...");
+    console.log("[INFO] [DemoSession] Starting cleanup of expired sessions...");
 
     const { keys } = await KV.list({ prefix: "demo_" });
     let deletedCount = 0;
@@ -114,9 +114,11 @@ export async function cleanupExpiredSessions(KV) {
       }
     }
 
-    console.log(`Cleaned up ${deletedCount} expired session keys`);
+    console.log(
+      `[INFO] [DemoSession] Cleaned up ${deletedCount} expired session keys`,
+    );
   } catch (error) {
-    console.error("Error during session cleanup:", error);
+    console.error("[ERROR] [DemoSession] Session cleanup failed:", error);
   }
 }
 
@@ -159,7 +161,7 @@ export function demoSessionMiddlewareHono(c, next) {
 
     c.header(
       "Set-Cookie",
-      `${DEMO_SESSION_COOKIE}=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires.toUTCString()}`
+      `${DEMO_SESSION_COOKIE}=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Expires=${expires.toUTCString()}`,
     );
   }
 
