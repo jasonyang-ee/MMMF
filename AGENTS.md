@@ -1,8 +1,6 @@
 ## Development Workflow
 
 - Run `./start.sh` to install dependencies, build frontend, and start dev servers.
-- `npm run dev` starts both Express server (port 3600) and Vite client (port 5173) via concurrently.
-- `npm run build` builds the frontend with Vite.
 
 ## Project Structure
 
@@ -11,19 +9,8 @@ MMMF/
   client/          # React 19 + Vite frontend (Tailwind CSS v4)
   server/          # Express.js backend API (file-based JSON storage)
   cloudflare/      # Hono-based Cloudflare Workers/Pages deployment
-  data/            # JSON data files (transactions, recurring, settings, credit-cards)
-  dist/            # Built frontend output
   doc/             # Screenshots and media
-  .github/         # CI/CD workflows (release + testing)
 ```
-
-## Technology Stack
-
-- **Frontend:** React 19, Vite 7, Tailwind CSS v4, react-datepicker, react-dnd
-- **Backend:** Express 5 (Node.js >=20), file-based JSON persistence, express-rate-limit
-- **Cloudflare:** Hono 4 with KV storage, demo mode with session isolation
-- **i18n:** Custom hook (`useI18n`) supporting en, es, zht, ja
-- **Deployment:** Docker (multi-arch), Cloudflare Workers, Cloudflare Pages
 
 ## Architecture
 
@@ -32,15 +19,6 @@ MMMF/
 - Demo mode (`server/demo-session.js`) provides isolated sessions with auto-cleanup.
 - Frontend is a single-page React app; Vite proxies `/api` to Express in dev.
 - Production: Express serves built `dist/` as static files with SPA fallback.
-
-## API Endpoints
-
-All endpoints under `/api/` with CRUD operations:
-
-- `/api/transactions` - one-time transactions
-- `/api/recurring` - recurring debits/credits with dayOfMonth
-- `/api/credit-cards` - credit cards with variable monthly amounts
-- `/api/settings` - balance, dates, currency, language, date format
 
 ## Key Frontend Components
 
