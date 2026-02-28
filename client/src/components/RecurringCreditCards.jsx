@@ -19,12 +19,19 @@ function CreditCardItem({
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(item.name);
   const nameInputRef = useRef(null);
+  const amountInputRef = useRef(null);
 
   useEffect(() => {
     if (isEditingName && nameInputRef.current) {
       nameInputRef.current.select();
     }
   }, [isEditingName]);
+
+  useEffect(() => {
+    if (showAmountForm && amountInputRef.current) {
+      amountInputRef.current.focus();
+    }
+  }, [showAmountForm]);
 
   const handleNameClick = () => {
     setEditName(item.name);
@@ -99,7 +106,7 @@ function CreditCardItem({
       const lastDayOfMonth = new Date(
         testYear,
         normalizedMonth + 1,
-        0
+        0,
       ).getDate();
 
       // Use the specified day or the last day of the month, whichever is smaller
@@ -233,6 +240,7 @@ function CreditCardItem({
             {nextDate ? formatDate(nextDate, dateFormat) : "N/A"}
           </div>
           <input
+            ref={amountInputRef}
             type="number"
             placeholder={t("recurring:amountPh")}
             value={amount}

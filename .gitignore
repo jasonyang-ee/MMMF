@@ -17,6 +17,7 @@ npm-debug.log*
 
 # IDE
 .vscode/
+*-cwd
 
 # Wrangler
 .wrangler
