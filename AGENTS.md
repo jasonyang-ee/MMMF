@@ -45,3 +45,7 @@ MMMF/
 - Settings object: `{ startingBalance, currentDate, forecastEndDate, currencySymbol, dateFormat, language }`.
 - Recurring items: `{ id, name, amount, dayOfMonth, type: "debit"|"credit" }`.
 - Credit cards: `{ id, name, dayOfMonth }` — amounts added per billing cycle as transactions.
+
+## Versioning
+
+- Update CHANGELOG.md `## [Unreleased]` section for every feature or fix
