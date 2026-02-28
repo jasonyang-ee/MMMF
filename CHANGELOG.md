@@ -19,6 +19,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 
 
+## [1.1.3] - 2026-02-27
+
+### Added
+
+- Auto-focus amount input when opening credit card payment form
+
+### Changed
+
+- Build output directory moved from `/dist` to `/client/dist`
+- Server logging format updated with structured `[INFO]`/`[ERROR]` prefixes
+- `start.sh` rewritten with graceful shutdown, startup failure detection, and process management
+- Node.js 20+ is now strictly required (previously a warning)
+- Cloudflare deployment paths updated in `wrangler.jsonc`
+- NPM scripts simplified; added `start` script for production
+- Package dependencies updated
+
+### Fixed
+
+- CI pipeline updated to reference new `client/dist` build output path
+
+### Removed
+
+- Windows platform notes from README
+
 ## [1.1.2] - 2026-01-27
 
 ### Fixed
