@@ -124,12 +124,6 @@ services:
   ./start.sh
   ```
 
-- Windows
-
-  ```powerhell
-  start.bat
-  ```
-
 - Docker Compose
   ```bash
   docker-compose up -d --build
