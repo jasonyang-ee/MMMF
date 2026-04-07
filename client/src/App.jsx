@@ -227,7 +227,7 @@ function App() {
   async function handleClearCalculations() {
     if (
       window.confirm(
-        "Clear all transactions? Recurring transactions will be kept."
+        "Clear all transactions? Recurring transactions will be kept.",
       )
     ) {
       await api.clearTransactions();
@@ -259,14 +259,14 @@ function App() {
     transactions,
     recurring,
     currentDate,
-    forecastEndDate
+    forecastEndDate,
   );
 
   const { currentBalance, balanceHistory } = calculateBalance(
     startingBalance,
     allTransactions,
     currentDate,
-    forecastEndDate
+    forecastEndDate,
   );
 
   // Calculate lowest balance and its date from balance history
@@ -292,9 +292,9 @@ function App() {
       <div className="min-h-screen bg-gray-50 dark:bg-[#1f1f1f]">
         <Header />
 
-        <main className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-full mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8">
           {/* New Layout: Sidebar + Main Content */}
-          <div className="grid grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px] gap-6">
+          <div className="grid grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px] gap-4 sm:gap-6">
             {/* Left Sidebar */}
             <div className="space-y-6">
               {/* Account Balance - Top */}

@@ -39,7 +39,7 @@
   }
 
   .card {
-    @apply bg-gray-50 rounded-lg shadow-md p-6 dark:bg-[#2a2a2a] dark:shadow-black/50;
+    @apply bg-gray-50 rounded-lg shadow-md p-4 sm:p-6 dark:bg-[#2a2a2a] dark:shadow-black/50;
   }
 
   .input {
@@ -146,4 +146,31 @@
     font-size: 1rem;
     line-height: 1.5;
   }
+}
+
+/* Mobile optimizations */
+@media (max-width: 639px) {
+  /* Prevent iOS zoom on input focus */
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Compact table for mobile */
+  .mobile-compact-table th,
+  .mobile-compact-table td {
+    padding: 0.375rem 0.5rem;
+  }
+
+  .mobile-compact-table .text-lg {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }

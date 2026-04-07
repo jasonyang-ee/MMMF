@@ -14,7 +14,7 @@ function GlobalSettings({
   useEffect(() => {
     const savedMode = localStorage.getItem("darkMode");
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: dark)",
     ).matches;
     const shouldBeDark = savedMode === "true" || (!savedMode && prefersDark);
 
@@ -60,7 +60,7 @@ function GlobalSettings({
 
   return (
     <div className="card space-y-4">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+      <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3">
         {t("settings:globalSettings")}
       </h2>
 

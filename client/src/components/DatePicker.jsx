@@ -79,13 +79,13 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
 
   const previousMonth = () => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1),
     );
   };
 
   const nextMonth = () => {
     setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1)
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1),
     );
   };
 
@@ -133,7 +133,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
       />
 
       {isOpen && (
-        <div className="absolute z-50 mt-2 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg shadow-2xl border border-gray-300 dark:border-[#444444] p-4 w-80">
+        <div className="absolute z-50 mt-2 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg shadow-2xl border border-gray-300 dark:border-[#444444] p-3 sm:p-4 w-[calc(100vw-2rem)] sm:w-80 max-w-80 left-0 right-auto">
           {/* Month/Year Header */}
           <div className="flex items-center justify-between mb-4">
             <button
@@ -208,12 +208,12 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
                     !date
                       ? "invisible"
                       : isDateSelected(date)
-                      ? "bg-blue-600 text-white dark:bg-blue-500"
-                      : isToday(date)
-                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                      : isDateDisabled(date)
-                      ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-                      : "hover:bg-gray-200 dark:hover:bg-[#333333] text-gray-700 dark:text-gray-300"
+                        ? "bg-blue-600 text-white dark:bg-blue-500"
+                        : isToday(date)
+                          ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                          : isDateDisabled(date)
+                            ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                            : "hover:bg-gray-200 dark:hover:bg-[#333333] text-gray-700 dark:text-gray-300"
                   }
                 `}
               >

@@ -24,9 +24,11 @@ function ForecastSettings({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">{t("forecast:settings")}</h2>
+      <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 dark:text-gray-100">
+        {t("forecast:settings")}
+      </h2>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <div>
           <label className="label">{t("forecast:currentDate")}</label>
           <DatePicker
@@ -74,7 +76,7 @@ function ForecastSettings({
           </p>
         </div>
 
-        <div className="pt-4 border-t dark:border-[#3a3a3a]">
+        <div className="pt-3 sm:pt-4 border-t dark:border-[#3a3a3a]">
           <button
             onClick={onClearCalculations}
             className="btn btn-danger w-full"

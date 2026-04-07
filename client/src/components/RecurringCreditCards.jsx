@@ -324,8 +324,8 @@ function RecurringCreditCards({
 
   return (
     <div className="card">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold dark:text-gray-100">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h2 className="text-lg sm:text-xl font-semibold dark:text-gray-100">
           {t("cards:title")}
         </h2>
         <button

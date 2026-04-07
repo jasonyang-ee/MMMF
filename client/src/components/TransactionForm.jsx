@@ -43,11 +43,11 @@ function TransactionForm({ onAddTransaction }) {
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">
+      <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 dark:text-gray-100">
         {t("transactions:addTransaction")}
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div>
           <label className="label">{t("transactions:description")}</label>
           <input
