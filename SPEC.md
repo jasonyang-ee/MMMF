@@ -141,7 +141,7 @@ V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems)
 | T13 | .      | ? expand currency support beyond current set                                                                     | ?           |
 | T14 | x      | server-side settings validation (language, startingBalance)                                                      | V12         |
 | T15 | x      | api.js res.ok guard on all fetch calls                                                                           | V13         |
-| T16 | .      | CORS origin restriction for production                                                                           | V14         |
+| T16 | x      | CORS origin restriction for production                                                                           | V14         |
 | T17 | .      | rewrite `release.sh` — `pipefail`, dry-run, body-scan for breaking changes, correct changelog awk, drop `gh` dep | V15         |
 | T18 | .      | final verify API harden — §V.12-14 compliance confirmed                                                          | V12,V13,V14 |
 | T19 | .      | final verify release.sh — §V.15 compliance confirmed                                                             | V15         |

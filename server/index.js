@@ -102,7 +102,14 @@ async function initializeDataDir() {
 }
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.ALLOWED_ORIGIN || false
+        : true,
+  }),
+);
 app.use(express.json());
 
 // Serve static files in production

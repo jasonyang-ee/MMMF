@@ -43,7 +43,7 @@ research complete — findings (recorded in §R):
 - `server/hono-app.js:16`: `app.use("/api/*", cors())` — wildcard CORS, no config; Cloudflare also needs restriction (§R.1)
 - `wrangler.jsonc:17`: `assets.directory: ./client/dist` — frontend co-located; same origin in prod (§R.2)
 - `server/index.js:107`: Express serves `client/dist/` in prod — same origin; `cors()` removable in prod (§R.3)
-- Conclusion: both runtimes can set `origin: false` (or restrict to `ALLOWED_ORIGIN` env) in production
+- Conclusion: Express accepts `origin: false`; Hono `cors()` requires string/function/array, so Hono must use an origin matcher returning exact `ALLOWED_ORIGIN` or `null`
 
 steps:
 
@@ -80,7 +80,7 @@ files: `server/index.js`, `server/hono-app.js`, `docker-compose.yml`
 steps:
 
 1. `server/index.js`: replace `app.use(cors())` with `cors({ origin: process.env.NODE_ENV === 'production' ? (process.env.ALLOWED_ORIGIN || false) : true })`.
-2. `server/hono-app.js:16`: replace `cors()` with `cors({ origin: (process.env.ALLOWED_ORIGIN || false) })` — Cloudflare always runs in production context.
+2. `server/hono-app.js:16`: replace `cors()` with `cors({ origin: (origin) => process.env.ALLOWED_ORIGIN === origin ? origin : null })` — Cloudflare always runs in production context; Hono rejects `origin: false`.
 3. `docker-compose.yml`: add comment noting optional `ALLOWED_ORIGIN` env var for cross-origin access.
    verify:
 

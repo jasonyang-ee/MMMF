@@ -10,3 +10,4 @@ services:
     environment:
       TZ: America/Los_Angeles
       DEFAULT_LANGUAGE: en # supported lanugage values: en, zht, ja, es
+      # ALLOWED_ORIGIN: https://example.com # optional cross-origin API access

@@ -13,7 +13,13 @@ app.use("*", async (c, next) => {
 });
 
 // API routes with CORS
-app.use("/api/*", cors());
+app.use(
+  "/api/*",
+  cors({
+    origin: (origin) =>
+      process.env.ALLOWED_ORIGIN === origin ? origin : null,
+  }),
+);
 
 // Periodic cleanup of expired sessions (run on first API call after startup)
 let lastCleanup = 0;
