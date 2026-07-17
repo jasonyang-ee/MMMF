@@ -77,6 +77,21 @@ SPA forecasts personal account balance across date range → user identifies opt
 - Dev: Vite proxies `/api` → `http://localhost:3600/api`
 - Prod: Express serves `client/dist/` + `/api` routes
 
+### Frontend Components
+
+- `App.jsx` — central state + ∀ API calls; passes callbacks to children
+- `BalanceTimeline.jsx` — forecast table (balance history by date)
+- `BalanceDisplay.jsx` — starting/current/lowest balance display; inline edit
+- `RecurringList.jsx` — recurring debits/credits CRUD; inline edit on click
+- `RecurringCreditCards.jsx` — credit cards + per-cycle payment input; auto-focus amount
+- `TransactionForm.jsx` / `TransactionList.jsx` — one-time transaction entry/display
+- `ForecastSettings.jsx` — currentDate, forecastEndDate, clear-all
+- `GlobalSettings.jsx` — currency, date format, language, dark mode toggle
+- `DatePicker.jsx` — custom calendar picker (mobile-aware)
+- `api.js` — fetch wrapper; ∀ `/api` calls
+- `utils.js` — `calculateBalance`, `generateRecurringTransactions`, `formatCurrency`, `formatDate`
+- `i18n.js` — `I18nProvider` + `useI18n`; 4 active languages + translations for 20
+
 ## §V INVARIANTS
 
 V1: ∀ API write → ID = `Date.now().toString()` (⊥ UUID)
@@ -93,27 +108,29 @@ V11: ∀ write route → readJsonFile null → 500 JSON error; ⊥ unhandled Typ
 V12: `PUT /api/settings` → language field ! validated ∈ V7 set; startingBalance ! numeric
 V13: `client/src/api.js` fetch calls → res.ok check before `.json()`; ⊥ 4xx/5xx silently applied to state
 V14: CORS → production deployments ! restrict allowed origins; ⊥ wildcard in production
+V15: `release.sh` ⊥ create GitHub Release (CI `release.yml` owns it); ! guard: tag ⊥ exist, `[Unreleased]` ≠ empty, ⊥ push all tags
 
 ## §T TASKS
 
-| id  | status | task                                                        | cites |
-| --- | ------ | ----------------------------------------------------------- | ----- |
-| T1  | x      | initial SPA + Express scaffold                              | -     |
-| T2  | x      | file-based JSON storage (transactions, recurring, settings) | V10   |
-| T3  | x      | balance forecast calculation + chart (BalanceTimeline.jsx)  | V5    |
-| T4  | x      | credit cards CRUD + per-cycle payment input                 | -     |
-| T5  | x      | rate limiting + loopback exemption                          | V3,V4 |
-| T6  | x      | demo mode session isolation                                 | V2    |
-| T7  | x      | Cloudflare Workers/Pages Hono mirror                        | V9    |
-| T8  | x      | i18n (en, es, zht, ja) + lang cookie                        | V7    |
-| T9  | x      | dark mode toggle (class-based)                              | -     |
-| T10 | x      | mobile layout support                                       | -     |
-| T11 | x      | Docker image (port 5173, `/app/data/` mount)                | V8    |
-| T12 | .      | add test runner + lint check to CI                          | ?     |
-| T13 | .      | ? expand currency support beyond current set                | ?     |
-| T14 | .      | server-side settings validation (language, startingBalance) | V12   |
-| T15 | .      | api.js res.ok guard on all fetch calls                      | V13   |
-| T16 | .      | CORS origin restriction for production                      | V14   |
+| id  | status | task                                                                                                             | cites |
+| --- | ------ | ---------------------------------------------------------------------------------------------------------------- | ----- |
+| T1  | x      | initial SPA + Express scaffold                                                                                   | -     |
+| T2  | x      | file-based JSON storage (transactions, recurring, settings)                                                      | V10   |
+| T3  | x      | balance forecast calculation + chart (BalanceTimeline.jsx)                                                       | V5    |
+| T4  | x      | credit cards CRUD + per-cycle payment input                                                                      | -     |
+| T5  | x      | rate limiting + loopback exemption                                                                               | V3,V4 |
+| T6  | x      | demo mode session isolation                                                                                      | V2    |
+| T7  | x      | Cloudflare Workers/Pages Hono mirror                                                                             | V9    |
+| T8  | x      | i18n (en, es, zht, ja) + lang cookie                                                                             | V7    |
+| T9  | x      | dark mode toggle (class-based)                                                                                   | -     |
+| T10 | x      | mobile layout support                                                                                            | -     |
+| T11 | x      | Docker image (port 5173, `/app/data/` mount)                                                                     | V8    |
+| T12 | .      | add test runner + lint check to CI                                                                               | ?     |
+| T13 | .      | ? expand currency support beyond current set                                                                     | ?     |
+| T14 | .      | server-side settings validation (language, startingBalance)                                                      | V12   |
+| T15 | .      | api.js res.ok guard on all fetch calls                                                                           | V13   |
+| T16 | .      | CORS origin restriction for production                                                                           | V14   |
+| T17 | .      | rewrite `release.sh` — `pipefail`, dry-run, body-scan for breaking changes, correct changelog awk, drop `gh` dep | V15   |
 
 ## §B BUGS
 
