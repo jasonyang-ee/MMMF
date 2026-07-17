@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PUT /api/settings` now rejects unsupported languages and non-numeric starting balances with 400
 - Client API calls now throw on non-2xx responses; write handlers log failures instead of silently applying state
 - Production CORS now rejects unconfigured origins in Express and Hono while development remains permissive
+- Release helper now supports dry-run, guarded tags/changelog, body-aware breaking detection, and CI-owned GitHub Releases
 
 ## [1.1.4] - 2026-04-07
 
