@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Language cookie validation used `"jp"` instead of `"ja"` — Japanese preference was lost on every page refresh
 - `DEFAULT_LANGUAGE` env var now accepts `zht` and `ja` in addition to `en`/`es`
 - All server write routes (`POST`/`PUT`/`DELETE`) now return 500 cleanly when JSON file is unreadable instead of crashing with TypeError
+- `PUT /api/settings` now rejects unsupported languages and non-numeric starting balances with 400
+- Client API calls now throw on non-2xx responses; write handlers log failures instead of silently applying state
 
 ## [1.1.4] - 2026-04-07
 

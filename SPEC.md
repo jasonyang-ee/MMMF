@@ -139,8 +139,8 @@ V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems)
 | T11 | x      | Docker image (port 5173, `/app/data/` mount)                                                                     | V8          |
 | T12 | .      | add test runner + lint check to CI                                                                               | ?           |
 | T13 | .      | ? expand currency support beyond current set                                                                     | ?           |
-| T14 | .      | server-side settings validation (language, startingBalance)                                                      | V12         |
-| T15 | .      | api.js res.ok guard on all fetch calls                                                                           | V13         |
+| T14 | x      | server-side settings validation (language, startingBalance)                                                      | V12         |
+| T15 | x      | api.js res.ok guard on all fetch calls                                                                           | V13         |
 | T16 | .      | CORS origin restriction for production                                                                           | V14         |
 | T17 | .      | rewrite `release.sh` — `pipefail`, dry-run, body-scan for breaking changes, correct changelog awk, drop `gh` dep | V15         |
 | T18 | .      | final verify API harden — §V.12-14 compliance confirmed                                                          | V12,V13,V14 |

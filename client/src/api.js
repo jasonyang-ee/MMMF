@@ -1,10 +1,17 @@
 const API_BASE = import.meta.env.PROD ? "/api" : "http://localhost:3600/api";
 
+async function checkOk(res) {
+  if (!res.ok) {
+    throw new Error(`${res.statusText} ${res.status}`);
+  }
+  return res.json();
+}
+
 export const api = {
   // Transactions
   async getTransactions() {
     const res = await fetch(`${API_BASE}/transactions`);
-    return res.json();
+    return checkOk(res);
   },
 
   async addTransaction(transaction) {
@@ -13,7 +20,7 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(transaction),
     });
-    return res.json();
+    return checkOk(res);
   },
 
   async updateTransaction(id, transaction) {
@@ -22,27 +29,27 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(transaction),
     });
-    return res.json();
+    return checkOk(res);
   },
 
   async deleteTransaction(id) {
     const res = await fetch(`${API_BASE}/transactions/${id}`, {
       method: "DELETE",
     });
-    return res.json();
+    return checkOk(res);
   },
 
   async clearTransactions() {
     const res = await fetch(`${API_BASE}/transactions`, {
       method: "DELETE",
     });
-    return res.json();
+    return checkOk(res);
   },
 
   // Recurring transactions
   async getRecurring() {
     const res = await fetch(`${API_BASE}/recurring`);
-    return res.json();
+    return checkOk(res);
   },
 
   async addRecurring(recurring) {
@@ -51,7 +58,7 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(recurring),
     });
-    return res.json();
+    return checkOk(res);
   },
 
   async updateRecurring(id, recurring) {
@@ -60,20 +67,20 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(recurring),
     });
-    return res.json();
+    return checkOk(res);
   },
 
   async deleteRecurring(id) {
     const res = await fetch(`${API_BASE}/recurring/${id}`, {
       method: "DELETE",
     });
-    return res.json();
+    return checkOk(res);
   },
 
   // Credit Cards
   async getCreditCards() {
     const res = await fetch(`${API_BASE}/credit-cards`);
-    return res.json();
+    return checkOk(res);
   },
 
   async addCreditCard(card) {
@@ -82,7 +89,7 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(card),
     });
-    return res.json();
+    return checkOk(res);
   },
 
   async updateCreditCard(id, card) {
@@ -91,20 +98,20 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(card),
     });
-    return res.json();
+    return checkOk(res);
   },
 
   async deleteCreditCard(id) {
     const res = await fetch(`${API_BASE}/credit-cards/${id}`, {
       method: "DELETE",
     });
-    return res.json();
+    return checkOk(res);
   },
 
   // Settings
   async getSettings() {
     const res = await fetch(`${API_BASE}/settings`);
-    return res.json();
+    return checkOk(res);
   },
 
   async updateSettings(settings) {
@@ -113,6 +120,6 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(settings),
     });
-    return res.json();
+    return checkOk(res);
   },
 };

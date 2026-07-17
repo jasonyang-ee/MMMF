@@ -102,119 +102,175 @@ function App() {
   }
 
   async function handleStartingBalanceChange(newBalance) {
-    setStartingBalance(newBalance);
-    await api.updateSettings({
-      startingBalance: newBalance,
-      currentDate: currentDate,
-      forecastEndDate: forecastEndDate,
-      currencySymbol: currencySymbol,
-      dateFormat: dateFormat,
-      language: language,
-    });
+    try {
+      setStartingBalance(newBalance);
+      await api.updateSettings({
+        startingBalance: newBalance,
+        currentDate: currentDate,
+        forecastEndDate: forecastEndDate,
+        currencySymbol: currencySymbol,
+        dateFormat: dateFormat,
+        language: language,
+      });
+    } catch (error) {
+      console.error("Error updating starting balance:", error);
+    }
   }
 
   async function handleCurrentDateChange(newDate) {
-    setCurrentDate(newDate);
-    await api.updateSettings({
-      startingBalance: startingBalance,
-      currentDate: newDate,
-      forecastEndDate: forecastEndDate,
-      currencySymbol: currencySymbol,
-      dateFormat: dateFormat,
-      language: language,
-    });
+    try {
+      setCurrentDate(newDate);
+      await api.updateSettings({
+        startingBalance: startingBalance,
+        currentDate: newDate,
+        forecastEndDate: forecastEndDate,
+        currencySymbol: currencySymbol,
+        dateFormat: dateFormat,
+        language: language,
+      });
+    } catch (error) {
+      console.error("Error updating current date:", error);
+    }
   }
 
   async function handleForecastEndDateChange(newDate) {
-    setForecastEndDate(newDate);
-    await api.updateSettings({
-      startingBalance: startingBalance,
-      currentDate: currentDate,
-      forecastEndDate: newDate,
-      currencySymbol: currencySymbol,
-      dateFormat: dateFormat,
-      language: language,
-    });
+    try {
+      setForecastEndDate(newDate);
+      await api.updateSettings({
+        startingBalance: startingBalance,
+        currentDate: currentDate,
+        forecastEndDate: newDate,
+        currencySymbol: currencySymbol,
+        dateFormat: dateFormat,
+        language: language,
+      });
+    } catch (error) {
+      console.error("Error updating forecast end date:", error);
+    }
   }
 
   async function handleCurrencyChange(newCurrency) {
-    setCurrencySymbol(newCurrency);
-    await api.updateSettings({
-      startingBalance: startingBalance,
-      currentDate: currentDate,
-      forecastEndDate: forecastEndDate,
-      currencySymbol: newCurrency,
-      dateFormat: dateFormat,
-      language: language,
-    });
+    try {
+      setCurrencySymbol(newCurrency);
+      await api.updateSettings({
+        startingBalance: startingBalance,
+        currentDate: currentDate,
+        forecastEndDate: forecastEndDate,
+        currencySymbol: newCurrency,
+        dateFormat: dateFormat,
+        language: language,
+      });
+    } catch (error) {
+      console.error("Error updating currency:", error);
+    }
   }
 
   async function handleDateFormatChange(newFormat) {
-    setDateFormat(newFormat);
-    await api.updateSettings({
-      startingBalance: startingBalance,
-      currentDate: currentDate,
-      forecastEndDate: forecastEndDate,
-      currencySymbol: currencySymbol,
-      dateFormat: newFormat,
-      language: language,
-    });
+    try {
+      setDateFormat(newFormat);
+      await api.updateSettings({
+        startingBalance: startingBalance,
+        currentDate: currentDate,
+        forecastEndDate: forecastEndDate,
+        currencySymbol: currencySymbol,
+        dateFormat: newFormat,
+        language: language,
+      });
+    } catch (error) {
+      console.error("Error updating date format:", error);
+    }
   }
 
   async function handleLanguageChange(newLanguage) {
-    const nextLang = ["en", "es", "zht", "ja"].includes(newLanguage)
-      ? newLanguage
-      : "en";
-    setCookie("lang", nextLang);
-    setLanguage(nextLang);
-    await api.updateSettings({
-      startingBalance: startingBalance,
-      currentDate: currentDate,
-      forecastEndDate: forecastEndDate,
-      currencySymbol: currencySymbol,
-      dateFormat: dateFormat,
-      language: nextLang,
-    });
+    try {
+      const nextLang = ["en", "es", "zht", "ja"].includes(newLanguage)
+        ? newLanguage
+        : "en";
+      setCookie("lang", nextLang);
+      setLanguage(nextLang);
+      await api.updateSettings({
+        startingBalance: startingBalance,
+        currentDate: currentDate,
+        forecastEndDate: forecastEndDate,
+        currencySymbol: currencySymbol,
+        dateFormat: dateFormat,
+        language: nextLang,
+      });
+    } catch (error) {
+      console.error("Error updating language:", error);
+    }
   }
 
   async function handleAddTransaction(transaction) {
-    const newTransaction = await api.addTransaction(transaction);
-    setTransactions([...transactions, newTransaction]);
+    try {
+      const newTransaction = await api.addTransaction(transaction);
+      setTransactions([...transactions, newTransaction]);
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+    }
   }
 
   async function handleDeleteTransaction(id) {
-    await api.deleteTransaction(id);
-    setTransactions(transactions.filter((t) => t.id !== id));
+    try {
+      await api.deleteTransaction(id);
+      setTransactions(transactions.filter((t) => t.id !== id));
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+    }
   }
 
   async function handleAddRecurring(recurring) {
-    const newRecurring = await api.addRecurring(recurring);
-    setRecurring((prev) => [...prev, newRecurring]);
+    try {
+      const newRecurring = await api.addRecurring(recurring);
+      setRecurring((prev) => [...prev, newRecurring]);
+    } catch (error) {
+      console.error("Error adding recurring transaction:", error);
+    }
   }
 
   async function handleUpdateRecurring(id, updatedRecurring) {
-    const updated = await api.updateRecurring(id, updatedRecurring);
-    setRecurring(recurring.map((r) => (r.id === id ? updated : r)));
+    try {
+      const updated = await api.updateRecurring(id, updatedRecurring);
+      setRecurring(recurring.map((r) => (r.id === id ? updated : r)));
+    } catch (error) {
+      console.error("Error updating recurring transaction:", error);
+    }
   }
 
   async function handleDeleteRecurring(id) {
-    await api.deleteRecurring(id);
-    setRecurring(recurring.filter((r) => r.id !== id));
+    try {
+      await api.deleteRecurring(id);
+      setRecurring(recurring.filter((r) => r.id !== id));
+    } catch (error) {
+      console.error("Error deleting recurring transaction:", error);
+    }
   }
 
   async function handleAddCreditCard(card) {
-    const newCard = await api.addCreditCard(card);
-    setCreditCards((prev) => [...prev, newCard]);
+    try {
+      const newCard = await api.addCreditCard(card);
+      setCreditCards((prev) => [...prev, newCard]);
+    } catch (error) {
+      console.error("Error adding credit card:", error);
+    }
   }
 
   async function handleUpdateCreditCard(id, updatedCard) {
-    const updated = await api.updateCreditCard(id, updatedCard);
-    setCreditCards(creditCards.map((c) => (c.id === id ? updated : c)));
+    try {
+      const updated = await api.updateCreditCard(id, updatedCard);
+      setCreditCards(creditCards.map((c) => (c.id === id ? updated : c)));
+    } catch (error) {
+      console.error("Error updating credit card:", error);
+    }
   }
 
   async function handleDeleteCreditCard(id) {
-    await api.deleteCreditCard(id);
-    setCreditCards(creditCards.filter((c) => c.id !== id));
+    try {
+      await api.deleteCreditCard(id);
+      setCreditCards(creditCards.filter((c) => c.id !== id));
+    } catch (error) {
+      console.error("Error deleting credit card:", error);
+    }
   }
 
   async function handleUseCreditCard(transactionData) {
@@ -230,27 +286,31 @@ function App() {
         "Clear all transactions? Recurring transactions will be kept.",
       )
     ) {
-      await api.clearTransactions();
-      setTransactions([]);
+      try {
+        await api.clearTransactions();
+        setTransactions([]);
 
-      // Reset current date to today
-      const todayDate = getTodayDate();
-      setCurrentDate(todayDate);
+        // Reset current date to today
+        const todayDate = getTodayDate();
+        setCurrentDate(todayDate);
 
-      // Set forecast end date to 30 days from today
-      const endDate = new Date(todayDate);
-      endDate.setDate(endDate.getDate() + 30);
-      const newForecastEndDate = endDate.toISOString().split("T")[0];
-      setForecastEndDate(newForecastEndDate);
+        // Set forecast end date to 30 days from today
+        const endDate = new Date(todayDate);
+        endDate.setDate(endDate.getDate() + 30);
+        const newForecastEndDate = endDate.toISOString().split("T")[0];
+        setForecastEndDate(newForecastEndDate);
 
-      await api.updateSettings({
-        startingBalance: startingBalance,
-        currentDate: todayDate,
-        forecastEndDate: newForecastEndDate,
-        currencySymbol: currencySymbol,
-        dateFormat: dateFormat,
-        language: language,
-      });
+        await api.updateSettings({
+          startingBalance: startingBalance,
+          currentDate: todayDate,
+          forecastEndDate: newForecastEndDate,
+          currencySymbol: currencySymbol,
+          dateFormat: dateFormat,
+          language: language,
+        });
+      } catch (error) {
+        console.error("Error clearing calculations:", error);
+      }
     }
   }
 

@@ -360,6 +360,14 @@ app.get("/api/settings", async (req, res) => {
 
 // Update settings
 app.put("/api/settings", async (req, res) => {
+  const { language, startingBalance } = req.body || {};
+  if (
+    !["en", "es", "zht", "ja"].includes(language) ||
+    !Number.isFinite(startingBalance)
+  ) {
+    return res.status(400).json({ error: "Invalid settings" });
+  }
+
   if (await writeJsonFile(SETTINGS_FILE, req.body)) {
     res.json(req.body);
   } else {
