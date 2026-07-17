@@ -69,7 +69,7 @@ function App() {
       const cookieLang = getCookie("lang");
       const serverLang = settingsData.language || "en";
       const initialLang =
-        cookieLang && ["en", "es", "zht", "jp"].includes(cookieLang)
+        cookieLang && ["en", "es", "zht", "ja"].includes(cookieLang)
           ? cookieLang
           : serverLang;
       setLanguage(initialLang);

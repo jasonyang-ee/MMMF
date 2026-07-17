@@ -36,7 +36,9 @@ const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 const CREDIT_CARDS_FILE = path.join(DATA_DIR, "credit-cards.json");
 
 // Resolve default language from environment
-const DEFAULT_LANGUAGE = ["en", "es"].includes(process.env.DEFAULT_LANGUAGE)
+const DEFAULT_LANGUAGE = ["en", "es", "zht", "ja"].includes(
+  process.env.DEFAULT_LANGUAGE,
+)
   ? process.env.DEFAULT_LANGUAGE
   : "en";
 
@@ -140,6 +142,8 @@ app.get("/api/transactions", async (req, res) => {
 // Add a new transaction
 app.post("/api/transactions", async (req, res) => {
   const transactions = await readJsonFile(TRANSACTIONS_FILE);
+  if (!transactions)
+    return res.status(500).json({ error: "Failed to read transactions" });
   const newTransaction = {
     id: Date.now().toString(),
     ...req.body,
@@ -157,6 +161,8 @@ app.post("/api/transactions", async (req, res) => {
 // Update a transaction
 app.put("/api/transactions/:id", async (req, res) => {
   const transactions = await readJsonFile(TRANSACTIONS_FILE);
+  if (!transactions)
+    return res.status(500).json({ error: "Failed to read transactions" });
   const index = transactions.findIndex((t) => t.id === req.params.id);
 
   if (index !== -1) {
@@ -174,6 +180,8 @@ app.put("/api/transactions/:id", async (req, res) => {
 // Delete a transaction
 app.delete("/api/transactions/:id", async (req, res) => {
   const transactions = await readJsonFile(TRANSACTIONS_FILE);
+  if (!transactions)
+    return res.status(500).json({ error: "Failed to read transactions" });
   const filtered = transactions.filter((t) => t.id !== req.params.id);
 
   if (await writeJsonFile(TRANSACTIONS_FILE, filtered)) {
@@ -201,6 +209,8 @@ app.get("/api/recurring", async (req, res) => {
 // Add a new recurring transaction
 app.post("/api/recurring", async (req, res) => {
   const recurring = await readJsonFile(RECURRING_FILE);
+  if (!recurring)
+    return res.status(500).json({ error: "Failed to read recurring" });
   const newRecurring = {
     id: Date.now().toString(),
     ...req.body,
@@ -218,6 +228,8 @@ app.post("/api/recurring", async (req, res) => {
 // Update a recurring transaction
 app.put("/api/recurring/:id", async (req, res) => {
   const recurring = await readJsonFile(RECURRING_FILE);
+  if (!recurring)
+    return res.status(500).json({ error: "Failed to read recurring" });
   const index = recurring.findIndex((r) => r.id === req.params.id);
 
   if (index !== -1) {
@@ -235,6 +247,8 @@ app.put("/api/recurring/:id", async (req, res) => {
 // Delete a recurring transaction
 app.delete("/api/recurring/:id", async (req, res) => {
   const recurring = await readJsonFile(RECURRING_FILE);
+  if (!recurring)
+    return res.status(500).json({ error: "Failed to read recurring" });
   const filtered = recurring.filter((r) => r.id !== req.params.id);
 
   if (await writeJsonFile(RECURRING_FILE, filtered)) {
@@ -253,6 +267,8 @@ app.get("/api/credit-cards", async (req, res) => {
 // Add a new credit card
 app.post("/api/credit-cards", async (req, res) => {
   const creditCards = await readJsonFile(CREDIT_CARDS_FILE);
+  if (!creditCards)
+    return res.status(500).json({ error: "Failed to read credit cards" });
   const newCard = {
     id: Date.now().toString(),
     ...req.body,
@@ -270,6 +286,8 @@ app.post("/api/credit-cards", async (req, res) => {
 // Update a credit card
 app.put("/api/credit-cards/:id", async (req, res) => {
   const creditCards = await readJsonFile(CREDIT_CARDS_FILE);
+  if (!creditCards)
+    return res.status(500).json({ error: "Failed to read credit cards" });
   const index = creditCards.findIndex((c) => c.id === req.params.id);
 
   if (index !== -1) {
@@ -292,6 +310,8 @@ app.put("/api/credit-cards/:id", async (req, res) => {
 // Delete a credit card
 app.delete("/api/credit-cards/:id", async (req, res) => {
   const creditCards = await readJsonFile(CREDIT_CARDS_FILE);
+  if (!creditCards)
+    return res.status(500).json({ error: "Failed to read credit cards" });
   const filtered = creditCards.filter((c) => c.id !== req.params.id);
 
   if (await writeJsonFile(CREDIT_CARDS_FILE, filtered)) {
