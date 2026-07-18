@@ -101,6 +101,15 @@ SPA forecasts personal account balance across date range → user identifies opt
 | R3  | Express prod: `NODE_ENV=production` → Express serves `client/dist/` from same origin → same-origin; `cors()` can be removed or origin set to `false` for prod                      | `server/index.js:107`   |
 | R4  | `.github/workflows/cleanup-ghcr.yml:26` hardcodes `package-name: iclib` — stale name; repo GHCR package is `mmmf`; cleanup never fires against the actual package                  | `cleanup-ghcr.yml:26`   |
 | R5  | Dependabot `open-pull-requests-limit: 0` stops version-update PRs; security alerts (scan report on GitHub Security tab) are a separate repo-level setting independent of this file | GitHub Dependabot docs  |
+| R6  | `TransactionList` imported `App.jsx:11` but ⊥ rendered in JSX (grep: only import line, no `<TransactionList`); `TransactionList.jsx` ⊥ other importer → dead import + dead file | `App.jsx:11`, `client/src/components/TransactionList.jsx` |
+| R7  | `DarkModeToggle.jsx` ⊥ imported anywhere (grep: only self def+export); dark-mode toggle logic dup inline `GlobalSettings.jsx:11-39` (state+effect+toggle fn) & `GlobalSettings.jsx:67-113` (svg+switch markup) → dead component + dup logic | `client/src/components/DarkModeToggle.jsx`, `GlobalSettings.jsx:11-113` |
+| R8  | submit-button slate clone `bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700...` (∉ `.btn*`) @ 5 sites | `RecurringList.jsx:299`, `TransactionForm.jsx:118`, `RecurringCreditCards.jsx:230`, `RecurringCreditCards.jsx:256`, `RecurringCreditCards.jsx:367` |
+| R9  | debit/credit type-toggle button pair dup — near-identical, size differs (`py-2 px-3 text-sm` vs `py-2.5 px-4`) → extract parametrized shared | `RecurringList.jsx:272-295`, `TransactionForm.jsx:81-104` |
+| R10 | add/cancel header toggle-link clone `text-primary-600 hover:text-primary-700 dark:text-gray-400... text-sm font-medium` | `RecurringList.jsx:223-228`, `RecurringCreditCards.jsx:331-336` |
+| R11 | delete-icon-button + trash svg path clone (`p-0.5` w-4 h-4 / `p-1` w-5 h-5) → dedup to shared; all <44px hit area | `RecurringList.jsx:144`, `RecurringCreditCards.jsx:202`, `BalanceTimeline.jsx:71`, `TransactionList.jsx:58` (dead) |
+| R12 | touch targets <44px: dark-toggle switch `h-6 w-11`=24px; delete btns ~20-28px; DatePicker nav `p-2`+w-5 h-5 ~36px; DatePicker day cell `h-10`=40px | `GlobalSettings.jsx:98-105`, `DatePicker.jsx:139-166`, `DatePicker.jsx:205` |
+| R13 | `App.jsx:357` grid single breakpoint `grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px]`; <1420px → 1-col DOM order = BalanceDisplay,ForecastSettings,GlobalSettings → BalanceTimeline → RecurringCreditCards,RecurringList,TransactionForm ∴ timeline buried after 3 settings cards on mobile | `App.jsx:357-427` |
+| R14 | V18 body-h-scroll risk LOW: BalanceTimeline table `minWidth:480px` inside `overflow-x-auto custom-scrollbar -mx-4 sm:mx-0` (contained); DatePicker popup `w-[calc(100vw-2rem)] sm:w-80 max-w-80` fits 360px ∴ main V18 work = layout order + intermediate breakpoint, ⊥ overflow fixes | `BalanceTimeline.jsx:32-35`, `DatePicker.jsx:136` |
 
 ## §V INVARIANTS
 
@@ -122,8 +131,8 @@ V15: `release.sh` ⊥ create GitHub Release (CI `release.yml` owns it); ! guard:
 V16: `cleanup-ghcr.yml` `package-name` ! match actual GHCR package (`mmmf`); ⊥ hardcode stale name; prefer `${{ github.event.repository.name }}`
 V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems); scanning/alerts ! remain enabled via repo Security settings
 V18: viewport ≤390px → ⊥ horizontal body scroll; wide content (tables) scrolls inside own `overflow-x-auto` container only
-V19: ∀ interactive element (buttons, click-to-edit, toggles) → touch target ≥44px on mobile viewport
-V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `client/src/index.css`; ⊥ duplicate inline utility clones of existing component classes
+V19: ∀ interactive element (buttons, click-to-edit, toggles) → touch target ≥44px on mobile viewport; ! implement via `min-h-11 min-w-11` (44px = Tailwind 11) | padding yielding ≥44px hit area so greppable; ⊥ visual-only claim
+V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `client/src/index.css`; ⊥ duplicate inline utility clones of existing component classes; ⊥ dead/unused component files; shared logic (e.g. dark-mode toggle) ! single source, ⊥ inline re-implementation
 
 ## §T TASKS
 
@@ -151,7 +160,7 @@ V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `cl
 | T20 | x      | fix `cleanup-ghcr.yml` — correct package-name to `mmmf`; use repo-name var                                       | V16         |
 | T21 | x      | fix `dependabot.yml` — set `open-pull-requests-limit: 0` all ecosystems; keep schedule/scan                      | V17         |
 | T22 | x      | final verify CI/CD — §V.16-17 compliance confirmed; dry-run check.yml logic verified                             | V16,V17     |
-| T23 | .      | research: audit ∀ 11 components mobile behavior + consistency catalog (touch targets, dupe styles, dead code)    | V18,V19,V20 |
+| T23 | x      | research: audit ∀ 11 components mobile behavior + consistency catalog (touch targets, dupe styles, dead code)    | V18,V19,V20 |
 | T24 | .      | mobile responsive fixes — layout order, touch targets, no body h-scroll ≤390px                                    | V18,V19     |
 | T25 | .      | UI consistency unification — dedupe inline button/input clones → shared classes                                   | V20         |
 | T26 | .      | final verify UI — §V.18-20 compliance, build + viewport checks                                                    | V18,V19,V20 |
