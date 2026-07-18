@@ -145,9 +145,9 @@ V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems)
 | T17 | x      | rewrite `release.sh` — `pipefail`, dry-run, body-scan for breaking changes, correct changelog awk, drop `gh` dep | V15         |
 | T18 | x      | final verify API harden — §V.12-14 compliance confirmed                                                          | V12,V13,V14 |
 | T19 | x      | final verify release.sh — §V.15 compliance confirmed                                                             | V15         |
-| T20 | .      | fix `cleanup-ghcr.yml` — correct package-name to `mmmf`; use repo-name var                                       | V16         |
-| T21 | ~      | fix `dependabot.yml` — set `open-pull-requests-limit: 0` all ecosystems; keep schedule/scan                      | V17         |
-| T22 | .      | final verify CI/CD — §V.16-17 compliance confirmed; dry-run check.yml logic verified                             | V16,V17     |
+| T20 | x      | fix `cleanup-ghcr.yml` — correct package-name to `mmmf`; use repo-name var                                       | V16         |
+| T21 | x      | fix `dependabot.yml` — set `open-pull-requests-limit: 0` all ecosystems; keep schedule/scan                      | V17         |
+| T22 | x      | final verify CI/CD — §V.16-17 compliance confirmed; dry-run check.yml logic verified                             | V16,V17     |
 
 ## §B BUGS
 
