@@ -1,35 +1,35 @@
 # HANDOFF 2026-07-18
 
-branch main | last commit 4e5e15b docs: verify CI/CD fixes (T20-T22 done) | tests green
-baseline green | oracle `npm.cmd run build` (✓ 5.49s); `bash -n release.sh` + `./release.sh --dry-run`
-uncommitted: none
+branch main | last commit 14c2374 docs: final handoff, plan cycle complete | tests none (no runner, T12 todo)
+baseline green (client builds) | oracle `npm run build` in `client/`
+uncommitted: none (this cook commit closes session)
 
 ## done this session
-F6: verify release.sh rewrite; T17+T19 → x → 279b8e2
-F8: cleanup-ghcr.yml repo-name var + dependabot limits 0 → 0c076dc
-F9: verify §V.16-17; T20+T21+T22 → x → 4e5e15b
+
+cook: new cycle — mobile-friendly UI + consistency sweep. PLAN.md F1-F4 written; SPEC §V.18-20 + §T.23-26 added → this commit
 
 ## in progress (exact stop point)
-- (∀ PLAN.md phases F1-F9 complete) | NEXT STEP: `/garnish` to close cycle (purge PLAN.md + HANDOFF.md)
-mid-edit files: none
+
+- (⊥ code shipped) | NEXT STEP: run `/workonplan F1` — read 8 unaudited components (PLAN.md F1 step 1 list), catalog mobile + consistency defects, log §R via /spec
 
 ## next
-plan cycle complete | preconditions: none | candidate follow-ups live in §T: T12 (test runner CI), T13 (currency expansion)
+
+F1 audit (T23) | preconditions: none. F2/F3 step lists ! be refined by F1 findings before execution
 
 ## deviations & decisions
-prev session committed F5 (b5cb854) ⊥ refreshed HANDOFF → resumed at F6 from SPEC §T state
-user decided: -
+
+user asked: mobile-friendly scaling + component consistency check + fix issues found → cook scoped to `client/src/` only, server untouched
+recommend /review-plan optional — blast radius low (UI-only, no data/API change)
 
 ## watchouts
-- `${{ github.event.repository.name }}` yields `MMMF` (mixed case); GHCR package is `mmmf` — GitHub package API matches case-insensitively, but if cleanup still no-ops, hardcode `mmmf`.
-- Dependabot security alerts = repo Settings → Security toggle; ! verify ON manually (⊥ file-controlled).
-- `.git` writes require escalated permission in this environment.
-- ⊥ push | tag without explicit ask; 5 local commits ahead of origin/main.
+
+- App.jsx grid single breakpoint `min-[1420px]` — <1420px everything stacks; mobile order fix = core F2 work
+- partial mobile support already ∈ `client/src/index.css:151-176` — extend, ⊥ duplicate
+- `TransactionList` imported `App.jsx:11` but ⊥ rendered in JSX — confirm dead before removal (F1 step 3)
+- dark mode ∀ change: `.dark` class-based; ∀ new styles ! carry `dark:` variants matching `#1f1f1f/#2a2a2a/#333333` palette
+- i18n: ∀ new visible string ! go through `t()` (4 langs); prefer zero new strings
 
 ## final verification
+
 item|status|evidence|decision
-§V.15|HOLD|⊥ `gh` in release.sh; tag guard :104; empty-Unreleased guard :111; push specific tag :168-169|code
-§V.16|HOLD|cleanup-ghcr.yml:28 `package-name: ${{ github.event.repository.name }}`; ⊥ `iclib`|code
-§V.17|HOLD|dependabot.yml:13,36,54 `open-pull-requests-limit: 0`; schedule/reviewers kept|code
-F6 oracle|HOLD|`bash -n` exit 0; dry-run ×2 exit 0, tree clean; awk scratch + 6 regex cases correct|-
-F9 oracle|HOLD|`npm.cmd run build` green; yaml parse ok|-
+-|-|-|-
