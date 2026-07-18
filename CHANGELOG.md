@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Mobile layout now surfaces the account balance and forecast timeline first, moving settings below the entry forms; added an intermediate two-column tier for tablet widths
+- Interactive controls (delete buttons, dark-mode toggle, date-picker navigation and day cells) now meet the 44px minimum touch-target size on mobile
+
 ### Fixed
 
 - Language cookie validation used `"jp"` instead of `"ja"` — Japanese preference was lost on every page refresh

@@ -143,7 +143,7 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
 
         <button
           onClick={() => onDelete(item.id)}
-          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-0.5"
+          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 min-h-11 min-w-11 inline-flex items-center justify-center"
           title={t("recurring:deleteRecurring")}
         >
           <svg

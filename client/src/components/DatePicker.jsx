@@ -139,7 +139,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
             <button
               type="button"
               onClick={previousMonth}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
             >
               <svg
                 className="w-5 h-5"
@@ -163,7 +163,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
             <button
               type="button"
               onClick={nextMonth}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
             >
               <svg
                 className="w-5 h-5"
@@ -202,7 +202,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
                 onClick={() => handleDateClick(date)}
                 disabled={isDateDisabled(date)}
                 className={`
-                  h-10 flex items-center justify-center rounded-lg text-sm font-medium
+                  h-11 flex items-center justify-center rounded-lg text-sm font-medium
                   transition-colors duration-150
                   ${
                     !date
@@ -227,7 +227,7 @@ export default function DatePicker({ value, onChange, min, className = "" }) {
             <button
               type="button"
               onClick={() => handleDateClick(new Date())}
-              className="w-full py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="w-full min-h-11 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
             >
               {t("common:today")}
             </button>

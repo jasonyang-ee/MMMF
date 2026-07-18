@@ -97,17 +97,21 @@ function GlobalSettings({
 
           <button
             onClick={toggleDarkMode}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ${
-              isDarkMode ? "bg-gray-600" : "bg-gray-200"
-            }`}
+            className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
             role="switch"
             aria-checked={isDarkMode}
           >
             <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                isDarkMode ? "translate-x-6" : "translate-x-1"
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                isDarkMode ? "bg-gray-600" : "bg-gray-200"
               }`}
-            />
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  isDarkMode ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </span>
           </button>
         </div>
       </div>

@@ -161,7 +161,7 @@ V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `cl
 | T21 | x      | fix `dependabot.yml` — set `open-pull-requests-limit: 0` all ecosystems; keep schedule/scan                      | V17         |
 | T22 | x      | final verify CI/CD — §V.16-17 compliance confirmed; dry-run check.yml logic verified                             | V16,V17     |
 | T23 | x      | research: audit ∀ 11 components mobile behavior + consistency catalog (touch targets, dupe styles, dead code)    | V18,V19,V20 |
-| T24 | .      | mobile responsive fixes — layout order, touch targets, no body h-scroll ≤390px                                    | V18,V19     |
+| T24 | x      | mobile responsive fixes — layout order, touch targets, no body h-scroll ≤390px                                    | V18,V19     |
 | T25 | .      | UI consistency unification — dedupe inline button/input clones → shared classes                                   | V20         |
 | T26 | .      | final verify UI — §V.18-20 compliance, build + viewport checks                                                    | V18,V19,V20 |
 
