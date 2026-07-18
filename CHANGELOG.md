@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Client API calls now throw on non-2xx responses; write handlers log failures instead of silently applying state
 - Production CORS now rejects unconfigured origins in Express and Hono while development remains permissive
 - Release helper now supports dry-run, guarded tags/changelog, body-aware breaking detection, and CI-owned GitHub Releases
+- GHCR cleanup workflow targeted stale package name `iclib`; now uses the repository name so untagged images are actually deleted
+- Dependabot no longer auto-opens version-update PRs (`open-pull-requests-limit: 0`); security alerts remain governed by repo settings
 
 ## [1.1.4] - 2026-04-07
 

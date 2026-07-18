@@ -25,7 +25,7 @@ jobs:
         uses: actions/delete-package-versions@v5
         with:
           owner: ${{ github.repository_owner }}
-          package-name: iclib
+          package-name: ${{ github.event.repository.name }}
           package-type: container
           min-versions-to-keep: 0
           delete-only-untagged-versions: 'true'
