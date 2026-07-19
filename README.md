@@ -1,5 +1,5 @@
 [![Release](https://github.com/jasonyang-ee/MMMF/actions/workflows/release.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/release.yml)
-[![Testing](https://github.com/jasonyang-ee/MMMF/actions/workflows/testing.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/testing.yml)
+[![Check](https://github.com/jasonyang-ee/MMMF/actions/workflows/check.yml/badge.svg)](https://github.com/jasonyang-ee/MMMF/actions/workflows/check.yml)
 
 <h1 align="center">MMMF</h1>
 <h3 align="center">Max Money Market Funds</h3>
