@@ -1,75 +1,69 @@
 # PLAN
 
-goal: fix GHCR cleanup orphaning tagged images — `docker pull ghcr.io/<owner>/mmmf:test` → `manifest unknown` after ∀ push (V21).
+goal: restore v1.1.4 3-col layout (`doc/screenshotFull.png`) in `App.jsx`; 3-col appears ≥1100px (was 1420), ⊥ 2-col intermediate tier → fix user-reported broken core layout (B6/V23).
 
 ## ground rules
-- root cause (diagnosed): `cleanup-ghcr.yml` `actions/delete-package-versions@v5` ⊥ manifest-aware → deletes untagged child manifests referenced by tagged index (`:test` is index due to build-push-action default provenance; release tags multi-arch) → tag survives, platform manifest gone → `manifest unknown` (§R17,§R18,§B4).
-- fix strategy (user-chosen): manifest-aware cleanup action (`dataaxiom/ghcr-cleanup-action`) — keep untagged pruning, ⊥ orphan tagged-index children (V21).
-- smallest codebase-consistent change; scope = `.github/workflows/cleanup-ghcr.yml` + CHANGELOG (+ optional `provenance:false` on check.yml only if F1 recommends).
-- ⊥ change build/push logic, triggers, permissions, or namespace unless F1 proves necessary.
-- verify-first: oracle = yaml parse valid + hand-trace deletion semantics vs V21 (⊥ live GHCR mutation from CI edits; ⊥ test runner, T12 todo).
+- root cause (diagnosed): `fad7b0d` (T24) replaced v1.1.4 `<main>` grid w/ mobile-first flat-children grid + `lg:grid-cols-2` intermediate tier (1024-1419px) + `min-[1420px]` 3-col. user window <1420px → 2-col, ⊥ v1.1.4 3-col.
+- user decision: want v1.1.4 3-col arrangement (Left=Balance+Forecast+Global \| Center=Timeline \| Right=Cards+Recurring+Add); 3-col ! appear at narrower widths → breakpoint lowered 1420→1100; <1100 → single-col stack (v1.1.4 DOM order accepted).
+- SURGICAL: change ONLY `App.jsx` `<main>` grid block (+ 1 CHANGELOG line). ⊥ touch child components. KEEP fad7b0d touch-target/overflow tweaks (BalanceTimeline/DatePicker/GlobalSettings/RecurringCreditCards/RecurringList) + a1e4a64 (T25) shared components — none live in the grid.
+- invariants: V18 overflow container (`BalanceTimeline.jsx:33`) + V19 touch targets + V20 shared classes all in child comps → untouched by grid revert ∴ ⊥ regress. V23 new = codifies restored layout.
+- verify-first: oracle = `cd client && npm run build` green + visual drive (run skill) @ ≥1100px → 3-col & <1100px → stack & ⊥ horizontal body scroll.
 - ∀ phase ends green + self-reviewed + committed w/ named evidence. ⊥ Claude co-author trailer.
-- close: flip §T (T30/T31/T32), update CHANGELOG `[Unreleased]`, refresh HANDOFF.
+- close: flip §T (T33), update CHANGELOG `[Unreleased]`, refresh HANDOFF.
 
 ## existing assets
-- broken cleanup: `.github/workflows/cleanup-ghcr.yml:24-32` — `actions/delete-package-versions@v5`, `delete-only-untagged-versions:'true'`, `min-versions-to-keep:0`, owner=`github.repository_owner`, package-name=`github.event.repository.name`, token fallback `secrets.TOKEN_GITHUB||github.token`.
-- triggers to preserve: `workflow_run` [Release,Check] completed (guard: success & event==push), `schedule` cron `17 3 * * *`, `workflow_dispatch`; concurrency group `cleanup-ghcr-untagged`.
-- `:test` producer: `check.yml:59-67` build-push-action@v5 (⊥ `platforms:` set → single-arch, but default provenance → index w/ untagged children); images `ghcr.io/${{ github.actor }}/mmmf` + dockerhub.
-- release producer: `release.yml:79-88` multi-arch `linux/amd64,linux/arm64` → per-arch untagged children.
-- §R17,§R18 (mechanism), §V21 (invariant), §B4 (bug) already in SPEC.
-- note (⊥ root cause, flag only): both workflows push to `ghcr.io/${{ github.actor }}/mmmf` (actor ≠ owner on bot/scheduled trigger).
+- v1.1.4 target markup: `git show v1.1.4:client/src/App.jsx` — `<div className="grid grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px] gap-4 sm:gap-6">` w/ 3 grouped divs: Left `space-y-6`(BalanceDisplay,ForecastSettings,GlobalSettings) \| Center `min-w-0`(BalanceTimeline) \| Right `space-y-6`(RecurringCreditCards,RecurringList,TransactionForm).
+- current broken markup: `App.jsx:362-430` — `grid grid-cols-1 lg:grid-cols-2 min-[1420px]:grid-cols-[320px_1fr_384px] items-start` + flat children w/ `lg:col-start-* min-[1420px]:col-start-*` placement.
+- current ≥1420 3-col placement ALREADY = v1.1.4 arrangement (col1=Balance+Settings, col2=Timeline, col3=Forms) → only the `lg` 2-col tier + 1420 breakpoint are the defect.
+- fad7b0d scope: `App.jsx` (grid ONLY) + child comps (touch/overflow) + CHANGELOG + SPEC. a1e4a64: shared comps only.
+- CHANGELOG `[Unreleased]` line "Mobile layout now surfaces the account balance and forecast timeline first... added an intermediate two-column tier" → now FALSE post-revert, ! fix (unreleased ∴ editable).
+- §V23 (new), §R13 supersession note, §B6, §T33 in SPEC.
+- breakpoint math @1100: 320+384 sidebars + 2×24px gap = 752 → center ≈348px; Timeline table `minWidth:480px` scrolls inside own `overflow-x-auto` container (V18 safe). tight but functional.
 
 ## phase order
 id|goal|depends|exit
-F1|research: confirm manifest-aware action + exact inputs vs current usage|-|action+config locked, F2 steps 1:1, ⊥ open `?`
-F2|impl: swap cleanup action, keep pruning+triggers, CHANGELOG|F1|yaml valid, hand-trace preserves tagged-index children, diff self-reviewed
-F3|final verify: classify V21 HOLD/VIOLATE/UNVERIFIABLE + sweep other workflows|F2|yaml valid, V21 HOLD w/ evidence, ⊥ other workflow orphans children
+F1|research: confirm exact v1.1.4 markup + revert scope + breakpoint fit + ⊥ invariant conflict|-|scope locked, F2 markup 1:1, ⊥ open `?`
+F2|impl: revert App.jsx `<main>` grid → v1.1.4 grouped 3-col @ min-[1100px]; fix CHANGELOG line|F1|build green, markup = v1.1.4+breakpoint, child comps untouched, self-reviewed
+F3|final verify: drive app @≥1100 & <1100; classify V23/V18/V19/V20 HOLD; confirm touch/shared work intact|F2|3-col ≥1100 + stack <1100 + ⊥ body h-scroll; invariants HOLD w/ evidence
 
 ## F1 research
-task: T30
-goal: lock exact manifest-aware action + config before editing.
-inputs: `.github/workflows/cleanup-ghcr.yml`, `check.yml`, `release.yml`, dataaxiom/ghcr-cleanup-action docs (current release), GHCR packages API semantics.
+task: T33
+goal: lock exact revert markup + breakpoint before editing.
+inputs: `git show v1.1.4:client/src/App.jsx`, current `App.jsx:349-434`, `git show fad7b0d -- client/src/App.jsx`, `BalanceTimeline.jsx:33-36`, `CHANGELOG.md`.
 steps:
-1. confirm `dataaxiom/ghcr-cleanup-action` current major tag + input names: `packages`/`package`, `token`, `owner`, `delete-untagged`, `keep-n-tagged`/`older-than`, `dry-run`; confirm it is manifest-aware (skips untagged children referenced by tagged index) — cite docs.
-2. map current behavior → new inputs 1:1: owner=repo owner, package=`mmmf`, token=`TOKEN_GITHUB||github.token`, keep untagged pruning ON but child-safe. Decide keep-policy (untagged-only, ⊥ delete tagged) matching current intent (`delete-only-untagged`).
-3. confirm build-push-action@v5 default provenance makes single-arch `:test` an index (∴ has untagged children) — decide whether F2 also sets `provenance:false`+`sbom:false` on `check.yml` build (belt-and-suspenders) OR leave to cleanup action (release still needs manifest-aware ∴ action swap mandatory regardless).
-4. confirm ⊥ permission/trigger changes needed (packages:write already present).
-verify: F2 step list maps 1:1 to a real current action release; ⊥ open `?`; ⊥ guessed input names.
-exit: config locked; if docs unreachable → record `?` + stop for user.
+1. confirm v1.1.4 `<main>` grid block markup verbatim (grouped 3 divs, class strings) → this is the F2 target minus breakpoint.
+2. confirm the ONLY App.jsx delta from fad7b0d = the `<main>` grid; ⊥ other App.jsx logic changed by fad7b0d/a1e4a64 → revert is grid-block-only.
+3. confirm breakpoint swap `min-[1420px]`→`min-[1100px]` fits: sidebars 320+384 + gaps < 1100; Timeline center scrolls its own container (V18) ⊥ body scroll. record center px.
+4. confirm V18/V19/V20 carriers all in child comps (⊥ `<main>` grid) → revert ⊥ touch them. cite files.
+5. identify exact CHANGELOG `[Unreleased]` line(s) to rewrite (the "Mobile layout now surfaces..." + "intermediate two-column tier" claim).
+verify: F2 markup maps 1:1 to v1.1.4 block w/ only breakpoint changed; ⊥ open `?`.
+exit: scope locked. if v1.1.4 markup ambiguous → record `?` + stop.
 next: F2
 
-### F1 findings (LOCKED 2026-07-19)
-- action = `dataaxiom/ghcr-cleanup-action@v1` (current major; latest v1.2.2 Jun 2026).
-- manifest-aware CONFIRMED (docs): "'Untagged' refers to untagged images, not untagged GitHub packages" → untagged child/platform manifests referenced by a tagged index ⊥ counted as untagged ∴ ⊥ orphaned by `delete-untagged`. distinct from `actions/delete-package-versions` (⊥ builds manifest graph). `validate` input post-verifies multi-arch integrity.
-- input map 1:1: `owner: ${{ github.repository_owner }}`, `package: ${{ github.event.repository.name }}`, `token: ${{ secrets.TOKEN_GITHUB != '' && secrets.TOKEN_GITHUB || github.token }}`, `delete-untagged: "true"` (= current delete-only-untagged intent), `validate: "true"` (NEW, cheap, strengthens V21 evidence). ⊥ `keep-n-tagged` (keep ∀ tagged, only untagged pruned), ⊥ `dry-run`.
-- step3 decision = ⊥ set `provenance:false` on `check.yml`: action covers both `:test` (attest index) & release (multi-arch); flattening only helps `:test` (strips attestations) + release still needs action swap ∴ scope creep. scope stays = `cleanup-ghcr.yml` + `CHANGELOG.md`.
-- step4: `permissions.packages: write` already present → ⊥ permission/trigger change needed.
-- trigger decision (USER 2026-07-19): `workflow_run.workflows` = `["Release"]` ONLY (dropped `Check`) — user wants cleanup on release push only, ⊥ every Check push. supersedes plan's "preserve [Release,Check]". user ALSO removed `schedule` cron → triggers now `workflow_run[Release]` + `workflow_dispatch` only. F2 KEEPS user's trigger set. NOTE: action swap still MANDATORY — release build is multi-arch (linux/amd64,arm64) + attested ∴ dumb cleaner would still orphan release-tag children even on Release-only trigger; trigger change is complementary defense-in-depth, ⊥ a replacement for manifest-aware action.
-- quote normalization in stray edit (single→double) = cosmetic; F2 keeps a single consistent style, minimal semantic diff.
-
 ## F2 implement
-task: T31
-goal: swap to manifest-aware cleanup, preserve pruning + triggers.
-inputs: F1 findings; `.github/workflows/cleanup-ghcr.yml`, `CHANGELOG.md`.
-files: `.github/workflows/cleanup-ghcr.yml`, `CHANGELOG.md`, (optional per F1) `.github/workflows/check.yml`.
+task: T33
+goal: revert grid to v1.1.4 grouped 3-col, breakpoint 1100, keep everything else.
+inputs: F1 findings; `client/src/App.jsx`, `CHANGELOG.md`.
+files: `client/src/App.jsx` (`<main>` block only), `CHANGELOG.md`.
 steps:
-1. replace `actions/delete-package-versions@v5` step w/ manifest-aware action (pinned tag from F1); set owner/package/token; enable untagged deletion child-safe; preserve `on:` triggers, `if` guard, `concurrency`, `permissions`.
-2. (if F1 step3 → yes) add `provenance: false` + `sbom: false` to `check.yml` build-push-action to keep `:test` a plain single manifest.
-3. update `CHANGELOG.md` `[Unreleased]` → Fixed: GHCR cleanup no longer orphans tagged multi-arch/attested images (`manifest unknown` on pull).
-verify: yaml parses (lint/parse); hand-trace — tagged index children preserved, genuinely-orphaned untagged still pruned; triggers unchanged.
-exit: cleanup step swapped, CHANGELOG updated, build/trigger surface unchanged, self-reviewed diff.
+1. replace `App.jsx` `<main>` grid block (`<div className="grid ...">…</div>`) w/ v1.1.4 grouped-3-col structure: container `grid grid-cols-1 min-[1100px]:grid-cols-[320px_1fr_384px] gap-4 sm:gap-6`; Left div `space-y-6` = BalanceDisplay+ForecastSettings+GlobalSettings; Center div `min-w-0` = BalanceTimeline; Right div `space-y-6` = RecurringCreditCards+RecurringList+TransactionForm. remove `lg:grid-cols-2`, `items-start`, ∀ `lg:`/`min-[1420px]:` col/row placement + the reorder comment. keep ∀ component props identical.
+2. rewrite `CHANGELOG.md` `[Unreleased]` mobile-layout line → reflect restored v1.1.4 3-col layout w/ lower (1100px) breakpoint; ⊥ leave stale "surfaces balance+timeline first / two-column tier" claim.
+3. `cd client && npm run build` → green.
+verify: build green; `git diff` shows ONLY `<main>` block + CHANGELOG changed; child comps ⊥ in diff; grid = v1.1.4 + `min-[1100px]`; ∀ 8 components still rendered w/ same props.
+exit: grid reverted, CHANGELOG fixed, build green, self-reviewed diff.
 next: F3
 
 ## F3 final verify
-task: T32
-goal: prove V21 holds, ⊥ residual orphaning path.
-inputs: touched files, §V21, §R17/§R18, `check.yml`, `release.yml`.
+task: T33
+goal: prove V23 holds + ⊥ regression of V18/V19/V20.
+inputs: touched files, §V23/V18/V19/V20, `doc/screenshotFull.png`.
 steps:
-1. re-read §V21, §R17, §R18.
-2. yaml parse `cleanup-ghcr.yml` → record result.
-3. confirm new action is manifest-aware + untagged pruning still active (cite action docs/inputs).
-4. grep all `.github/workflows/*.yml` for other package-deletion steps → confirm none orphan tagged-index children.
-5. classify V21 = HOLD | VIOLATE | UNVERIFIABLE w/ file evidence (note: full proof = observe a real pull post-deploy, ⊥ runnable pre-merge → record as UNVERIFIABLE-until-deploy if applicable, w/ hand-trace as strongest available evidence); record table in HANDOFF.
-verify: yaml valid + V21 classified w/ cited evidence + ⊥ other orphaning workflow.
+1. re-read §V23, §V18, §V19, §V20.
+2. `cd client && npm run build` → record.
+3. drive app (run skill) @ width ≥1100 → screenshot; confirm 3-col = Left(Balance+Forecast+Global)\|Center(Timeline)\|Right(Cards+Recurring+Add) matching `doc/screenshotFull.png`.
+4. drive @ width <1100 (e.g. 900 + ≤390) → confirm single-col stack + ⊥ horizontal body scroll (V18); Timeline table scrolls own container.
+5. grep child comps for `min-h-11`/`min-w-11` touch targets (V19) + shared `.btn*`/`.input`/`.card` (V20) still present (⊥ removed by revert).
+6. classify V23/V18/V19/V20 = HOLD \| VIOLATE \| UNVERIFIABLE w/ file/screenshot evidence; record table in HANDOFF.
+verify: build green + 3-col ≥1100 + stack <1100 + ⊥ body h-scroll + touch/shared intact + V23 HOLD.
 exit: cycle done → ready for /garnish.
 next: -
