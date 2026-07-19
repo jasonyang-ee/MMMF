@@ -137,7 +137,7 @@ V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems)
 V18: viewport ≤390px → ⊥ horizontal body scroll; wide content (tables) scrolls inside own `overflow-x-auto` container only
 V19: ∀ discrete tap control (buttons, toggle switches, icon buttons, calendar nav + day cells) → touch target ≥44px on mobile viewport; ! implement via `min-h-11 min-w-11` (44px = Tailwind 11) | padding yielding ≥44px hit area so greppable; ⊥ visual-only claim. EXCLUDED: dense inline click-to-edit text rows (recurring/card name+amount, balance figures) — per-row 44px min-height bloats list density on mobile ∴ deliberately exempt; `.input`/`.input cursor-pointer` selects governed by `.input` shared class (§V.20), ⊥ V19
 V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `client/src/index.css`; ⊥ duplicate inline utility clones of existing component classes; ⊥ dead/unused component files; shared logic (e.g. dark-mode toggle) ! single source, ⊥ inline re-implementation
-V22: CI job `node-version` (`actions/setup-node`) ! satisfy the minimum required by tools run in that job; `Cloudflare_Build_Test` runs `npx wrangler` → ! Node ≥22 (Wrangler hard-requires v22.0.0); ⊥ pin below a tool's floor
+V22: CI job `node-version` (`actions/setup-node`) ! satisfy the max floor of `package.json` `engines.node` (≥24) & any tool run in that job (Wrangler ≥22); ⊥ pin below it; ∴ `Cloudflare_Build_Test` & release both pin `24`
 V21: GHCR untagged cleanup ! manifest-aware; ⊥ delete untagged child manifests referenced by tagged multi-arch/attested index (∴ ⊥ orphan tag → `manifest unknown`); `actions/delete-package-versions` ⊥ satisfy → use manifest-aware action (skips children of tagged indexes)
 
 ## §T TASKS

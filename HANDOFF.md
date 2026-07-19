@@ -26,7 +26,8 @@ user asked mid-session: fix Wrangler Node-version CI error → done as B5/V22, s
 ## watchouts
 - V21 empirical proof (real `docker pull` post-cleanup) ⊥ runnable pre-merge (no live GHCR mutation from CI); first post-deploy cleanup self-asserts via `validate: true` (fails job if orphaned).
 - action swap was MANDATORY independent of trigger change — release build multi-arch (amd64,arm64)+attested → dumb cleaner orphans children even on Release-only trigger.
-- release.yml uses node 24, check.yml now 22 — intentional (both ≥ tool floors); ⊥ regress below V22.
+- node floor = 24 across repo: package.json engines ≥24 (user edit), release.yml + check.yml Cloudflare_Build_Test both pin 24; ⊥ regress below V22.
+- uncommitted (user's parallel edit, ⊥ mine): package.json + package-lock.json engines.node 20→24 — left for user to commit.
 - secondary (flag only, ⊥ addressed): both workflows push `ghcr.io/${{ github.actor }}/mmmf` (actor≠owner on bot trigger).
 
 ## final verification

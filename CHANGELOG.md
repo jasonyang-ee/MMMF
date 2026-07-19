@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Production CORS now rejects unconfigured origins in Express and Hono while development remains permissive
 - Cloudflare (Hono) runtime brought to parity with the Express server: `PUT /api/settings` now validates language and starting balance (400 on invalid), and the CORS origin allowlist reads the Workers `ALLOWED_ORIGIN` environment binding (`c.env`) instead of `process.env`, which the Workers runtime does not populate — so a configured allowed origin now takes effect
 - Release helper now supports dry-run, guarded tags/changelog, body-aware breaking detection, and CI-owned GitHub Releases
-- CI `Cloudflare_Build_Test` job now runs Node 22 (was 20) so the Wrangler validation step no longer fails with "Wrangler requires at least Node.js v22.0.0"
+- CI `Cloudflare_Build_Test` job now runs Node 24 (was 20), matching `package.json` engines and clearing the Wrangler ≥22 requirement, so the Wrangler validation step no longer fails with "Wrangler requires at least Node.js v22.0.0"
 - GHCR cleanup no longer orphans tagged multi-arch/attested images: replaced `actions/delete-package-versions` (not manifest-aware) with `dataaxiom/ghcr-cleanup-action`, which excludes untagged child/platform manifests referenced by a tagged index — fixing `docker pull ghcr.io/<owner>/mmmf:<tag>` failing with `manifest unknown` after a build; `validate: true` fails the job if any tagged image is left orphaned
 - GHCR cleanup workflow targeted stale package name `iclib`; now uses the repository name so untagged images are actually deleted
 - Dependabot no longer auto-opens version-update PRs (`open-pull-requests-limit: 0`); security alerts remain governed by repo settings

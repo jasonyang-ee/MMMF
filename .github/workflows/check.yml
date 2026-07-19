@@ -201,8 +201,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          # Wrangler (Check wrangler configuration step) requires Node >= 22
-          node-version: "22"
+          # Match package.json engines (>=24) and release.yml; also clears
+          # the Wrangler >= 22 floor for the "Check wrangler configuration" step
+          node-version: "24"
 
       - name: Install Dependencies
         run: npm install
