@@ -1,37 +1,39 @@
 # HANDOFF 2026-07-18
 
-branch main | last commit fad7b0d feat(mobile): reorder layout + 44px touch targets (T24) | tests none (no runner, T12 todo)
+branch main | last commit be955ea verify(ui): final verify V18-20; toggle 44px + refine V19 (T26) | tests none (no runner, T12 todo)
 baseline green (client builds) | oracle `npm run build` in `client/`
 uncommitted: none
 
 ## done this session
 
-- docs: apply review-plan findings (R6-R14, sharpen V19/V20); T23 audit done → 3505425
-- F2 mobile fixes (T24): App grid flat children → mobile order balance→timeline→forms→settings + lg 2-col tier, desktop 3-col preserved via explicit col/row placement; delete btns + dark-toggle + DatePicker nav/day-cells/today ≥44px via min-h-11/min-w-11 → fad7b0d
+- F3 consistency (T25): completed prior session's partial F3 → dedup RecurringCreditCards 3 slate submit btns → `.btn btn-submit`, header link → `.btn-link`, delete → `DeleteButton`; BalanceTimeline delete → `DeleteButton` (iconSize `w-5 h-5`); removed dead `TransactionList` (App.jsx:11 import + file) + `DarkModeToggle` file; added `.btn-submit`/`.btn-link` to index.css → a1e4a64
+- F4 final verify (T26): classified §V.18-20; found V19 gap → user chose fix+refine → added `min-h-11` to shared `TypeToggle` (both variants ≥44px); refined §V.19 scope → be955ea
 
 ## in progress (exact stop point)
 
-- (⊥ mid-edit) | NEXT STEP: run F3 consistency (T25) — start step 1: extract debit/credit type-toggle pair (§R9) shared, replace `RecurringList.jsx:272-295` & `TransactionForm.jsx:81-104`
+- (⊥ mid-edit) | NEXT STEP: run `/garnish` — cycle complete, purge PLAN.md + HANDOFF.md, keep SPEC.md
+mid-edit files: none
 
 ## next
 
-F3 consistency (T25) | preconditions: none (F2 done). §V.20 acceptance bar. then F4 final verify (T26)
+/garnish (cycle done, all §T.23-26 = x) | preconditions: none
 
 ## deviations & decisions
 
-- review-plan docs (R6-R14, V19/V20) were uncommitted at session start → committed as 3505425 baseline before F2 (PLAN.md updated: y, prior)
-- EOL trap: HEAD App.jsx + GlobalSettings.jsx had MIXED line endings (few bare-LF among CRLF); Edit tool normalizes whole file → CRLF ∴ spurious EOL-only hunks. Fixed via scratchpad `fix_eol.py` (difflib: keep HEAD EOL on unchanged lines). F2 diff clean.
+- prior interrupted session left uncommitted+undocumented partial F3 (TypeToggle.jsx + DeleteButton.jsx + RecurringList/TransactionForm done) → adopted & completed rather than discard (clean, on-plan). Not in prior HANDOFF.
+- EOL trap on App.jsx: mixed-EOL despite `grep -c` showing all-CRLF (git blob differs) → Edit normalized whole file → phantom CRLF hunks. Fixed via byte-level single-line splice (restore HEAD + python binary remove). GlobalSettings.jsx also mixed but untouched.
+- F3 step 6 (normalize heading/spacing) = verified NO-OP: §R6-R11 produced no typography finding; headings already coherent. Deliberate deferral-with-reason.
+- user decided: V19 gap → fix shared TypeToggle to ≥44px + refine §V.19 scope (⊥ mass-edit click-to-edit rows). §V.19 amended via /spec.
 
 ## watchouts
 
-- EOL: ∀ future Edit to a mixed-EOL file → re-run scratchpad `fix_eol.py <path>` before commit to strip phantom EOL hunks. Fully-CRLF files (BalanceTimeline/DatePicker/RecurringList/RecurringCreditCards) ⊥ affected.
-- F3 step 4 delete-btn extract → shared component ! bake ≥44px (F2 already set min-h-11/min-w-11 @ 3 delete sites: RecurringList:144, RecurringCreditCards:202 (+flex-shrink-0), BalanceTimeline:71); ⊥ regress the 44px
-- F3 step 5 removes dead files: `TransactionList.jsx` (+App.jsx:11 import) (§R6), `DarkModeToggle.jsx` (§R7); live dark-toggle stays inline in GlobalSettings
-- F3 submit-btn slate clone @ 5 sites (§R8): RecurringList:299, TransactionForm:118, RecurringCreditCards:230,256,367
-- dark mode ∀ new style ! carry `dark:` variant (#1f1f1f/#2a2a2a/#333333); i18n ∀ visible string ! via `t()`, prefer zero new strings
-- V18 verified statically (no headless browser): only fixed widths ≥360px = BalanceTimeline table minWidth 480px (in overflow-x-auto) + DatePicker popup max-w-80=320px; both contained. scrollWidth check ⊥ run in browser.
+- EOL: future Edit to `App.jsx` | `GlobalSettings.jsx` (mixed-EOL) → byte-level splice | difflib keep-HEAD-EOL to avoid phantom CRLF hunks. Fully-CRLF files unaffected.
+- §V.18 runtime `scrollWidth <= innerWidth` @360/390px never run in a real browser (no headless) — only static evidence. Confirm dynamically if browser available.
+- T12 (test runner + lint in CI) still todo — no automated tests; build = only oracle.
 
 ## final verification
 
 item|status|evidence|decision
--|-|-|-
+V18|HOLD (static)|no fixed-width content added F2-F4; BalanceTimeline table minWidth 480px inside `overflow-x-auto`; DatePicker popup ≤320px; runtime scrollWidth check ⊥ run (no browser)|-
+V19|HOLD (refined)|discrete tap controls ≥44px: DeleteButton/DatePicker nav/GlobalSettings toggle `min-h-11 min-w-11`, DatePicker day cell `h-11`, TypeToggle `min-h-11`; inline click-to-edit rows exempt|SPEC (V19 scope refined)
+V20|HOLD|single-source greps: trash svg=DeleteButton, active toggle=TypeToggle, `.btn-submit`/`.btn-link`=index.css, `bg-slate-600`=0 in components; dead files removed; dark-toggle single source|-
