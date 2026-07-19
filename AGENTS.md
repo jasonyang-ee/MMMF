@@ -17,9 +17,9 @@ Stack: React 19 + Vite (Tailwind v4) frontend | Express.js backend | file-based 
 ```
 client/src/App.jsx              # central state + all API calls
 client/src/components/          # BalanceDisplay, BalanceTimeline, DatePicker,
-                                #   DarkModeToggle, ForecastSettings, GlobalSettings,
+                                #   DeleteButton, ForecastSettings, GlobalSettings,
                                 #   Header, RecurringCreditCards, RecurringList,
-                                #   TransactionForm, TransactionList
+                                #   TransactionForm, TypeToggle
 client/src/api.js               # fetch wrapper for all /api routes
 client/src/utils.js             # calculateBalance, generateRecurringTransactions, formatters
 client/src/i18n.js              # I18nProvider + useI18n; 4 active langs

@@ -16,8 +16,8 @@ app.use("*", async (c, next) => {
 app.use(
   "/api/*",
   cors({
-    origin: (origin) =>
-      process.env.ALLOWED_ORIGIN === origin ? origin : null,
+    origin: (origin, c) =>
+      c.env.ALLOWED_ORIGIN === origin ? origin : null,
   }),
 );
 
@@ -211,6 +211,13 @@ app.get("/api/settings", async (c) => {
 
 app.put("/api/settings", async (c) => {
   const body = await c.req.json();
+  const { language, startingBalance } = body || {};
+  if (
+    !["en", "es", "zht", "ja"].includes(language) ||
+    !Number.isFinite(startingBalance)
+  ) {
+    return c.json({ error: "Invalid settings" }, 400);
+  }
   await saveData(c, "settings", body);
   return c.json(body);
 });

@@ -167,7 +167,7 @@ V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `cl
 | T25 | x      | UI consistency unification — dedupe inline button/input clones → shared classes                                   | V20         |
 | T26 | x      | final verify UI — §V.18-20 compliance, build + viewport checks                                                    | V18,V19,V20 |
 | T27 | x      | research: confirm Hono `cors` origin callback sig `(origin,c)` + `c.env` var binding + exact Express `PUT /api/settings` validation semantics to mirror | V9          |
-| T28 | .      | Hono parity fixes — mirror `PUT /api/settings` validation (language∈set & finite startingBalance → 400) into `hono-app.js`; CORS origin → `c.env.ALLOWED_ORIGIN` ⊥ `process.env`; refresh AGENTS.md stale component list (drop removed DarkModeToggle + TransactionList) | V9,V12,V14  |
+| T28 | x      | Hono parity fixes — mirror `PUT /api/settings` validation (language∈set & finite startingBalance → 400) into `hono-app.js`; CORS origin → `c.env.ALLOWED_ORIGIN` ⊥ `process.env`; refresh AGENTS.md stale component list (drop removed DarkModeToggle + TransactionList) | V9,V12,V14  |
 | T29 | .      | final verify Hono parity — `npm run build` green; re-read V9/V12/V14, classify HOLD/VIOLATE/UNVERIFIABLE + evidence | V9,V12,V14  |
 
 ## §B BUGS

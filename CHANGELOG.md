@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `PUT /api/settings` now rejects unsupported languages and non-numeric starting balances with 400
 - Client API calls now throw on non-2xx responses; write handlers log failures instead of silently applying state
 - Production CORS now rejects unconfigured origins in Express and Hono while development remains permissive
+- Cloudflare (Hono) runtime brought to parity with the Express server: `PUT /api/settings` now validates language and starting balance (400 on invalid), and the CORS origin allowlist reads the Workers `ALLOWED_ORIGIN` environment binding (`c.env`) instead of `process.env`, which the Workers runtime does not populate — so a configured allowed origin now takes effect
 - Release helper now supports dry-run, guarded tags/changelog, body-aware breaking detection, and CI-owned GitHub Releases
 - GHCR cleanup workflow targeted stale package name `iclib`; now uses the repository name so untagged images are actually deleted
 - Dependabot no longer auto-opens version-update PRs (`open-pull-requests-limit: 0`); security alerts remain governed by repo settings
