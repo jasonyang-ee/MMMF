@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { formatDate } from "../utils";
 import { useI18n } from "../i18n";
+import DeleteButton from "./DeleteButton";
 
 function CreditCardItem({
   item,
@@ -197,25 +198,11 @@ function CreditCardItem({
             </div>
           )}
         </div>
-        <button
+        <DeleteButton
           onClick={() => onDelete(item.id)}
-          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 min-h-11 min-w-11 inline-flex items-center justify-center flex-shrink-0"
           title={t("cards:deleteCard")}
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
+          className="flex-shrink-0"
+        />
       </div>
 
       {!showAmountForm ? (
@@ -227,7 +214,7 @@ function CreditCardItem({
           )}
           <button
             onClick={() => setShowAmountForm(true)}
-            className="w-full px-3 py-1.5 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn btn-submit w-full px-3 py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!nextDate}
           >
             {nextDate ? t("cards:addPayment") : t("cards:noUpcoming")}
@@ -253,7 +240,7 @@ function CreditCardItem({
           <div className="flex space-x-2">
             <button
               type="submit"
-              className="flex-1 px-3 py-1.5 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs"
+              className="btn btn-submit flex-1 px-3 py-1.5 text-xs"
             >
               {t("common:add")}
             </button>
@@ -328,10 +315,7 @@ function RecurringCreditCards({
         <h2 className="text-lg sm:text-xl font-semibold dark:text-gray-100">
           {t("cards:title")}
         </h2>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="text-primary-600 hover:text-primary-700 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium"
-        >
+        <button onClick={() => setShowForm(!showForm)} className="btn-link">
           {showForm ? t("common:cancel") : t("recurring:addButton")}
         </button>
       </div>
@@ -362,10 +346,7 @@ function RecurringCreditCards({
             className="input text-sm"
             required
           />
-          <button
-            type="submit"
-            className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm"
-          >
+          <button type="submit" className="btn btn-submit w-full text-sm">
             {t("cards:saveCard")}
           </button>
         </form>

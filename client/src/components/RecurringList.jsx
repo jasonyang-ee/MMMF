@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { formatCurrency } from "../utils";
 import { useI18n } from "../i18n";
+import TypeToggle from "./TypeToggle";
+import DeleteButton from "./DeleteButton";
 
 function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
   const { t } = useI18n();
@@ -141,25 +143,10 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
           </span>
         )}
 
-        <button
+        <DeleteButton
           onClick={() => onDelete(item.id)}
-          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 min-h-11 min-w-11 inline-flex items-center justify-center"
           title={t("recurring:deleteRecurring")}
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
+        />
       </div>
     </div>
   );
@@ -222,7 +209,7 @@ function RecurringList({
         </h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="text-primary-600 hover:text-primary-700 dark:text-gray-400 dark:hover:text-gray-300 text-sm font-medium"
+          className="btn-link"
         >
           {showForm ? t("common:cancel") : t("recurring:addButton")}
         </button>
@@ -269,35 +256,15 @@ function RecurringList({
             required
           />
 
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, type: "debit" })}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                formData.type === "debit"
-                  ? "bg-red-600 text-white shadow-md dark:bg-red-700"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
-              }`}
-            >
-              {t("recurring:payment")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, type: "credit" })}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                formData.type === "credit"
-                  ? "bg-green-600 text-white shadow-md dark:bg-green-700"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
-              }`}
-            >
-              {t("recurring:income")}
-            </button>
-          </div>
+          <TypeToggle
+            value={formData.type}
+            onChange={(type) => setFormData({ ...formData, type })}
+            debitLabel={t("recurring:payment")}
+            creditLabel={t("recurring:income")}
+            size="sm"
+          />
 
-          <button
-            type="submit"
-            className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-sm"
-          >
+          <button type="submit" className="btn btn-submit w-full text-sm">
             {t("recurring:saveRecurring")}
           </button>
         </form>

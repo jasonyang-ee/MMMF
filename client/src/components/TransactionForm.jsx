@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getTodayDate } from "../utils";
 import DatePicker from "./DatePicker";
+import TypeToggle from "./TypeToggle";
 import { useI18n } from "../i18n";
 
 function TransactionForm({ onAddTransaction }) {
@@ -78,30 +79,12 @@ function TransactionForm({ onAddTransaction }) {
 
         <div>
           <label className="label">{t("transactions:type")}</label>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, type: "debit" })}
-              className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all ${
-                formData.type === "debit"
-                  ? "bg-red-600 text-white shadow-md dark:bg-red-700"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
-              }`}
-            >
-              {t("transactions:debitPayment")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setFormData({ ...formData, type: "credit" })}
-              className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all ${
-                formData.type === "credit"
-                  ? "bg-green-600 text-white shadow-md dark:bg-green-700"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]"
-              }`}
-            >
-              {t("transactions:creditIncome")}
-            </button>
-          </div>
+          <TypeToggle
+            value={formData.type}
+            onChange={(type) => setFormData({ ...formData, type })}
+            debitLabel={t("transactions:debitPayment")}
+            creditLabel={t("transactions:creditIncome")}
+          />
         </div>
 
         <div>
@@ -113,10 +96,7 @@ function TransactionForm({ onAddTransaction }) {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full px-4 py-2 rounded-lg font-medium transition-colors duration-200 bg-slate-600 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600"
-        >
+        <button type="submit" className="btn btn-submit w-full">
           {t("transactions:addBtn")}
         </button>
       </form>

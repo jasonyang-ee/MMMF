@@ -8,7 +8,6 @@ import {
 import Header from "./components/Header";
 import BalanceDisplay from "./components/BalanceDisplay";
 import TransactionForm from "./components/TransactionForm";
-import TransactionList from "./components/TransactionList";
 import RecurringList from "./components/RecurringList";
 import RecurringCreditCards from "./components/RecurringCreditCards";
 import ForecastSettings from "./components/ForecastSettings";

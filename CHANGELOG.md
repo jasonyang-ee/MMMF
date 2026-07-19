@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Mobile layout now surfaces the account balance and forecast timeline first, moving settings below the entry forms; added an intermediate two-column tier for tablet widths
 - Interactive controls (delete buttons, dark-mode toggle, date-picker navigation and day cells) now meet the 44px minimum touch-target size on mobile
+- Unified duplicated UI into shared building blocks: a `DeleteButton` component (bakes the 44px hit area), a `TypeToggle` debit/credit selector, and `.btn-submit`/`.btn-link` classes; removed dead `TransactionList` and `DarkModeToggle` components
 
 ### Fixed
 
