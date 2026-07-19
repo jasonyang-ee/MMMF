@@ -3,9 +3,10 @@ import React from "react";
 // Single source for the debit/credit type selector (R9). One active-red /
 // active-green pair shared by RecurringList and TransactionForm; `size`
 // covers the only real difference between the two call sites.
+// min-h-11 keeps both variants at the >=44px tap target (V19).
 function TypeToggle({ value, onChange, debitLabel, creditLabel, size = "md" }) {
   const sizeClass = size === "sm" ? "py-2 px-3 text-sm" : "py-2.5 px-4";
-  const base = `flex-1 ${sizeClass} rounded-lg font-medium transition-all`;
+  const base = `flex-1 flex items-center justify-center min-h-11 ${sizeClass} rounded-lg font-medium transition-all`;
   const inactive =
     "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-[#333333] dark:text-gray-300 dark:hover:bg-[#3a3a3a]";
 

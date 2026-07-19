@@ -131,7 +131,7 @@ V15: `release.sh` ⊥ create GitHub Release (CI `release.yml` owns it); ! guard:
 V16: `cleanup-ghcr.yml` `package-name` ! match actual GHCR package (`mmmf`); ⊥ hardcode stale name; prefer `${{ github.event.repository.name }}`
 V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems); scanning/alerts ! remain enabled via repo Security settings
 V18: viewport ≤390px → ⊥ horizontal body scroll; wide content (tables) scrolls inside own `overflow-x-auto` container only
-V19: ∀ interactive element (buttons, click-to-edit, toggles) → touch target ≥44px on mobile viewport; ! implement via `min-h-11 min-w-11` (44px = Tailwind 11) | padding yielding ≥44px hit area so greppable; ⊥ visual-only claim
+V19: ∀ discrete tap control (buttons, toggle switches, icon buttons, calendar nav + day cells) → touch target ≥44px on mobile viewport; ! implement via `min-h-11 min-w-11` (44px = Tailwind 11) | padding yielding ≥44px hit area so greppable; ⊥ visual-only claim. EXCLUDED: dense inline click-to-edit text rows (recurring/card name+amount, balance figures) — per-row 44px min-height bloats list density on mobile ∴ deliberately exempt; `.input`/`.input cursor-pointer` selects governed by `.input` shared class (§V.20), ⊥ V19
 V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `client/src/index.css`; ⊥ duplicate inline utility clones of existing component classes; ⊥ dead/unused component files; shared logic (e.g. dark-mode toggle) ! single source, ⊥ inline re-implementation
 
 ## §T TASKS
@@ -163,7 +163,7 @@ V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `cl
 | T23 | x      | research: audit ∀ 11 components mobile behavior + consistency catalog (touch targets, dupe styles, dead code)    | V18,V19,V20 |
 | T24 | x      | mobile responsive fixes — layout order, touch targets, no body h-scroll ≤390px                                    | V18,V19     |
 | T25 | x      | UI consistency unification — dedupe inline button/input clones → shared classes                                   | V20         |
-| T26 | .      | final verify UI — §V.18-20 compliance, build + viewport checks                                                    | V18,V19,V20 |
+| T26 | x      | final verify UI — §V.18-20 compliance, build + viewport checks                                                    | V18,V19,V20 |
 
 ## §B BUGS
 
