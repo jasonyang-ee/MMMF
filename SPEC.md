@@ -51,7 +51,7 @@ SPA forecasts personal account balance across date range → user identifies opt
 
 ### Data Shapes
 
-- `Transaction`: `{ id, date, amount, type:"debit"|"credit", description?, createdAt }`
+- `Transaction`: `{ id, date, amount, type:"debit"|"credit", name, createdAt }` (client forms send `name`, e.g. `TransactionForm.jsx:24`, `RecurringCreditCards` onUse; ⊥ `description`)
 - `Recurring`: `{ id, name, amount, dayOfMonth, type:"debit"|"credit", createdAt }`
 - `CreditCard`: `{ id, name, dayOfMonth, createdAt }`
 - `Settings`: `{ startingBalance, currentDate, forecastEndDate, currencySymbol, dateFormat, language }`
@@ -110,6 +110,8 @@ SPA forecasts personal account balance across date range → user identifies opt
 | R12 | touch targets <44px: dark-toggle switch `h-6 w-11`=24px; delete btns ~20-28px; DatePicker nav `p-2`+w-5 h-5 ~36px; DatePicker day cell `h-10`=40px | `GlobalSettings.jsx:98-105`, `DatePicker.jsx:139-166`, `DatePicker.jsx:205` |
 | R13 | `App.jsx:357` grid single breakpoint `grid-cols-1 min-[1420px]:grid-cols-[320px_1fr_384px]`; <1420px → 1-col DOM order = BalanceDisplay,ForecastSettings,GlobalSettings → BalanceTimeline → RecurringCreditCards,RecurringList,TransactionForm ∴ timeline buried after 3 settings cards on mobile | `App.jsx:357-427` |
 | R14 | V18 body-h-scroll risk LOW: BalanceTimeline table `minWidth:480px` inside `overflow-x-auto custom-scrollbar -mx-4 sm:mx-0` (contained); DatePicker popup `w-[calc(100vw-2rem)] sm:w-80 max-w-80` fits 360px ∴ main V18 work = layout order + intermediate breakpoint, ⊥ overflow fixes | `BalanceTimeline.jsx:32-35`, `DatePicker.jsx:136` |
+| R15 | Hono `cors()` `origin` opt accepts callback `(origin, c) => string\|null`, `c` = req Context; Workers env vars exposed on `c.env`, ⊥ `process.env` (Node global). ∴ `server/hono-app.js:20` `process.env.ALLOWED_ORIGIN` always undefined in Workers → CORS allowlist inert | `server/hono-app.js:20`, `cloudflare/worker.js:15` (`app.fetch(request, env, ctx)`), `server/demo-session.js:142` (`c.env.DEMO`), Hono cors docs |
+| R16 | Express `PUT /api/settings` validates `language ∈ {en,es,zht,ja}` & `Number.isFinite(startingBalance)` → 400 `{error:"Invalid settings"}`; Hono mirror `server/hono-app.js:212-216` ⊥ validation → V9/V12 parity gap on Cloudflare | `server/index.js:369-383`, `server/hono-app.js:212-216` |
 
 ## §V INVARIANTS
 
@@ -126,7 +128,7 @@ V10: ∀ JSON file write → `JSON.stringify(data, null, 2)` (pretty-print)
 V11: ∀ write route → readJsonFile null → 500 JSON error; ⊥ unhandled TypeError
 V12: `PUT /api/settings` → language field ! validated ∈ V7 set; startingBalance ! numeric
 V13: `client/src/api.js` fetch calls → res.ok check before `.json()`; ⊥ 4xx/5xx silently applied to state
-V14: CORS → production deployments ! restrict allowed origins; ⊥ wildcard in production
+V14: CORS → production deployments ! restrict allowed origins; ⊥ wildcard in production. Express reads allowlist from `process.env.ALLOWED_ORIGIN` (prod → origin=false when unset); Hono reads from `c.env.ALLOWED_ORIGIN` (Workers env binding, ⊥ `process.env`). Both runtimes ! enforce same allowlist semantics (V9 parity)
 V15: `release.sh` ⊥ create GitHub Release (CI `release.yml` owns it); ! guard: tag ⊥ exist, `[Unreleased]` ≠ empty, ⊥ push all tags
 V16: `cleanup-ghcr.yml` `package-name` ! match actual GHCR package (`mmmf`); ⊥ hardcode stale name; prefer `${{ github.event.repository.name }}`
 V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems); scanning/alerts ! remain enabled via repo Security settings
@@ -164,6 +166,9 @@ V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `cl
 | T24 | x      | mobile responsive fixes — layout order, touch targets, no body h-scroll ≤390px                                    | V18,V19     |
 | T25 | x      | UI consistency unification — dedupe inline button/input clones → shared classes                                   | V20         |
 | T26 | x      | final verify UI — §V.18-20 compliance, build + viewport checks                                                    | V18,V19,V20 |
+| T27 | x      | research: confirm Hono `cors` origin callback sig `(origin,c)` + `c.env` var binding + exact Express `PUT /api/settings` validation semantics to mirror | V9          |
+| T28 | .      | Hono parity fixes — mirror `PUT /api/settings` validation (language∈set & finite startingBalance → 400) into `hono-app.js`; CORS origin → `c.env.ALLOWED_ORIGIN` ⊥ `process.env`; refresh AGENTS.md stale component list (drop removed DarkModeToggle + TransactionList) | V9,V12,V14  |
+| T29 | .      | final verify Hono parity — `npm run build` green; re-read V9/V12/V14, classify HOLD/VIOLATE/UNVERIFIABLE + evidence | V9,V12,V14  |
 
 ## §B BUGS
 
