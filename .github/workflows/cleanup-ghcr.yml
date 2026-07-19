@@ -19,12 +19,15 @@ jobs:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     steps:
+      # Manifest-aware: untagged child/platform manifests referenced by a
+      # tagged multi-arch/attested index are NOT treated as untagged, so
+      # pruning untagged images cannot orphan a tag (V21). validate: true
+      # post-checks multi-arch image integrity and fails the job on orphaning.
       - name: Delete untagged GHCR versions
-        uses: actions/delete-package-versions@v5
+        uses: dataaxiom/ghcr-cleanup-action@v1
         with:
           owner: ${{ github.repository_owner }}
-          package-name: ${{ github.event.repository.name }}
-          package-type: container
-          min-versions-to-keep: 0
-          delete-only-untagged-versions: "true"
+          package: ${{ github.event.repository.name }}
+          delete-untagged: true
+          validate: true
           token: ${{ secrets.TOKEN_GITHUB != '' && secrets.TOKEN_GITHUB || github.token }}
