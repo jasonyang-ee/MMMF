@@ -112,6 +112,8 @@ SPA forecasts personal account balance across date range → user identifies opt
 | R14 | V18 body-h-scroll risk LOW: BalanceTimeline table `minWidth:480px` inside `overflow-x-auto custom-scrollbar -mx-4 sm:mx-0` (contained); DatePicker popup `w-[calc(100vw-2rem)] sm:w-80 max-w-80` fits 360px ∴ main V18 work = layout order + intermediate breakpoint, ⊥ overflow fixes | `BalanceTimeline.jsx:32-35`, `DatePicker.jsx:136` |
 | R15 | Hono `cors()` `origin` opt accepts callback `(origin, c) => string\|null`, `c` = req Context; Workers env vars exposed on `c.env`, ⊥ `process.env` (Node global). ∴ `server/hono-app.js:20` `process.env.ALLOWED_ORIGIN` always undefined in Workers → CORS allowlist inert | `server/hono-app.js:20`, `cloudflare/worker.js:15` (`app.fetch(request, env, ctx)`), `server/demo-session.js:142` (`c.env.DEMO`), Hono cors docs |
 | R16 | Express `PUT /api/settings` validates `language ∈ {en,es,zht,ja}` & `Number.isFinite(startingBalance)` → 400 `{error:"Invalid settings"}`; Hono mirror `server/hono-app.js:212-216` ⊥ validation → V9/V12 parity gap on Cloudflare | `server/index.js:369-383`, `server/hono-app.js:212-216` |
+| R17 | `docker/build-push-action@v5` attaches provenance/SBOM attestations by DEFAULT on push → even single-platform build → OCI image index (manifest list) w/ untagged child manifests (arch image + `unknown/unknown` attestation); release build explicit multi-arch (`platforms: linux/amd64,linux/arm64`) → per-arch children also untagged; only top-level index carries tag, children stored in GHCR as untagged package versions | `.github/workflows/check.yml:59-67`, `.github/workflows/release.yml:79-88`, docker build-push-action provenance docs |
+| R18 | `actions/delete-package-versions@v5` ⊥ manifest-aware; `delete-only-untagged-versions:'true'` + `min-versions-to-keep:0` deletes ∀ untagged versions incl. child manifests referenced by tagged index → tagged `:test`/release tags survive but referenced platform manifest gone → `docker pull` → `manifest unknown`; cleanup triggers on `workflow_run` completion of `Check` (builds `:test` ∀ push) → ∀ push guts `:test`; manifest-aware cleaners (e.g. dataaxiom/ghcr-cleanup-action) skip untagged children of tagged indexes | `.github/workflows/cleanup-ghcr.yml:24-32`, `.github/workflows/check.yml` |
 
 ## §V INVARIANTS
 
@@ -135,6 +137,7 @@ V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems)
 V18: viewport ≤390px → ⊥ horizontal body scroll; wide content (tables) scrolls inside own `overflow-x-auto` container only
 V19: ∀ discrete tap control (buttons, toggle switches, icon buttons, calendar nav + day cells) → touch target ≥44px on mobile viewport; ! implement via `min-h-11 min-w-11` (44px = Tailwind 11) | padding yielding ≥44px hit area so greppable; ⊥ visual-only claim. EXCLUDED: dense inline click-to-edit text rows (recurring/card name+amount, balance figures) — per-row 44px min-height bloats list density on mobile ∴ deliberately exempt; `.input`/`.input cursor-pointer` selects governed by `.input` shared class (§V.20), ⊥ V19
 V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `client/src/index.css`; ⊥ duplicate inline utility clones of existing component classes; ⊥ dead/unused component files; shared logic (e.g. dark-mode toggle) ! single source, ⊥ inline re-implementation
+V21: GHCR untagged cleanup ! manifest-aware; ⊥ delete untagged child manifests referenced by tagged multi-arch/attested index (∴ ⊥ orphan tag → `manifest unknown`); `actions/delete-package-versions` ⊥ satisfy → use manifest-aware action (skips children of tagged indexes)
 
 ## §T TASKS
 
@@ -169,6 +172,9 @@ V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `cl
 | T27 | x      | research: confirm Hono `cors` origin callback sig `(origin,c)` + `c.env` var binding + exact Express `PUT /api/settings` validation semantics to mirror | V9          |
 | T28 | x      | Hono parity fixes — mirror `PUT /api/settings` validation (language∈set & finite startingBalance → 400) into `hono-app.js`; CORS origin → `c.env.ALLOWED_ORIGIN` ⊥ `process.env`; refresh AGENTS.md stale component list (drop removed DarkModeToggle + TransactionList) | V9,V12,V14  |
 | T29 | x      | final verify Hono parity — `npm run build` green; re-read V9/V12/V14, classify HOLD/VIOLATE/UNVERIFIABLE + evidence | V9,V12,V14  |
+| T30 | x      | research: confirm manifest-aware cleanup action (`dataaxiom/ghcr-cleanup-action` or equiv) inputs vs current usage — package name, token, delete-untagged/keep-n semantics, preserves multi-arch/attested children; confirm build-push-action default provenance → `:test` is index; decide whether to also set `provenance:false` on check build | V21         |
+| T31 | .      | fix: replace `actions/delete-package-versions@v5` in `cleanup-ghcr.yml` w/ manifest-aware action preserving tagged-index children; keep untagged pruning + triggers; update CHANGELOG `[Unreleased]` | V21,V16     |
+| T32 | .      | final verify — `cleanup-ghcr.yml` yaml valid + logic classified HOLD/VIOLATE/UNVERIFIABLE vs V21; confirm ⊥ other workflow deletes tagged-index children; evidence-based | V21         |
 
 ## §B BUGS
 
@@ -177,3 +183,4 @@ V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `cl
 | B1  | 2026-07-16 | `lang` cookie allowlist used `"jp"` → `"ja"` cookie rejected on reload              | V7  |
 | B2  | 2026-07-16 | `DEFAULT_LANGUAGE` only accepted `en`\|`es`; `zht`/`ja` silently fell to `en`       | V7  |
 | B3  | 2026-07-16 | write routes called array methods on null from `readJsonFile` → unhandled TypeError | V11 |
+| B4  | 2026-07-19 | `cleanup-ghcr.yml` `actions/delete-package-versions` (delete-only-untagged, min-keep 0) deletes child manifests of tagged multi-arch/attested images → `docker pull ghcr.io/<owner>/mmmf:test` → `manifest unknown` ∀ push | V21 |
