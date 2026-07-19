@@ -177,7 +177,7 @@ V23: `App.jsx` `<main>` layout ! = v1.1.4 3-col style (`doc/screenshotFull.png`)
 | T30 | x      | research: confirm manifest-aware cleanup action (`dataaxiom/ghcr-cleanup-action` or equiv) inputs vs current usage — package name, token, delete-untagged/keep-n semantics, preserves multi-arch/attested children; confirm build-push-action default provenance → `:test` is index; decide whether to also set `provenance:false` on check build | V21         |
 | T31 | x      | fix: replace `actions/delete-package-versions@v5` in `cleanup-ghcr.yml` w/ manifest-aware action preserving tagged-index children; keep untagged pruning + triggers; update CHANGELOG `[Unreleased]` | V21,V16     |
 | T32 | x      | final verify — `cleanup-ghcr.yml` yaml valid + logic classified HOLD/VIOLATE/UNVERIFIABLE vs V21; confirm ⊥ other workflow deletes tagged-index children; evidence-based | V21         |
-| T33 | ~      | revert `App.jsx` `<main>` grid → v1.1.4 grouped 3-col (Left/Center/Right sidebars); remove `lg:grid-cols-2` intermediate tier + flat-children col/row placement; lower breakpoint `min-[1420px]`→`min-[1100px]`; keep fad7b0d touch-target/overflow + a1e4a64 shared components intact; fix `CHANGELOG.md` `[Unreleased]` mobile-layout line | V23,V18     |
+| T33 | x      | revert `App.jsx` `<main>` grid → v1.1.4 grouped 3-col (Left/Center/Right sidebars); remove `lg:grid-cols-2` intermediate tier + flat-children col/row placement; lower breakpoint `min-[1420px]`→`min-[1100px]`; keep fad7b0d touch-target/overflow + a1e4a64 shared components intact; fix `CHANGELOG.md` `[Unreleased]` mobile-layout line | V23,V18     |
 
 ## §B BUGS
 
