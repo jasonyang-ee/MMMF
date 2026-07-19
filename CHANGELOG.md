@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] - 2026-07-19
+
 ### Changed
 
 - Restored the v1.1.4 three-column desktop layout (balance/settings | timeline | credit cards/recurring/entry), now appearing from 1100px instead of 1420px and collapsing to a single-column stack below that; removed the intermediate two-column tier
@@ -213,3 +215,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Express.js REST API
 - Vite for frontend build
 - Docker multi-stage build
+[Unreleased]: https://github.com/jasonyang-ee/MMMF/compare/v1.1.5...HEAD
+[1.1.5]: https://github.com/jasonyang-ee/MMMF/releases/tag/v1.1.5
