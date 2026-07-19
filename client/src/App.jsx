@@ -352,16 +352,10 @@ function App() {
         <Header />
 
         <main className="max-w-full mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8">
-          {/*
-            Responsive grid. Cards are flat children (not grouped column divs) so
-            mobile source order reads BalanceDisplay -> Timeline -> forms -> settings
-            (primary content first, R13). Explicit col/row placement reconstructs the
-            2-col (lg) and 3-col (min-[1420px]) layouts; items-start keeps cards at
-            natural height instead of stretching to the tallest track.
-          */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 min-[1420px]:grid-cols-[320px_1fr_384px] gap-4 sm:gap-6 items-start">
-            {/* Account Balance - first on every viewport */}
-            <div className="lg:col-start-1 lg:row-start-1 min-[1420px]:col-start-1 min-[1420px]:row-start-1">
+          {/* Layout: 3-col sidebars (min-[1100px]) | single-col stack below */}
+          <div className="grid grid-cols-1 min-[1100px]:grid-cols-[320px_1fr_384px] gap-4 sm:gap-6">
+            {/* Left Sidebar */}
+            <div className="space-y-6">
               <BalanceDisplay
                 startingBalance={startingBalance}
                 currentBalance={currentBalance}
@@ -371,10 +365,25 @@ function App() {
                 currencySymbol={currencySymbol}
                 dateFormat={dateFormat}
               />
+
+              <ForecastSettings
+                currentDate={currentDate}
+                forecastEndDate={forecastEndDate}
+                onCurrentDateChange={handleCurrentDateChange}
+                onForecastEndDateChange={handleForecastEndDateChange}
+                onClearCalculations={handleClearCalculations}
+              />
+
+              <GlobalSettings
+                currencySymbol={currencySymbol}
+                dateFormat={dateFormat}
+                onCurrencyChange={handleCurrencyChange}
+                onDateFormatChange={handleDateFormatChange}
+              />
             </div>
 
-            {/* Balance Timeline - primary content; right/center column */}
-            <div className="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-3 min-[1420px]:col-start-2 min-[1420px]:row-start-1 min-[1420px]:row-span-2">
+            {/* Center - Balance Timeline */}
+            <div className="min-w-0">
               <BalanceTimeline
                 balanceHistory={balanceHistory}
                 currentDate={currentDate}
@@ -385,8 +394,8 @@ function App() {
               />
             </div>
 
-            {/* Forms: credit cards, recurring, add transaction */}
-            <div className="space-y-6 lg:col-start-1 lg:row-start-2 min-[1420px]:col-start-3 min-[1420px]:row-start-1 min-[1420px]:row-span-2">
+            {/* Right Sidebar */}
+            <div className="space-y-6">
               <RecurringCreditCards
                 creditCards={creditCards}
                 onAddCreditCard={handleAddCreditCard}
@@ -408,24 +417,6 @@ function App() {
               />
 
               <TransactionForm onAddTransaction={handleAddTransaction} />
-            </div>
-
-            {/* Settings: forecast + global; last on mobile */}
-            <div className="space-y-6 lg:col-start-1 lg:row-start-3 min-[1420px]:col-start-1 min-[1420px]:row-start-2">
-              <ForecastSettings
-                currentDate={currentDate}
-                forecastEndDate={forecastEndDate}
-                onCurrentDateChange={handleCurrentDateChange}
-                onForecastEndDateChange={handleForecastEndDateChange}
-                onClearCalculations={handleClearCalculations}
-              />
-
-              <GlobalSettings
-                currencySymbol={currencySymbol}
-                dateFormat={dateFormat}
-                onCurrencyChange={handleCurrencyChange}
-                onDateFormatChange={handleDateFormatChange}
-              />
             </div>
           </div>
         </main>

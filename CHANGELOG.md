@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Mobile layout now surfaces the account balance and forecast timeline first, moving settings below the entry forms; added an intermediate two-column tier for tablet widths
+- Restored the v1.1.4 three-column desktop layout (balance/settings | timeline | credit cards/recurring/entry), now appearing from 1100px instead of 1420px and collapsing to a single-column stack below that; removed the intermediate two-column tier
 - Interactive controls (delete buttons, dark-mode toggle, debit/credit type toggle, date-picker navigation and day cells) now meet the 44px minimum touch-target size on mobile
 - Unified duplicated UI into shared building blocks: a `DeleteButton` component (bakes the 44px hit area), a `TypeToggle` debit/credit selector, and `.btn-submit`/`.btn-link` classes; removed dead `TransactionList` and `DarkModeToggle` components
 
