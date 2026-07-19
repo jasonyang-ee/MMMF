@@ -174,7 +174,7 @@ V21: GHCR untagged cleanup ! manifest-aware; ⊥ delete untagged child manifests
 | T29 | x      | final verify Hono parity — `npm run build` green; re-read V9/V12/V14, classify HOLD/VIOLATE/UNVERIFIABLE + evidence | V9,V12,V14  |
 | T30 | x      | research: confirm manifest-aware cleanup action (`dataaxiom/ghcr-cleanup-action` or equiv) inputs vs current usage — package name, token, delete-untagged/keep-n semantics, preserves multi-arch/attested children; confirm build-push-action default provenance → `:test` is index; decide whether to also set `provenance:false` on check build | V21         |
 | T31 | x      | fix: replace `actions/delete-package-versions@v5` in `cleanup-ghcr.yml` w/ manifest-aware action preserving tagged-index children; keep untagged pruning + triggers; update CHANGELOG `[Unreleased]` | V21,V16     |
-| T32 | .      | final verify — `cleanup-ghcr.yml` yaml valid + logic classified HOLD/VIOLATE/UNVERIFIABLE vs V21; confirm ⊥ other workflow deletes tagged-index children; evidence-based | V21         |
+| T32 | x      | final verify — `cleanup-ghcr.yml` yaml valid + logic classified HOLD/VIOLATE/UNVERIFIABLE vs V21; confirm ⊥ other workflow deletes tagged-index children; evidence-based | V21         |
 
 ## §B BUGS
 
