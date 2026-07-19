@@ -137,6 +137,7 @@ V17: Dependabot ⊥ auto-open PRs (`open-pull-requests-limit: 0` ∀ ecosystems)
 V18: viewport ≤390px → ⊥ horizontal body scroll; wide content (tables) scrolls inside own `overflow-x-auto` container only
 V19: ∀ discrete tap control (buttons, toggle switches, icon buttons, calendar nav + day cells) → touch target ≥44px on mobile viewport; ! implement via `min-h-11 min-w-11` (44px = Tailwind 11) | padding yielding ≥44px hit area so greppable; ⊥ visual-only claim. EXCLUDED: dense inline click-to-edit text rows (recurring/card name+amount, balance figures) — per-row 44px min-height bloats list density on mobile ∴ deliberately exempt; `.input`/`.input cursor-pointer` selects governed by `.input` shared class (§V.20), ⊥ V19
 V20: buttons/inputs/cards ! use shared `.btn*`/`.input`/`.card` classes from `client/src/index.css`; ⊥ duplicate inline utility clones of existing component classes; ⊥ dead/unused component files; shared logic (e.g. dark-mode toggle) ! single source, ⊥ inline re-implementation
+V22: CI job `node-version` (`actions/setup-node`) ! satisfy the minimum required by tools run in that job; `Cloudflare_Build_Test` runs `npx wrangler` → ! Node ≥22 (Wrangler hard-requires v22.0.0); ⊥ pin below a tool's floor
 V21: GHCR untagged cleanup ! manifest-aware; ⊥ delete untagged child manifests referenced by tagged multi-arch/attested index (∴ ⊥ orphan tag → `manifest unknown`); `actions/delete-package-versions` ⊥ satisfy → use manifest-aware action (skips children of tagged indexes)
 
 ## §T TASKS
@@ -184,3 +185,4 @@ V21: GHCR untagged cleanup ! manifest-aware; ⊥ delete untagged child manifests
 | B2  | 2026-07-16 | `DEFAULT_LANGUAGE` only accepted `en`\|`es`; `zht`/`ja` silently fell to `en`       | V7  |
 | B3  | 2026-07-16 | write routes called array methods on null from `readJsonFile` → unhandled TypeError | V11 |
 | B4  | 2026-07-19 | `cleanup-ghcr.yml` `actions/delete-package-versions` (delete-only-untagged, min-keep 0) deletes child manifests of tagged multi-arch/attested images → `docker pull ghcr.io/<owner>/mmmf:test` → `manifest unknown` ∀ push | V21 |
+| B5  | 2026-07-19 | `check.yml` `Cloudflare_Build_Test` pinned `node-version: "20"`; `npx wrangler --version` step hard-requires Node ≥22 → job failed "Wrangler requires at least Node.js v22.0.0" | V22 |
