@@ -41,11 +41,15 @@ client/dist/                    # Vite build output (served by Express in produc
 2. `/prep` → iterative PLAN.md + HANDOFF.md + SPEC.md handoff
 3. `/review-plan` → research/refute plan → GO/NO-GO
 4. `/cook` → execute all remaining phases in order → verify → commit → handoff after each phase. Optional phase arg → target one phase. Single main agent.
-5. `/cater` → same phases via sub-agents, parallel when file sets ⊥ intersect. 4 | 5 exclusive per phase, ⊥ both.
+5. `/cater` → adapt per ready phase: direct via loaded `cook` when delegation lacks material benefit | sub-agents when parallelism, context isolation, or specialist capability pays; before dispatch show scope, agent type, model, effort, rationale. Top-level 4 | 5 exclusive; one phase ⊥ direct + delegated.
 6. `/garnish` → SPEC.md cleanup → blank PLAN.md + HANDOFF.md to template
-7. `/review-code` → baseline code sweep → prep
+7. `/review-code` → baseline code sweep → prep for accepted, authorized follow-up work
 
-support: `/handoff` session baton | `/encode-docs` sole mutator of `SPEC.md`, `PLAN.md`, and `HANDOFF.md` | `encode-header` header template | `/encode-commit` commit summary | `/encode-pr` PR review comments
+Research before coding is required; a numbered research phase is optional when current prep/review-plan evidence covers the scope. Keep the evidence and gate in PLAN.md; missing/stale evidence loads review-plan in the main agent before execution-state transition, direct work, or dispatch. Consequential unknowns block dependent coding; final verification remains last.
+
+support: `/handoff` session baton | `/encode-docs` sole mutator of `SPEC.md`, `PLAN.md`, and `HANDOFF.md` | `encode-header` header template | `/encode-agent` bounded sub-agent prompt | `/encode-commit` commit summary | `/encode-pr` PR review comments
+
+standalone: `/review-vibe` → direct user-requested review and fixes, including matching natural language; no other skill may invoke/load it as a phase, hook, or helper. It may use encoding helpers itself. A small scoped review, including a whole tiny codebase, completed and verified in one session/context may omit REVIEW.md; work beyond that scope or unfinished work keeps a coverage/resume record unless user output preferences override.
 
 ## Project Scripts
 
@@ -89,6 +93,6 @@ Tables use `|`; escape literal `\|`. SPEC `§C`/`§I`/`§R`/`§V` tables carry a
 
 ## End of Chat Checklist
 
-- Ensure ∀ lint + tests pass.
+- Run documented repository checks (including lint/tests when available); report exact failures or unavailable checks.
 - Update `CHANGELOG.md` `## [Unreleased]` ∀ feature/fix.
 - Commit directly (single summary commit, ⊥ Claude co-author trailer). ⊥ push | tag without explicit ask.
