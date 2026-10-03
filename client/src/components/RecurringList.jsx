@@ -51,6 +51,10 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
 
   const handleNameBlur = async () => {
     if (isEditingName && !saving.current) {
+      if (editName === item.name) {
+        setIsEditingName(false);
+        return;
+      }
       const trimmedName = editName.trim();
       if (trimmedName && trimmedName !== item.name) {
         saving.current = true;

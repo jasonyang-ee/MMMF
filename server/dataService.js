@@ -12,7 +12,7 @@ export const collections = ["transactions", "recurring", "credit-cards"];
 const isObject = (value) =>
   value !== null && typeof value === "object" && !Array.isArray(value);
 const isName = (value) =>
-  typeof value === "string" && value.trim().length > 0 && value.length <= 200;
+  typeof value === "string" && value.trim().length > 0;
 
 export function defaultSettings(language) {
   const currentDate = localDate();
@@ -74,10 +74,14 @@ function validateSettings(value) {
   return normalizeSettings(value);
 }
 
-function validateEntity(key, value) {
-  if (!isObject(value) || !isName(value.name))
+function validateEntity(key, value, { preserveName = false } = {}) {
+  if (
+    !isObject(value) ||
+    !isName(value.name) ||
+    (!preserveName && value.name.length > 200)
+  )
     throw new ApiError(400, "Invalid name");
-  const entity = { name: value.name.trim() };
+  const entity = { name: preserveName ? value.name : value.name.trim() };
   if (key !== "credit-cards") {
     if (
       !Number.isFinite(value.amount) ||
@@ -115,7 +119,7 @@ function checkCollection(value, key) {
     throw new ApiError(500, "Invalid stored collection");
   try {
     for (const item of value) {
-      validateEntity(key, item);
+      validateEntity(key, item, { preserveName: true });
       if (
         typeof item.id !== "string" ||
         !item.id ||
@@ -136,7 +140,26 @@ export function createDataService(store, language) {
       return checkCollection(await store.read(key, []), key);
     },
     async create(key, body) {
-      const entity = validateEntity(key, body);
+      let preserveName = false;
+      if (
+        key === "transactions" &&
+        isObject(body) &&
+        typeof body.name === "string" &&
+        body.name.length > 200 &&
+        body.type === "debit" &&
+        typeof body.creditCardId === "string" &&
+        /^\d+$/.test(body.creditCardId)
+      ) {
+        // Inherit only an exact card name from this account/session's store.
+        const cards = checkCollection(
+          await store.read("credit-cards", []),
+          "credit-cards",
+        );
+        preserveName = cards.some(
+          (card) => card.id === body.creditCardId && card.name === body.name,
+        );
+      }
+      const entity = validateEntity(key, body, { preserveName });
       let result;
       await store.update(key, [], async (value) => {
         const items = checkCollection(value, key);
@@ -158,7 +181,11 @@ export function createDataService(store, language) {
         const index = items.findIndex((item) => item.id === id);
         if (index < 0) throw new ApiError(404, "Item not found");
         result = {
-          ...validateEntity(key, { ...items[index], ...body }),
+          ...validateEntity(
+            key,
+            { ...items[index], ...body },
+            { preserveName: !Object.hasOwn(body, "name") || body.name === items[index].name },
+          ),
           id,
           createdAt: items[index].createdAt,
         };

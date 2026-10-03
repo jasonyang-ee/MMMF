@@ -11,3 +11,4 @@ services:
       TZ: America/Los_Angeles
       DEFAULT_LANGUAGE: en # supported language values: see shared/preferences.js
       # ALLOWED_ORIGIN: https://example.com # optional cross-origin API access
+      # TRUST_PROXY: "192.0.2.10/32,2001:db8::10/128" # replace with actual proxy IPs

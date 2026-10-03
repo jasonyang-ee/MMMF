@@ -13,7 +13,7 @@ Reopened work → work-in-progress. garnish resets header-only new. Empty new �
 Symbols: → leads to | ∴ therefore | ∀ every | ∃ exists | ! required | ? unknown/optional | ⊥ forbidden/absent | ≠ differs | ∈ member | ∉ not member | ≤ at most | ≥ at least | & and | § section.
 Preserve literals, conditions, negation, uncertainty, quantities, and requirement strength. Tables need delimiter rows.
 Executable without chat history. Full rules: /encode-docs.
-planning status: new
+planning status: done
 -->
 
 # PLAN
@@ -22,7 +22,7 @@ goal: resolve review findings RC1 (legacy-name account lockout) and RC2 (Express
 
 ## ground rules
 
-- User authorized a remediation plan from the review. This cycle is unstarted; implementation next via `/cook`. No prior PLAN.md/HANDOFF.md/BACKLOG.md existed; no cycle reset or inherited completion ticks.
+- User authorized the full remediation cycle via `/cook`. No cycle reset or inherited completion ticks; execute all phases in order and make one reviewed summary commit per repository policy.
 - Scope: stored names >200, their ordinary edits/deletes and linked card payments; explicit Express proxy trust; meaningful regressions; deployment guidance and review/changelog reconciliation. No storage redesign, new dependency, UI redesign or generalized repair of other invalid historical fields.
 - Preserve stored names verbatim unless the user changes/deletes them; no automatic truncation or data migration. New/changed names retain the current 200-character validation semantics except verified inheritance under SPEC §I.58. All other field/metadata validation and the 100 KiB request limit remain active.
 - Preserve `Date.now().toString()` IDs, protected metadata, atomic serialized file writes, demo isolation and KV limitations (SPEC §V.1–2, §V.9–11, §V.32–34). A card lookup is scoped to the same store; no cross-file transaction or stronger KV consistency claim.
@@ -36,6 +36,8 @@ review record: `REVIEW.md` → “Follow-up code review — 2026-10-03” retain
 
 local evidence: release baseline `v1.1.5` = `b45a74c6f33ae2631aa5a67d3356350f10c04c4a`; reviewed implementation HEAD `61205993ddfcdcf245a7eb0fbf4c51e0d37154a9`, branch `main`, clean before planning. Only planning/spec/review documents change during prep; runtime/test evidence remains current for this source revision.
 
+execution evidence: 2026-10-03 `/cook` checked clean `main` at `984d4ba`; diff from the researched runtime revision contains only planning/spec/review documents. F1 research and gates remain valid. Phase batons kept current; one final summary commit follows repository policy. F1: eight new adapter cases first reproduced six expected failures, then full `npm test` passed 30/30. The new Chromium case first reproduced untouched-name save failure, then full `npm run test:ui` passed 9/9 after both editor fixes. F2 selection: F1 changes preserve all proxy research assumptions; installed Express/limiter sources and current primary documentation rechecked; no new unknowns. F2: five proxy cases first reproduced four expected failures, then full `npm test` passed 35/35; scoped matching/startup/cookies/quota/spoof assertions inspected. `docker compose config --quiet` passed; docs match parser tests and leave trust commented out. F3: final Chromium 9/9, frontend/Worker/Pages builds, Docker build/real-entrypoint smoke, Bash/ShellCheck/Compose, audit (0), manifest/lock and diff checks passed. Full owned diff/callers reviewed; all five tasks complete. Contract evidence and verification limits are in HANDOFF.md and REVIEW.md; no remaining gate.
+
 prior research:
 
 id|covered question & evidence|decision / consequence
@@ -47,15 +49,15 @@ RC2|`server/app.js:19–33,56–61,119–125`, `server/index.js:11`: default pro
 API/test reuse|`createDataService` already serves Express/Hono; adapters supply scoped stores and mutation queues. `tests/api.test.js` has disposable file/KV fixtures and parity, corruption, metadata, concurrency, session and limiter cases. `tests/browser/app.spec.js` has actual startup/inline/payment flows.|Keep policy in shared data service. Seed pre-existing records directly into disposable fixtures; creating them through the newly restricted POST would not test upgrades. Browser case owns an ephemeral Express server with fixed settings, seeded fixture files and teardown; no change to production/demo seeding APIs or Playwright global config.
 Proxy API research|Installed Express `lib/request.js`/`lib/utils.js`, `proxy-addr/index.js`; official sources below. In-memory Express allowlist `127.0.0.1/32,::1/128` matches IPv4, mapped loopback and IPv6 loopback, excludes `203.0.113.1`. Node 24 `net.isIP` recognizes literal IPv4/IPv6 and rejects `true`, `1`, `*`.|Use `node:net` in an Express-only helper, Express's existing trust compiler for matching, and explicit decimal CIDR prefix checks (1–32 IPv4, 1–128 IPv6). No new dependency, numeric-hop shorthand or named subnet aliases. Fail startup on bad configuration; do not silently fall back to permissive trust.
 
-external evidence (checked 2026-10-03): [Express behind proxies](https://expressjs.com/en/guide/behind-proxies/) documents scoped addresses/subnets, nearest untrusted client selection and forwarded protocol; [express-rate-limit error codes](https://express-rate-limit.mintlify.app/reference/error-codes#err-erl-unexpected-x-forwarded-for) documents shared quotas with trust disabled and spoofing risk from blanket trust. Node documentation fetch failed; installed Node 24 `net.isIP`/Express prototypes above directly verify the selected API behavior.
+external evidence (checked 2026-10-03): [Express behind proxies](https://expressjs.com/en/guide/behind-proxies/) documents scoped addresses/subnets, nearest untrusted client selection and forwarded protocol; [express-rate-limit error codes](https://express-rate-limit.mintlify.app/reference/error-codes#err-erl-unexpected-x-forwarded-for) documents shared quotas with trust disabled and spoofing risk from blanket trust. Original planning Node documentation fetch failed; execution rechecked https://nodejs.org/api/net.html#netisipinput on 2026-10-03 successfully. Installed Node 24 `net.isIP`/Express prototypes above directly verify the selected API behavior.
 
 baseline verification (fresh in preceding review, reused at identical runtime HEAD): `npm test` 22/22; `npm run test:ui` 8/8 Chromium; `npm run build`, `npm run build:worker`, `npm run build:pages`; Docker build + real-entrypoint static/API/demo smoke; `bash -n start.sh release.sh`, `shellcheck start.sh release.sh`; `npm audit` 0 vulnerabilities; manifest/lock alignment and CRLF-aware diff check pass. Focused RC1/RC2 probes fail the required behavior despite these green suites. Browser/editorial/live-infrastructure limits remain in REVIEW.md. No JS lint script. No claim that baseline checks prove the proposed fixes.
 
 environment: Node 24.21.0 at `/home/sami/.nvm/versions/node/v24.21.0/bin`; prepend that directory to PATH when needed. Chromium at `/home/sami/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome` via `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. Sandbox listener `EPERM`, audit DNS `EAI_AGAIN` and Docker socket restrictions were resolved by tool-approved execution in the review; use equivalent approved execution when required. Wrangler can use `XDG_CONFIG_HOME=/tmp/mmmf-remediation-config` and `WRANGLER_SEND_METRICS=false`.
 
-spec decisions: §I.16 now explicitly distinguishes legacy stored text from new names; §I.58 permits verified inheritance needed by the existing card workflow; new §I.61 defines the proxy setting, referenced by §I.54. Existing security/corruption/rate requirements are retained. These define intended behavior; implementation is pending.
+spec decisions: §I.16 now explicitly distinguishes legacy stored text from new names; §I.58 permits verified inheritance needed by the existing card workflow; new §I.61 defines the proxy setting, referenced by §I.54. Existing security/corruption/rate requirements are retained. F1/F2 now implement these prepared contracts; F3 verified them without another spec change.
 
-unknowns & gate: consequential research resolved; planning review GO (2026-10-03), zero open planning BLOCK/DIVERGENCE/blocking UNKNOWN. Review covered scope, ordering, references, verification, ownership, migration safety, trust boundaries and feasibility. It added the card-inheritance path, untouched-editor handling and explicit fixture/Host-header strategies to avoid incomplete fixes. Implementation gate remains NO-GO (RC1/RC2 open) until F3. No deferred research phase needed. A later change to named evidence/requirements requires targeted reassessment.
+unknowns & gate: consequential research resolved; planning review GO (2026-10-03), zero open planning BLOCK/DIVERGENCE/blocking UNKNOWN. Review covered scope, ordering, references, verification, ownership, migration safety, trust boundaries and feasibility. It added the card-inheritance path, untouched-editor handling and explicit fixture/Host-header strategies to avoid incomplete fixes. F3 completed: implementation gate GO; RC1/RC2 resolved with original failure evidence retained in REVIEW.md and current HOLD rows in HANDOFF.md. No deferred research phase needed. A later change to named evidence/requirements requires targeted reassessment.
 
 ## phase order
 
@@ -76,8 +78,8 @@ depends: prior research covers scope; planning review GO before execution.
 
 id|status|description|cites
 |---|---|---|---|
-T1|.|Implement length-only stored compatibility, strict changed names and verified card-name inheritance with adapter regressions|SPEC §V.1–2, §V.9–11, §V.31–34
-T2|.|Preserve untouched inline names; verify legacy loading, edits and payments in Chromium|SPEC §V.13, §V.18, §V.28–29, §V.31, §V.34
+T1|x|Implement length-only stored compatibility, strict changed names and verified card-name inheritance with adapter regressions|SPEC §V.1–2, §V.9–11, §V.31–34
+T2|x|Preserve untouched inline names; verify legacy loading, edits and payments in Chromium|SPEC §V.13, §V.18, §V.28–29, §V.31, §V.34
 
 task: T1
 touch: `server/dataService.js`, `tests/api.test.js`, `tests/fixtures/legacy-collections.json`, `CHANGELOG.md`.
@@ -104,8 +106,8 @@ depends: prior research covers scope; no behavioral F1 prerequisite, but execute
 
 id|status|description|cites
 |---|---|---|---|
-T1|.|Add explicit proxy allowlist and verify cookies, client quotas and spoof resistance|SPEC §V.2–4, §V.14, §V.32–34
-T2|.|Document opt-in deployment configuration and update the changelog|SPEC §I.53–54, §I.61; §V.3–4, §V.14
+T1|x|Add explicit proxy allowlist and verify cookies, client quotas and spoof resistance|SPEC §V.2–4, §V.14, §V.32–34
+T2|x|Document opt-in deployment configuration and update the changelog|SPEC §I.53–54, §I.61; §V.3–4, §V.14
 
 task: T1
 touch: `server/proxyService.js`, `server/app.js`, `server/index.js`, `tests/api.test.js`.
@@ -132,7 +134,7 @@ depends: F1.T1–T2 and F2.T1–T2 complete.
 
 id|status|description|cites
 |---|---|---|---|
-T1|.|Run final checks and self-review; close RC1/RC2 only on fresh regression evidence|SPEC §V.1–4, §V.9–11, §V.13–14, §V.18, §V.28–29, §V.31–34
+T1|x|Run final checks and self-review; close RC1/RC2 only on fresh regression evidence|SPEC §V.1–4, §V.9–11, §V.13–14, §V.18, §V.28–29, §V.31–34
 
 task: T1
 touch: `REVIEW.md`, `PLAN.md`, `HANDOFF.md`; affected implementation/tests/docs if verification reopens their owning tasks.

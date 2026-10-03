@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Express supports an opt-in `TRUST_PROXY` IP/CIDR allowlist so trusted HTTPS proxies set Secure demo cookies and preserve per-client rate limits; malformed configuration stops startup, untrusted forwarding stays ignored, and deployment examples keep proxy trust disabled by default
+- Existing names longer than 200 characters remain readable, editable and deletable without truncation; untouched inline names keep their original whitespace, and linked card payments can inherit the exact stored card name while new and changed names retain validation
 - Express API rate limiting and demo-session isolation now apply to every API request; Hono adds per-isolate throttling, bounded request bodies, validated cookies and automatic demo-key expiry
 - Shared API validation protects dates, amounts, settings and immutable IDs/timestamps; partial settings updates preserve other fields, invalid saved languages fall back to English, storage corruption returns visible errors, and local file updates use serialized atomic replacement
 - Forecasts use calendar dates across timezones, exclude transactions outside the range, and only suppress recurring entries with matching type; card scheduling includes the start day and unpaid gaps, with stable links for new card payments

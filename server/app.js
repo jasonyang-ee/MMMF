@@ -5,6 +5,7 @@ import fs from "node:fs/promises";
 import rateLimit from "express-rate-limit";
 import { collections, createDataService } from "./dataService.js";
 import { createFileStore } from "./fileStoreService.js";
+import { parseTrustProxy } from "./proxyService.js";
 import {
   isSessionExpired,
   resolveSession,
@@ -17,6 +18,7 @@ export function createApp({
   staticDirectory = path.resolve("client/dist"),
 } = {}) {
   const app = express();
+  app.set("trust proxy", parseTrustProxy(env.TRUST_PROXY));
   app.disable("x-powered-by");
   app.use("/api", (req, res, next) => {
     res.set("Cache-Control", "no-store");

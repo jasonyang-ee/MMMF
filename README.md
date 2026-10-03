@@ -125,6 +125,20 @@ Express uses atomic, serialized file updates within one server process. Do not r
 
 `ALLOWED_ORIGIN` permits one exact cross-origin API origin when needed. Same-origin access works without it. Express supports `DATA_DIR` to override the default storage directory. Currency changes affect formatting and input precision, without converting stored amounts.
 
+### Reverse proxies (Express and Docker)
+
+`TRUST_PROXY` is disabled when unset or blank. To recognize HTTPS and client IPs behind a reverse proxy, set it to a comma-separated list of only your actual trusted proxy IP addresses or CIDRs. IPv4 and IPv6 literals are accepted; CIDR prefixes must be decimal numbers from 1–32 for IPv4 or 1–128 for IPv6. Whitespace around entries is allowed. Empty entries, invalid addresses, `true`/`false`, hop counts, subnet aliases such as `loopback`, wildcards and `/0` are rejected at startup.
+
+For example, add this under your Compose service's `environment`, replacing the documentation addresses with your proxy peers before uncommenting it:
+
+```yaml
+# TRUST_PROXY: "192.0.2.10/32,2001:db8::10/128" # replace with actual proxy IPs
+```
+
+The trusted proxy must overwrite client-supplied `X-Forwarded-For` and `X-Forwarded-Proto` headers with the verified client address/chain and original protocol. Also overwrite `X-Forwarded-Host` if sent. Preserve the public `Host` header for same-origin API requests, or configure the exact public origin in `ALLOWED_ORIGIN`. Restrict backend access to the trusted network/proxy and keep authentication at that boundary; proxy trust is not authentication.
+
+With a matching proxy configuration, HTTPS demo sessions receive Secure cookies and clients receive separate API/static rate-limit quotas. The nearest untrusted address in the forwarding chain identifies the client; untrusted peers cannot change identity or protocol through forwarded headers. Direct loopback health checks bypass only the static limiter. This setting applies only to Express/Docker: Cloudflare keeps its runtime protocol and client-IP handling, with per-isolate API limits and separate edge configuration for distributed limits.
+
 ## Local Development
 
 Requires Node.js 24 or newer.

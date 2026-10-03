@@ -1,6 +1,110 @@
 import { test, expect } from "@playwright/test";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { once } from "node:events";
+import { createApp } from "../../server/app.js";
 import { languages } from "../../shared/preferences.js";
 import { translate } from "../../client/src/translations.js";
+
+test("legacy account loads, edits and pays without truncation", async ({ page }) => {
+  const legacy = JSON.parse(
+    await fs.readFile(new URL("../fixtures/legacy-collections.json", import.meta.url), "utf8"),
+  );
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "mmmf-ui-legacy-"));
+  let server;
+  try {
+    for (const [key, value] of Object.entries(legacy))
+      await fs.writeFile(path.join(directory, `${key}.json`), JSON.stringify(value));
+    server = createApp({ dataDirectory: directory, env: {} }).listen(0, "127.0.0.1");
+    await once(server, "listening");
+    const base = `http://127.0.0.1:${server.address().port}`;
+    const read = async (key) => {
+      const response = await page.request.get(`${base}/api/${key}`);
+      expect(response.status()).toBe(200);
+      return response.json();
+    };
+    const errors = [];
+    const writes = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("dialog", async (dialog) => {
+      errors.push(dialog.message());
+      await dialog.dismiss();
+    });
+    page.on("request", (request) => {
+      if (request.method() === "PUT") writes.push(request.url());
+    });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(base);
+    await expect(page.getByRole("heading", { name: "Global Settings" })).toBeVisible();
+    const recurring = page.locator(".card").filter({
+      has: page.getByRole("heading", { name: "Recurring Transactions", exact: true }),
+    });
+    const cards = page.locator(".card").filter({
+      has: page.getByRole("heading", { name: "Recurring Credit Cards", exact: true }),
+    });
+    for (const [section, key] of [[recurring, "recurring"], [cards, "credit-cards"]]) {
+      const original = legacy[key][0];
+      const name = section.getByRole("button", { name: original.name.trim(), exact: true });
+      const input = section.getByRole("textbox", { name: "Description", exact: true });
+      await name.click();
+      await expect(input).toHaveValue(original.name);
+      await input.blur();
+      await expect(input).toHaveCount(0);
+      await name.click();
+      await input.press("Enter");
+      await expect(input).toHaveCount(0);
+      await name.click();
+      await input.fill("Cancelled rename");
+      await input.press("Escape");
+      await expect(input).toHaveCount(0);
+      expect(writes).toEqual([]);
+      expect(await read(key)).toEqual(legacy[key]);
+    }
+    await recurring.getByRole("button", { name: "-$55.00", exact: true }).click();
+    const amount = recurring.getByRole("spinbutton", { name: "Amount", exact: true });
+    await amount.fill("75");
+    await amount.press("Enter");
+    await expect(amount).toHaveCount(0);
+    expect(writes).toHaveLength(1);
+    expect(await read("recurring")).toEqual([{ ...legacy.recurring[0], amount: 75 }]);
+    await cards.getByRole("button", { name: "Add Payment", exact: true }).click();
+    const paymentAmount = cards.getByRole("spinbutton", { name: "Amount", exact: true });
+    await expect(paymentAmount).toBeFocused();
+    await paymentAmount.fill("10");
+    await cards.getByRole("button", { name: "Add", exact: true }).click();
+    await expect(paymentAmount).toHaveCount(0);
+    const payments = await read("transactions");
+    expect(payments).toHaveLength(2);
+    expect(payments[0]).toEqual(legacy.transactions[0]);
+    expect(payments[1]).toMatchObject({
+      name: legacy["credit-cards"][0].name,
+      creditCardId: legacy["credit-cards"][0].id,
+      type: "debit", amount: 10, date: "2026-10-15",
+    });
+    await cards.getByRole("button", { name: legacy["credit-cards"][0].name.trim(), exact: true }).click();
+    const cardName = cards.getByRole("textbox", { name: "Description", exact: true });
+    await cardName.fill("Short card name");
+    await cardName.press("Enter");
+    await expect(cardName).toHaveCount(0);
+    expect(writes).toHaveLength(2);
+    expect(await read("credit-cards")).toEqual([{ ...legacy["credit-cards"][0], name: "Short card name" }]);
+    await page.getByRole("row").filter({
+      has: page.getByRole("cell", { name: legacy.transactions[0].name.trim(), exact: true }),
+    }).getByRole("button", { name: "Delete transaction", exact: true }).click();
+    await expect(page.getByRole("cell", { name: legacy.transactions[0].name.trim(), exact: true })).toHaveCount(0);
+    expect(await read("transactions")).toEqual([payments[1]]);
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    expect(errors).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  } finally {
+    if (server) {
+      server.closeAllConnections();
+      await new Promise((resolve) => server.close(resolve));
+    }
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
 
 async function openApp(page) {
   await page.goto("/");
