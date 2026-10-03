@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "คาดการณ์ยอดเงินในบัญชีเพื่อวางแผนฝากในกองทุนตลาดเงิน",
+    "github": "ดูบน GitHub",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "ยกเลิก",
+    "add": "เพิ่ม",
+    "save": "บันทึก",
+    "today": "วันนี้",
+    "selectDate": "เลือกวันที่",
+    "auto": "อัตโนมัติ"
+  },
+  "balance": {
+    "accountBalance": "ยอดเงินในบัญชี",
+    "startingBalance": "ยอดเงินเริ่มต้น",
+    "forecastedBalance": "ยอดเงินที่คาดการณ์",
+    "netChange": "การเปลี่ยนแปลงสุทธิ",
+    "lowestBalance": "ยอดเงินต่ำสุด",
+    "onDate": "วันที่",
+    "startingBalanceRow": "ยอดเงินเริ่มต้น"
+  },
+  "forecast": {
+    "settings": "ตั้งค่าการคาดการณ์",
+    "currentDate": "วันที่เริ่มต้น",
+    "forecastUntil": "คาดการณ์ถึง",
+    "quick30": "30 วัน",
+    "quick60": "60 วัน",
+    "quick90": "90 วัน",
+    "daysFromCurrent": "วันนับจากวันที่เริ่มต้น",
+    "selectFutureDate": "เลือกวันที่ในอนาคต",
+    "clearAll": "ล้างธุรกรรมทั้งหมด",
+    "clearNote": "ธุรกรรมประจำจะยังคงอยู่"
+  },
+  "transactions": {
+    "addTransaction": "เพิ่มธุรกรรม",
+    "description": "รายละเอียด",
+    "amount": "จำนวนเงิน",
+    "type": "ประเภท",
+    "debitPayment": "เดบิต (รายจ่าย)",
+    "creditIncome": "เครดิต (รายรับ)",
+    "date": "วันที่",
+    "fillAllFields": "กรุณากรอกข้อมูลทุกช่อง",
+    "listTitle": "ธุรกรรม ({0})",
+    "noneYet": "ยังไม่มีธุรกรรม",
+    "getStarted": "เพิ่มธุรกรรมแรกเพื่อเริ่มต้น",
+    "delete": "ลบธุรกรรม",
+    "descriptionPh": "เช่น: ค่าเช่า",
+    "addBtn": "เพิ่มธุรกรรม",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "ธุรกรรมประจำ",
+    "addButton": "+ เพิ่ม",
+    "saveRecurring": "บันทึกธุรกรรมประจำ",
+    "noRecurring": "ไม่มีธุรกรรมประจำ",
+    "autoNote": "สร้างธุรกรรมประจำโดยอัตโนมัติทุกเดือน",
+    "payment": "รายจ่าย",
+    "income": "รายรับ",
+    "dayOfMonthPh": "วันที่ของเดือน (1–31)",
+    "dayOfMonth": "วันที่ {0} ของทุกเดือน",
+    "clickToEditDesc": "คลิกเพื่อแก้ไขรายละเอียด",
+    "clickToEditAmount": "คลิกเพื่อแก้ไขจำนวนเงิน",
+    "deleteRecurring": "ลบธุรกรรมประจำ",
+    "validationDayRange": "วันที่ของเดือนต้องอยู่ระหว่าง 1 ถึง 31",
+    "descriptionPh": "รายละเอียด",
+    "amountPh": "จำนวนเงิน",
+    "validationAll": "กรุณากรอกข้อมูลทุกช่อง"
+  },
+  "cards": {
+    "title": "บัตรเครดิตประจำ",
+    "saveCard": "บันทึกบัตรเครดิต",
+    "noCards": "ไม่มีบัตรเครดิต",
+    "addNote": "เพิ่มบัตรเพื่อบันทึกการชำระเงินได้รวดเร็ว",
+    "cardNamePh": "ชื่อบัตร (เช่น: วีซ่า)",
+    "deleteCard": "ลบบัตร",
+    "clickToEditName": "คลิกเพื่อแก้ไขชื่อ",
+    "next": "ครั้งถัดไป:",
+    "addPayment": "เพิ่มการชำระเงิน",
+    "noUpcoming": "ไม่มีวันที่ถัดไป",
+    "paymentDate": "วันที่ชำระเงิน:",
+    "enterAmount": "กรุณาระบุจำนวนเงิน",
+    "noUpcomingInRange": "ไม่มีวันที่ชำระเงินในช่วงคาดการณ์",
+    "dayOfMonth": "วันที่ {0} ของทุกเดือน"
+  },
+  "timeline": {
+    "title": "ลำดับเวลายอดเงิน",
+    "action": "การดำเนินการ",
+    "balance": "ยอดเงิน",
+    "description": "รายละเอียด",
+    "amount": "จำนวนเงิน",
+    "date": "วันที่",
+    "delete": "ลบธุรกรรม"
+  },
+  "settings": {
+    "globalSettings": "ตั้งค่าทั่วไป",
+    "darkMode": "โหมดมืด",
+    "lightMode": "โหมดสว่าง",
+    "language": "ภาษา",
+    "currency": "สกุลเงิน",
+    "dateFormat": "รูปแบบวันที่"
+  }
+}

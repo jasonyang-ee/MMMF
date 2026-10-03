@@ -20,6 +20,7 @@ RUN npm ci --ignore-scripts
 
 # Copy client folder (contains all frontend source, config, and public assets)
 COPY client ./client
+COPY shared ./shared
 
 # Build frontend
 RUN npm run build
@@ -37,7 +38,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --only=production --ignore-scripts \
+RUN npm ci --omit=dev --ignore-scripts \
 	&& npm cache clean --force
 
 # Copy built frontend from builder stage
@@ -45,6 +46,7 @@ COPY --from=builder /app/client/dist ./client/dist
 
 # Copy server files
 COPY server ./server
+COPY shared ./shared
 
 # Create data directory for file-based database
 RUN mkdir -p /app/data
@@ -55,7 +57,7 @@ EXPOSE 5173
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=5173
-# Default language for server-side defaults (en|es)
+# Default language for server-side defaults (see shared/preferences.js)
 ENV DEFAULT_LANGUAGE=en
 
 HEALTHCHECK --interval=5m --timeout=10s --start-period=10s --retries=3 \

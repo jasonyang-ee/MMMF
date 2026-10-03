@@ -1,16 +1,28 @@
 import React from "react";
 
-// Single source for the trash-icon delete control (R11). Bakes the >=44px
+// Single source for the trash-icon delete control. Bakes the >=44px
 // touch target (V19); callers vary only the icon size and optional extra
 // classes (e.g. flex-shrink-0 inside a flex row).
-function DeleteButton({ onClick, title, iconSize = "w-4 h-4", className = "" }) {
+function DeleteButton({
+  onClick,
+  title,
+  iconSize = "w-4 h-4",
+  className = "",
+}) {
   return (
     <button
+      type="button"
+      aria-label={title}
       onClick={onClick}
       className={`text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 min-h-11 min-w-11 inline-flex items-center justify-center ${className}`}
       title={title}
     >
-      <svg className={iconSize} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg
+        className={iconSize}
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"

@@ -15,3 +15,7 @@ data/
 
 # Wrangler
 .wrangler
+
+# Browser verification
+test-results/
+playwright-report/

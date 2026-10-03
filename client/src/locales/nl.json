@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "Voorspel uw rekeningsaldo om stortingen in geldmarktfondsen te plannen.",
+    "github": "Bekijk op GitHub",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "Annuleren",
+    "add": "Toevoegen",
+    "save": "Opslaan",
+    "today": "Vandaag",
+    "selectDate": "Kies een datum",
+    "auto": "Automatisch"
+  },
+  "balance": {
+    "accountBalance": "Rekeningsaldo",
+    "startingBalance": "Beginsaldo",
+    "forecastedBalance": "Voorspeld saldo",
+    "netChange": "Nettoverandering",
+    "lowestBalance": "Laagste saldo",
+    "onDate": "op",
+    "startingBalanceRow": "Beginsaldo"
+  },
+  "forecast": {
+    "settings": "Prognose-instellingen",
+    "currentDate": "Begindatum",
+    "forecastUntil": "Prognose tot",
+    "quick30": "30 dagen",
+    "quick60": "60 dagen",
+    "quick90": "90 dagen",
+    "daysFromCurrent": "dagen vanaf de begindatum",
+    "selectFutureDate": "Kies een toekomstige datum",
+    "clearAll": "Alle transacties wissen",
+    "clearNote": "Terugkerende transacties blijven bewaard"
+  },
+  "transactions": {
+    "addTransaction": "Transactie toevoegen",
+    "description": "Omschrijving",
+    "amount": "Bedrag",
+    "type": "Type",
+    "debitPayment": "Debet (Uitgave)",
+    "creditIncome": "Credit (Inkomst)",
+    "date": "Datum",
+    "fillAllFields": "Vul alle velden in",
+    "listTitle": "Transacties ({0})",
+    "noneYet": "Nog geen transacties",
+    "getStarted": "Voeg uw eerste transactie toe om te beginnen",
+    "delete": "Transactie verwijderen",
+    "descriptionPh": "Bijv. huurbetaling",
+    "addBtn": "Transactie toevoegen",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "Terugkerende transacties",
+    "addButton": "+ Toevoegen",
+    "saveRecurring": "Terugkerende transactie opslaan",
+    "noRecurring": "Geen terugkerende transacties",
+    "autoNote": "Terugkerende transacties worden elke maand automatisch aangemaakt",
+    "payment": "Uitgave",
+    "income": "Inkomst",
+    "dayOfMonthPh": "Dag van de maand (1–31)",
+    "dayOfMonth": "Dag {0} van elke maand",
+    "clickToEditDesc": "Klik om de omschrijving te wijzigen",
+    "clickToEditAmount": "Klik om het bedrag te wijzigen",
+    "deleteRecurring": "Terugkerende transactie verwijderen",
+    "validationDayRange": "De dag moet tussen 1 en 31 liggen",
+    "descriptionPh": "Omschrijving",
+    "amountPh": "Bedrag",
+    "validationAll": "Vul alle velden in"
+  },
+  "cards": {
+    "title": "Terugkerende creditcards",
+    "saveCard": "Creditcard opslaan",
+    "noCards": "Geen creditcards",
+    "addNote": "Voeg kaarten toe om snel betalingen in te voeren",
+    "cardNamePh": "Kaartnaam (bijv. Visa)",
+    "deleteCard": "Kaart verwijderen",
+    "clickToEditName": "Klik om de naam te wijzigen",
+    "next": "Volgende:",
+    "addPayment": "Betaling toevoegen",
+    "noUpcoming": "Geen aankomende datum",
+    "paymentDate": "Betaaldatum:",
+    "enterAmount": "Voer een bedrag in",
+    "noUpcomingInRange": "Geen betaaldatum binnen de prognoseperiode",
+    "dayOfMonth": "Dag {0} van elke maand"
+  },
+  "timeline": {
+    "title": "Saldotijdlijn",
+    "action": "Actie",
+    "balance": "Saldo",
+    "description": "Omschrijving",
+    "amount": "Bedrag",
+    "date": "Datum",
+    "delete": "Transactie verwijderen"
+  },
+  "settings": {
+    "globalSettings": "Algemene instellingen",
+    "darkMode": "Donkere modus",
+    "lightMode": "Lichte modus",
+    "language": "Taal",
+    "currency": "Valuta",
+    "dateFormat": "Datumnotatie"
+  }
+}

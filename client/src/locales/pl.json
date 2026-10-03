@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "Prognozuj saldo konta, aby planować wpłaty do funduszy rynku pieniężnego.",
+    "github": "Zobacz na GitHub",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "Anuluj",
+    "add": "Dodaj",
+    "save": "Zapisz",
+    "today": "Dzisiaj",
+    "selectDate": "Wybierz datę",
+    "auto": "Automatycznie"
+  },
+  "balance": {
+    "accountBalance": "Saldo konta",
+    "startingBalance": "Saldo początkowe",
+    "forecastedBalance": "Prognozowane saldo",
+    "netChange": "Zmiana netto",
+    "lowestBalance": "Najniższe saldo",
+    "onDate": "dnia",
+    "startingBalanceRow": "Saldo początkowe"
+  },
+  "forecast": {
+    "settings": "Ustawienia prognozy",
+    "currentDate": "Data początkowa",
+    "forecastUntil": "Prognoza do",
+    "quick30": "30 dni",
+    "quick60": "60 dni",
+    "quick90": "90 dni",
+    "daysFromCurrent": "dni od daty początkowej",
+    "selectFutureDate": "Wybierz przyszłą datę",
+    "clearAll": "Usuń wszystkie transakcje",
+    "clearNote": "Transakcje cykliczne zostaną zachowane"
+  },
+  "transactions": {
+    "addTransaction": "Dodaj transakcję",
+    "description": "Opis",
+    "amount": "Kwota",
+    "type": "Typ",
+    "debitPayment": "Obciążenie (Wydatek)",
+    "creditIncome": "Uznanie (Przychód)",
+    "date": "Data",
+    "fillAllFields": "Wypełnij wszystkie pola",
+    "listTitle": "Transakcje ({0})",
+    "noneYet": "Brak transakcji",
+    "getStarted": "Dodaj pierwszą transakcję, aby rozpocząć",
+    "delete": "Usuń transakcję",
+    "descriptionPh": "Np. opłata za czynsz",
+    "addBtn": "Dodaj transakcję",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "Transakcje cykliczne",
+    "addButton": "+ Dodaj",
+    "saveRecurring": "Zapisz transakcję cykliczną",
+    "noRecurring": "Brak transakcji cyklicznych",
+    "autoNote": "Transakcje cykliczne są tworzone automatycznie co miesiąc",
+    "payment": "Wydatek",
+    "income": "Przychód",
+    "dayOfMonthPh": "Dzień miesiąca (1–31)",
+    "dayOfMonth": "Dzień {0} każdego miesiąca",
+    "clickToEditDesc": "Kliknij, aby edytować opis",
+    "clickToEditAmount": "Kliknij, aby edytować kwotę",
+    "deleteRecurring": "Usuń transakcję cykliczną",
+    "validationDayRange": "Dzień miesiąca musi być liczbą od 1 do 31",
+    "descriptionPh": "Opis",
+    "amountPh": "Kwota",
+    "validationAll": "Wypełnij wszystkie pola"
+  },
+  "cards": {
+    "title": "Cykliczne karty kredytowe",
+    "saveCard": "Zapisz kartę kredytową",
+    "noCards": "Brak kart kredytowych",
+    "addNote": "Dodaj karty, aby szybko wprowadzać płatności",
+    "cardNamePh": "Nazwa karty (np. Visa)",
+    "deleteCard": "Usuń kartę",
+    "clickToEditName": "Kliknij, aby edytować nazwę",
+    "next": "Następna:",
+    "addPayment": "Dodaj płatność",
+    "noUpcoming": "Brak nadchodzącej daty",
+    "paymentDate": "Data płatności:",
+    "enterAmount": "Wprowadź kwotę",
+    "noUpcomingInRange": "Brak daty płatności w okresie prognozy",
+    "dayOfMonth": "Dzień {0} każdego miesiąca"
+  },
+  "timeline": {
+    "title": "Oś czasu salda",
+    "action": "Działanie",
+    "balance": "Saldo",
+    "description": "Opis",
+    "amount": "Kwota",
+    "date": "Data",
+    "delete": "Usuń transakcję"
+  },
+  "settings": {
+    "globalSettings": "Ustawienia ogólne",
+    "darkMode": "Tryb ciemny",
+    "lightMode": "Tryb jasny",
+    "language": "Język",
+    "currency": "Waluta",
+    "dateFormat": "Format daty"
+  }
+}

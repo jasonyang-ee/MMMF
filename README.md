@@ -16,9 +16,10 @@
 - **Persistent Storage**: Simple file based json data storage
 - **Edit on Click**: Click on recurring transaction items to edit
 - **Clear Calculations**: Remove all transactions while keeping recurring items
-- **Global Currency and Date Format**: Set your preferred currency and date format
-- **Internationalization (i18n)**: Support for multiple languages including English, Español, 日本語, and 繁體中文
-  > Looking for contributors to help translate to more languages!
+- **Global Currency and Date Format**: Search by currency code, localized name, or symbol; currency-specific decimals and localized dates
+- **Searchable Language Selection**: Search native or English names; keyboard navigation, bounded lists, and Arabic right-to-left layout
+- **Internationalization (i18n)**: Support for multiple languages with 20 complete catalogs, including English, Español, 日本語, 繁體中文, العربية, हिन्दी, and more
+  > Contributions and native-language reviews are welcome. See `SPEC.md` for the language registry and expansion checklist.
 
 ## Demo
 
@@ -50,7 +51,7 @@ services:
       - ./mmmf/data:/app/data
     environment:
       TZ: America/Los_Angeles
-      DEFAULT_LANGUAGE: en # supported lanugage values: en, zht, ja, es
+      DEFAULT_LANGUAGE: en # supported values: see shared/preferences.js
 ```
 
 ### Docker Image
@@ -80,7 +81,7 @@ services:
 
 1. Fork this repository to your GitHub account.
 2. Create a `MMMF_KV` [KV namespace](https://developers.cloudflare.com/kv/) (under **Storage & Databases** -> **KV**), and copy the namespace ID.
-3. Update the `kv_namespaces` ID in `wrangler.jsonc` with your own namespace ID, then commit and push the change to your forked repository.
+3. Update the `kv_namespaces` ID in `wrangler.jsonc` (Workers) or `wrangler.pages.jsonc` (Pages) with your own namespace ID, then commit and push the change to your forked repository.
 4. Configure the [GitHub integration for cloudflare application](https://github.com/apps/cloudflare-workers-and-pages/installations/new) to connect your forked repository.
 5. Create a project in [Cloudflare Workers](https://developers.cloudflare.com/workers/).
    1. Select **Continue with GitHub** as the deployment method.
@@ -93,7 +94,7 @@ services:
 
 1. Fork this repository to your GitHub account.
 2. Create a [KV namespace](https://developers.cloudflare.com/kv/) (under **Storage & Databases** -> **KV**), and copy the namespace ID.
-3. Update the `kv_namespaces` ID in `wrangler.jsonc` with your own namespace ID, then commit and push the change to your forked repository.
+3. Update the `kv_namespaces` ID in `wrangler.jsonc` (Workers) or `wrangler.pages.jsonc` (Pages) with your own namespace ID, then commit and push the change to your forked repository.
 4. Configure the [GitHub integration for cloudflare application](https://github.com/apps/cloudflare-workers-and-pages/installations/new) to connect your forked repository.
 5. Create a project in [Cloudflare Workers](https://developers.cloudflare.com/workers/).
 6. Force Pages deployment by clicking the footnote: `Looking to deploy Pages? Get started`
@@ -102,7 +103,7 @@ services:
    3. Make a project name.
    4. Select **Framework preset**: React (Vite)
    5. **Build command**: `npm run build`
-   6. **Build output directory**: `dist`
+   6. **Build output directory**: `client/dist`
 
 7. Force update KV binding in **Settings** -> **Bindings** -> **Add** -> **KV Namespace**.
    1. Variable name: `MMMF_KV`
@@ -114,9 +115,19 @@ services:
    3. This enables session-based data isolation where each user gets their own data
    4. Session data automatically expires after 5 days
 
-9. Deploy the project again.
+9. Deploy the project again. Pages functions live in the root `functions/` directory. For CLI deployment, use `npx wrangler pages deploy --config wrangler.pages.jsonc`; Workers uses `npx wrangler deploy`.
+
+### Storage and access
+
+Normal mode is one shared account with no built-in login. Protect a private deployment with authentication at your reverse proxy or Cloudflare Access. `DEMO=true` isolates disposable sessions on both Express and Cloudflare; sessions expire after five days.
+
+Express uses atomic, serialized file updates within one server process. Do not run multiple writers against the same data directory. Cloudflare KV is eventually consistent and limits writes to the same key; simultaneous writes from different Worker instances can overwrite each other. Use it with that limitation in mind; stronger transactional storage requires a separate design change.
+
+`ALLOWED_ORIGIN` permits one exact cross-origin API origin when needed. Same-origin access works without it. Express supports `DATA_DIR` to override the default storage directory. Currency changes affect formatting and input precision, without converting stored amounts.
 
 ## Local Development
+
+Requires Node.js 24 or newer.
 
 - Linux
 
@@ -138,3 +149,22 @@ services:
 > Empty View
 
 ![Empty View](doc/screenshot.png)
+
+## Verification
+
+```bash
+npm ci
+npm test
+npm run build
+npm run build:worker  # local dry-run; does not deploy
+npm run build:pages   # local Pages Functions bundle
+npx playwright install chromium
+npm run test:ui
+bash -n start.sh release.sh
+shellcheck start.sh release.sh
+npm audit
+```
+
+Browser tests start a disposable demo server and use temporary data. An existing Chromium executable can be selected with `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. No JavaScript lint script is configured. CI runs Node tests and build checks; browser checks should accompany UI changes.
+
+`SPEC.md` documents architecture, API/data shapes, forecast rules, UI contracts, localization and operational limits. `REVIEW.md` records the repository review and its verification evidence.

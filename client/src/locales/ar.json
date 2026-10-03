@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "توقع رصيد الحساب لتخطيط الإيداع في صناديق سوق النقد.",
+    "github": "عرض على GitHub",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "إلغاء",
+    "add": "إضافة",
+    "save": "حفظ",
+    "today": "اليوم",
+    "selectDate": "اختر تاريخًا",
+    "auto": "تلقائي"
+  },
+  "balance": {
+    "accountBalance": "رصيد الحساب",
+    "startingBalance": "الرصيد الافتتاحي",
+    "forecastedBalance": "الرصيد المتوقع",
+    "netChange": "صافي التغير",
+    "lowestBalance": "أدنى رصيد",
+    "onDate": "في",
+    "startingBalanceRow": "الرصيد الافتتاحي"
+  },
+  "forecast": {
+    "settings": "إعدادات التوقع",
+    "currentDate": "تاريخ البدء",
+    "forecastUntil": "التوقع حتى",
+    "quick30": "30 يومًا",
+    "quick60": "60 يومًا",
+    "quick90": "90 يومًا",
+    "daysFromCurrent": "يومًا من تاريخ البدء",
+    "selectFutureDate": "اختر تاريخًا لاحقًا",
+    "clearAll": "مسح جميع المعاملات",
+    "clearNote": "سيتم الاحتفاظ بالمعاملات المتكررة"
+  },
+  "transactions": {
+    "addTransaction": "إضافة معاملة",
+    "description": "الوصف",
+    "amount": "المبلغ",
+    "type": "النوع",
+    "debitPayment": "خصم (دفع)",
+    "creditIncome": "إيداع (دخل)",
+    "date": "التاريخ",
+    "fillAllFields": "يرجى ملء جميع الحقول",
+    "listTitle": "المعاملات ({0})",
+    "noneYet": "لا توجد معاملات بعد",
+    "getStarted": "أضف أول معاملة للبدء",
+    "delete": "حذف المعاملة",
+    "descriptionPh": "مثال: دفع الإيجار",
+    "addBtn": "إضافة معاملة",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "المعاملات المتكررة",
+    "addButton": "+ إضافة",
+    "saveRecurring": "حفظ المعاملة المتكررة",
+    "noRecurring": "لا توجد معاملات متكررة",
+    "autoNote": "تُنشأ المعاملات المتكررة تلقائيًا كل شهر",
+    "payment": "دفع",
+    "income": "دخل",
+    "dayOfMonthPh": "يوم الشهر (1–31)",
+    "dayOfMonth": "اليوم {0} من الشهر",
+    "clickToEditDesc": "انقر لتعديل الوصف",
+    "clickToEditAmount": "انقر لتعديل المبلغ",
+    "deleteRecurring": "حذف المعاملة المتكررة",
+    "validationDayRange": "يجب أن يكون يوم الشهر بين 1 و31",
+    "descriptionPh": "الوصف",
+    "amountPh": "المبلغ",
+    "validationAll": "يرجى ملء جميع الحقول"
+  },
+  "cards": {
+    "title": "بطاقات الائتمان المتكررة",
+    "saveCard": "حفظ بطاقة الائتمان",
+    "noCards": "لا توجد بطاقات ائتمان",
+    "addNote": "أضف بطاقات لإدخال الدفعات بسرعة",
+    "cardNamePh": "اسم البطاقة (مثال: فيزا)",
+    "deleteCard": "حذف البطاقة",
+    "clickToEditName": "انقر لتعديل الاسم",
+    "next": "التالي:",
+    "addPayment": "إضافة دفعة",
+    "noUpcoming": "لا يوجد موعد قادم",
+    "paymentDate": "تاريخ الدفع:",
+    "enterAmount": "يرجى إدخال المبلغ",
+    "noUpcomingInRange": "لا يوجد موعد دفع ضمن فترة التوقع",
+    "dayOfMonth": "اليوم {0} من الشهر"
+  },
+  "timeline": {
+    "title": "الجدول الزمني للرصيد",
+    "action": "الإجراء",
+    "balance": "الرصيد",
+    "description": "الوصف",
+    "amount": "المبلغ",
+    "date": "التاريخ",
+    "delete": "حذف المعاملة"
+  },
+  "settings": {
+    "globalSettings": "الإعدادات العامة",
+    "darkMode": "الوضع الداكن",
+    "lightMode": "الوضع الفاتح",
+    "language": "اللغة",
+    "currency": "العملة",
+    "dateFormat": "تنسيق التاريخ"
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { formatCurrency, formatDate } from "../utils";
+import { formatCurrency, formatDate, currencyStep } from "../utils";
 import { useI18n } from "../i18n";
 
 function BalanceDisplay({
@@ -14,7 +14,8 @@ function BalanceDisplay({
   const [isEditing, setIsEditing] = useState(false);
   const [tempBalance, setTempBalance] = useState(startingBalance);
   const inputRef = useRef(null);
-  const { t } = useI18n();
+  const saving = useRef(false);
+  const { t, language } = useI18n();
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -22,10 +23,13 @@ function BalanceDisplay({
     }
   }, [isEditing]);
 
-  const handleBlur = () => {
-    if (isEditing) {
+  const handleBlur = async () => {
+    if (isEditing && !saving.current) {
       const newValue = parseFloat(tempBalance) || 0;
-      onStartingBalanceChange(newValue);
+      saving.current = true;
+      const saved = await onStartingBalanceChange(newValue);
+      saving.current = false;
+      if (!saved) return;
       setIsEditing(false);
     }
   };
@@ -60,7 +64,8 @@ function BalanceDisplay({
             <input
               ref={inputRef}
               type="number"
-              step="0.01"
+              step={currencyStep(currencySymbol)}
+              aria-label={t("balance:startingBalance")}
               value={tempBalance}
               onChange={(e) => setTempBalance(e.target.value)}
               onBlur={handleBlur}
@@ -69,13 +74,14 @@ function BalanceDisplay({
               autoFocus
             />
           ) : (
-            <div
+            <button
+              type="button"
               onClick={handleClick}
-              className="text-2xl sm:text-3xl font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded dark:text-gray-100"
+              className="btn-inline text-start text-2xl sm:text-3xl font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded dark:text-gray-100"
               title={t("recurring:clickToEditAmount")}
             >
-              {formatCurrency(startingBalance, currencySymbol)}
-            </div>
+              {formatCurrency(startingBalance, currencySymbol, language)}
+            </button>
           )}
         </div>
 
@@ -88,7 +94,7 @@ function BalanceDisplay({
                 currentBalance >= 0 ? "balance-positive" : "balance-negative"
               }
             >
-              {formatCurrency(currentBalance, currencySymbol)}
+              {formatCurrency(currentBalance, currencySymbol, language)}
             </span>
           </div>
         </div>
@@ -103,7 +109,7 @@ function BalanceDisplay({
               }
             >
               {balanceChange >= 0 ? "+" : ""}
-              {formatCurrency(balanceChange, currencySymbol)}
+              {formatCurrency(balanceChange, currencySymbol, language)}
             </span>
           </div>
         </div>
@@ -117,11 +123,12 @@ function BalanceDisplay({
                 lowestBalance >= 0 ? "balance-positive" : "balance-negative"
               }
             >
-              {formatCurrency(lowestBalance, currencySymbol)}
+              {formatCurrency(lowestBalance, currencySymbol, language)}
             </span>
           </div>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            {t("balance:onDate")} {formatDate(lowestBalanceDate, dateFormat)}
+            {t("balance:onDate")}{" "}
+            {formatDate(lowestBalanceDate, dateFormat, language)}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import DatePicker from "./DatePicker";
 import { useI18n } from "../i18n";
+import { addDays } from "../../../shared/dates.js";
 
 function ForecastSettings({
   currentDate,
@@ -8,6 +9,7 @@ function ForecastSettings({
   onCurrentDateChange,
   onForecastEndDateChange,
   onClearCalculations,
+  dateFormat,
 }) {
   const { t } = useI18n();
   // Calculate days between dates
@@ -17,9 +19,7 @@ function ForecastSettings({
 
   // Handle quick date selection
   const handleQuickSelect = (days) => {
-    const newEndDate = new Date(currentDate);
-    newEndDate.setDate(newEndDate.getDate() + days);
-    onForecastEndDateChange(newEndDate.toISOString().split("T")[0]);
+    onForecastEndDateChange(addDays(currentDate, days));
   };
 
   return (
@@ -32,6 +32,8 @@ function ForecastSettings({
         <div>
           <label className="label">{t("forecast:currentDate")}</label>
           <DatePicker
+            label={t("forecast:currentDate")}
+            dateFormat={dateFormat}
             value={currentDate}
             onChange={onCurrentDateChange}
             className="w-full"
@@ -41,6 +43,8 @@ function ForecastSettings({
         <div>
           <label className="label">{t("forecast:forecastUntil")}</label>
           <DatePicker
+            label={t("forecast:forecastUntil")}
+            dateFormat={dateFormat}
             value={forecastEndDate}
             onChange={onForecastEndDateChange}
             min={currentDate}

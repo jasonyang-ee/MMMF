@@ -1,17 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
-import { formatCurrency } from "../utils";
+import { formatCurrency, currencyStep } from "../utils";
 import { useI18n } from "../i18n";
 import TypeToggle from "./TypeToggle";
 import DeleteButton from "./DeleteButton";
 
 function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [isEditingAmount, setIsEditingAmount] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editAmount, setEditAmount] = useState(item.amount);
   const [editName, setEditName] = useState(item.name);
   const amountInputRef = useRef(null);
   const nameInputRef = useRef(null);
+  const saving = useRef(false);
 
   useEffect(() => {
     if (isEditingAmount && amountInputRef.current) {
@@ -35,21 +36,27 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
     setIsEditingName(true);
   };
 
-  const handleAmountBlur = () => {
-    if (isEditingAmount) {
+  const handleAmountBlur = async () => {
+    if (isEditingAmount && !saving.current) {
       const newAmount = parseFloat(editAmount);
       if (newAmount && newAmount > 0 && newAmount !== item.amount) {
-        onUpdate(item.id, { ...item, amount: newAmount });
+        saving.current = true;
+        const saved = await onUpdate(item.id, { amount: newAmount });
+        saving.current = false;
+        if (!saved) return;
       }
       setIsEditingAmount(false);
     }
   };
 
-  const handleNameBlur = () => {
-    if (isEditingName) {
+  const handleNameBlur = async () => {
+    if (isEditingName && !saving.current) {
       const trimmedName = editName.trim();
       if (trimmedName && trimmedName !== item.name) {
-        onUpdate(item.id, { ...item, name: trimmedName });
+        saving.current = true;
+        const saved = await onUpdate(item.id, { name: trimmedName });
+        saving.current = false;
+        if (!saved) return;
       }
       setIsEditingName(false);
     }
@@ -80,6 +87,7 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
           <input
             ref={nameInputRef}
             type="text"
+            aria-label={t("recurring:descriptionPh")}
             value={editName}
             onChange={(e) => setEditName(e.target.value)}
             onBlur={handleNameBlur}
@@ -88,13 +96,14 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
             autoFocus
           />
         ) : (
-          <div
+          <button
+            type="button"
             onClick={handleNameClick}
-            className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-0.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
+            className="btn-inline text-start font-medium text-sm text-gray-900 dark:text-gray-100 mb-0.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
             title={t("recurring:clickToEditDesc")}
           >
             {item.name}
-          </div>
+          </button>
         )}
         {item.dayOfMonth && (
           <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -118,8 +127,9 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
             <input
               ref={amountInputRef}
               type="number"
-              step="0.01"
-              min="0"
+              step={currencyStep(currencySymbol)}
+              min={currencyStep(currencySymbol)}
+              aria-label={t("recurring:amountPh")}
               value={editAmount}
               onChange={(e) => setEditAmount(e.target.value)}
               onBlur={handleAmountBlur}
@@ -129,9 +139,10 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
             />
           </div>
         ) : (
-          <span
+          <button
+            type="button"
             onClick={handleAmountClick}
-            className={`text-sm font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1.5 py-0.5 rounded ${
+            className={`btn-inline text-start text-sm font-semibold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1.5 py-0.5 rounded ${
               item.type === "credit"
                 ? "text-green-600 dark:text-green-400"
                 : "text-red-600 dark:text-red-400"
@@ -139,8 +150,8 @@ function RecurringItem({ item, onDelete, onUpdate, currencySymbol = "USD" }) {
             title={t("recurring:clickToEditAmount")}
           >
             {item.type === "credit" ? "+" : "-"}
-            {formatCurrency(item.amount, currencySymbol)}
-          </span>
+            {formatCurrency(item.amount, currencySymbol, language)}
+          </button>
         )}
 
         <DeleteButton
@@ -176,7 +187,7 @@ function RecurringList({
     }
   }, [showForm]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.name || !formData.amount || !formData.dayOfMonth) {
@@ -190,13 +201,14 @@ function RecurringList({
       return;
     }
 
-    onAddRecurring({
+    const saved = await onAddRecurring({
       name: formData.name,
       amount: parseFloat(formData.amount),
       type: formData.type,
       dayOfMonth: dayOfMonth,
     });
 
+    if (!saved) return;
     setFormData({ name: "", amount: "", type: "debit", dayOfMonth: "" });
     setShowForm(false);
   };
@@ -207,10 +219,7 @@ function RecurringList({
         <h2 className="text-lg sm:text-xl font-semibold dark:text-gray-100">
           {t("recurring:title")}
         </h2>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="btn-link"
-        >
+        <button onClick={() => setShowForm(!showForm)} className="btn-link">
           {showForm ? t("common:cancel") : t("recurring:addButton")}
         </button>
       </div>
@@ -224,6 +233,7 @@ function RecurringList({
             ref={nameInputRef}
             type="text"
             placeholder={t("recurring:descriptionPh")}
+            aria-label={t("recurring:descriptionPh")}
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className="input text-sm"
@@ -233,12 +243,13 @@ function RecurringList({
           <input
             type="number"
             placeholder={t("recurring:amountPh")}
+            aria-label={t("recurring:amountPh")}
             value={formData.amount}
             onChange={(e) =>
               setFormData({ ...formData, amount: e.target.value })
             }
-            step="0.01"
-            min="0"
+            step={currencyStep(currencySymbol)}
+            min={currencyStep(currencySymbol)}
             className="input text-sm"
             required
           />
@@ -246,6 +257,7 @@ function RecurringList({
           <input
             type="number"
             placeholder={t("recurring:dayOfMonthPh")}
+            aria-label={t("recurring:dayOfMonthPh")}
             value={formData.dayOfMonth}
             onChange={(e) =>
               setFormData({ ...formData, dayOfMonth: e.target.value })

@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "Para piyasası fonlarına yatırımları planlamak için hesap bakiyesini tahmin edin.",
+    "github": "GitHub üzerinde görüntüle",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "İptal",
+    "add": "Ekle",
+    "save": "Kaydet",
+    "today": "Bugün",
+    "selectDate": "Tarih seçin",
+    "auto": "Otomatik"
+  },
+  "balance": {
+    "accountBalance": "Hesap bakiyesi",
+    "startingBalance": "Başlangıç bakiyesi",
+    "forecastedBalance": "Tahmini bakiye",
+    "netChange": "Net değişim",
+    "lowestBalance": "En düşük bakiye",
+    "onDate": "tarihinde",
+    "startingBalanceRow": "Başlangıç bakiyesi"
+  },
+  "forecast": {
+    "settings": "Tahmin ayarları",
+    "currentDate": "Başlangıç tarihi",
+    "forecastUntil": "Şu tarihe kadar tahmin",
+    "quick30": "30 gün",
+    "quick60": "60 gün",
+    "quick90": "90 gün",
+    "daysFromCurrent": "başlangıç tarihinden itibaren gün",
+    "selectFutureDate": "Gelecekteki bir tarih seçin",
+    "clearAll": "Tüm işlemleri temizle",
+    "clearNote": "Tekrarlanan işlemler korunacaktır"
+  },
+  "transactions": {
+    "addTransaction": "İşlem ekle",
+    "description": "Açıklama",
+    "amount": "Tutar",
+    "type": "Tür",
+    "debitPayment": "Borç (Ödeme)",
+    "creditIncome": "Alacak (Gelir)",
+    "date": "Tarih",
+    "fillAllFields": "Lütfen tüm alanları doldurun",
+    "listTitle": "İşlemler ({0})",
+    "noneYet": "Henüz işlem yok",
+    "getStarted": "Başlamak için ilk işleminizi ekleyin",
+    "delete": "İşlemi sil",
+    "descriptionPh": "Örn. kira ödemesi",
+    "addBtn": "İşlem ekle",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "Tekrarlanan işlemler",
+    "addButton": "+ Ekle",
+    "saveRecurring": "Tekrarlanan işlemi kaydet",
+    "noRecurring": "Tekrarlanan işlem yok",
+    "autoNote": "Tekrarlanan işlemler her ay otomatik oluşturulur",
+    "payment": "Ödeme",
+    "income": "Gelir",
+    "dayOfMonthPh": "Ayın günü (1–31)",
+    "dayOfMonth": "Her ayın {0}. günü",
+    "clickToEditDesc": "Açıklamayı düzenlemek için tıklayın",
+    "clickToEditAmount": "Tutarı düzenlemek için tıklayın",
+    "deleteRecurring": "Tekrarlanan işlemi sil",
+    "validationDayRange": "Ayın günü 1 ile 31 arasında olmalıdır",
+    "descriptionPh": "Açıklama",
+    "amountPh": "Tutar",
+    "validationAll": "Lütfen tüm alanları doldurun"
+  },
+  "cards": {
+    "title": "Tekrarlanan kredi kartları",
+    "saveCard": "Kredi kartını kaydet",
+    "noCards": "Kredi kartı yok",
+    "addNote": "Ödemeleri hızla girmek için kart ekleyin",
+    "cardNamePh": "Kart adı (örn. Visa)",
+    "deleteCard": "Kartı sil",
+    "clickToEditName": "Adı düzenlemek için tıklayın",
+    "next": "Sonraki:",
+    "addPayment": "Ödeme ekle",
+    "noUpcoming": "Yaklaşan tarih yok",
+    "paymentDate": "Ödeme tarihi:",
+    "enterAmount": "Lütfen tutar girin",
+    "noUpcomingInRange": "Tahmin aralığında ödeme tarihi yok",
+    "dayOfMonth": "Her ayın {0}. günü"
+  },
+  "timeline": {
+    "title": "Bakiye zaman çizelgesi",
+    "action": "İşlem",
+    "balance": "Bakiye",
+    "description": "Açıklama",
+    "amount": "Tutar",
+    "date": "Tarih",
+    "delete": "İşlemi sil"
+  },
+  "settings": {
+    "globalSettings": "Genel ayarlar",
+    "darkMode": "Koyu mod",
+    "lightMode": "Açık mod",
+    "language": "Dil",
+    "currency": "Para birimi",
+    "dateFormat": "Tarih biçimi"
+  }
+}

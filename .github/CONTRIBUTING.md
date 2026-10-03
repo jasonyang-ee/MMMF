@@ -35,7 +35,7 @@ Please be respectful and considerate in all interactions. We welcome contributio
 
 ### Prerequisites
 
-- Node.js 20+ (24 recommended)
+- Node.js 24+
 - npm 10+
 - Git
 - Docker (optional, for containerized development)
@@ -45,7 +45,7 @@ Please be respectful and considerate in all interactions. We welcome contributio
 1. **Install dependencies**:
 
    ```bash
-   npm install
+   npm ci
    ```
 
 2. **Start development servers**:
@@ -72,31 +72,22 @@ Access at http://localhost:5173
 
 ```
 MMMF/
-├── client/                 # React frontend
-│   ├── components/         # React components
-│   ├── api.js             # API client
-│   ├── App.jsx            # Main app component
-│   ├── i18n.js            # Internationalization
-│   ├── index.css          # Global styles
-│   ├── main.jsx           # Entry point
-│   └── utils.js           # Utility functions
-├── server/                 # Express.js backend
-│   ├── index.js           # Server entry point
-│   ├── hono-app.js        # Hono app for Cloudflare
-│   └── demo-session.js    # Demo mode utilities
-├── data/                   # Local data storage (gitignored)
-├── public/                 # Static assets
-├── cloudflare/             # Cloudflare-specific files
-│   ├── worker.js          # Cloudflare Worker entry
-│   └── wrangler.jsonc     # Wrangler configuration
-├── .github/                # GitHub Actions and templates
-│   ├── workflows/         # CI/CD workflows
-│   └── CONTRIBUTING.md    # This file
-├── docker-compose.yml      # Docker Compose config
-├── Dockerfile             # Docker build config
-├── package.json           # Dependencies
-├── vite.config.js         # Vite configuration
-└── tailwind.config.js     # Tailwind CSS config
+├── client/src/              # React state, components, translations, utilities
+├── client/public/           # Static branding assets
+├── client/                  # HTML entry, Vite/PostCSS config and build output
+├── shared/                  # Calendar dates and active language/currency registry
+├── server/                  # Express/Hono adapters, shared validation, file storage
+├── functions/api/           # Cloudflare Pages API entry
+├── cloudflare/worker.js     # Cloudflare Workers entry
+├── tests/                   # Node and Playwright regression suites
+├── data/                    # Local JSON storage (gitignored)
+├── .github/                 # CI/CD, contribution and security guidance
+├── wrangler.jsonc           # Workers assets/KV configuration
+├── wrangler.pages.jsonc     # Pages output/KV configuration
+├── Dockerfile               # Production image
+├── docker-compose.yml       # Local container configuration
+├── package.json             # Dependencies and checks
+└── SPEC.md                  # Durable architecture and behavior contracts
 ```
 
 ## Making Changes
@@ -194,7 +185,28 @@ npm test
 
 # Run tests in watch mode
 npm run test:watch
+
+# Browser interactions (install Chromium once)
+npx playwright install chromium
+npm run test:ui
+
+# Build and deployment validation without publishing
+npm run build
+npm run build:worker
+npm run build:pages
+
+# Script checks
+bash -n start.sh release.sh
+shellcheck start.sh release.sh
 ```
+
+No JavaScript lint script is configured. Node tests use temporary storage; browser tests start their own demo server. Do not test mutations against real finance data.
+
+### Adding a language or currency
+
+`shared/preferences.js` is the active-language registry for both servers and the UI. Add a stable language ID, English/native names, BCP 47 locale and text direction. Supply every key in the English catalog, including common status/error and calendar text. Run catalog tests and browser checks for long labels, mobile widths, RTL where applicable, keyboard selection and formatting. New catalogs benefit from a native-language editorial review.
+
+Currency options come from the runtime Intl catalog; do not grow a hand-maintained symbol dropdown. Always retain ISO-style currency codes to distinguish shared symbols. Currency is a display preference, not an exchange-rate conversion.
 
 ### Manual Testing
 

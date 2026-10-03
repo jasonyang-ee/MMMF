@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Searchable language and currency selectors with native/English names, currency codes and symbols, bounded scrolling, keyboard selection, and no-results feedback
+- Complete and activate all 20 existing language entries, including Arabic RTL, localized calendars/amounts, status messages and currency-specific amount precision
+- Node API/forecast/localization regressions and Playwright checks for selection, save failures, calendars, themes and multilingual mobile layouts
+- Expanded `SPEC.md` covering architecture, data contracts, UI behavior, localization extension rules, verification and storage limits; whole-repository coverage in `REVIEW.md`
+
+### Fixed
+
+- Express API rate limiting and demo-session isolation now apply to every API request; Hono adds per-isolate throttling, bounded request bodies, validated cookies and automatic demo-key expiry
+- Shared API validation protects dates, amounts, settings and immutable IDs/timestamps; partial settings updates preserve other fields, invalid saved languages fall back to English, storage corruption returns visible errors, and local file updates use serialized atomic replacement
+- Forecasts use calendar dates across timezones, exclude transactions outside the range, and only suppress recurring entries with matching type; card scheduling includes the start day and unpaid gaps, with stable links for new card payments
+- Load/save failures are visible, drafts survive failed submissions, and duplicate pending submissions are blocked; initial demo loading establishes one cookie before parallel reads
+- Calendar and inline editors support keyboards; controls have accessible names, focus indicators and consistent touch targets; calendar save errors appear inside the dialog, and the theme switch stays inside its track in RTL layouts
+- Cloudflare Workers use the configured asset binding and SPA fallback; Pages discovers the API entry from the root functions directory; Docker includes shared modules
+- Development startup uses the Node 24 floor and reliably cleans up child processes while preserving failure status; the Vite proxy preserves same-origin saves, and deployment/contribution documentation and CI checks match actual paths and scripts
+- Compatible dependency updates resolve the audit findings; removed unused drag-and-drop, date-picker/date utility and legacy asset-handler dependencies, plus obsolete Tailwind configuration and unused native date-input styles
+
 ## [1.1.5] - 2026-07-19
 
 ### Changed

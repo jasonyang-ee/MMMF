@@ -1,239 +1,235 @@
-import { useState, useRef, useEffect } from "react";
-import { format, parse, isValid } from "date-fns";
+import { useId, useRef, useState } from "react";
 import { useI18n } from "../i18n";
+import { formatDate, getTodayDate } from "../utils";
+import { addDays, localDate, parseDate } from "../../../shared/dates.js";
+import { getLanguage } from "../../../shared/preferences.js";
 
-export default function DatePicker({ value, onChange, min, className = "" }) {
-  const { t } = useI18n();
-  const [isOpen, setIsOpen] = useState(false);
-  const [displayValue, setDisplayValue] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (value) {
-      const date = parse(value, "yyyy-MM-dd", new Date());
-      if (isValid(date)) {
-        setSelectedDate(date);
-        setDisplayValue(format(date, "MMM dd, yyyy"));
-        setCurrentMonth(date);
-      }
-    }
-  }, [value]);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target)
-      ) {
-        setIsOpen(false);
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-
-  const getDaysInMonth = (date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
-
-    const days = [];
-
-    // Add empty cells for days before the first day of the month
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null);
-    }
-
-    // Add all days in the month
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push(new Date(year, month, day));
-    }
-
-    return days;
-  };
-
-  const handleDateClick = (date) => {
-    if (date) {
-      const minDate = min ? parse(min, "yyyy-MM-dd", new Date()) : null;
-      if (minDate && date < minDate) {
-        return; // Don't allow dates before min
-      }
-
-      setSelectedDate(date);
-      setDisplayValue(format(date, "MMM dd, yyyy"));
-      onChange(format(date, "yyyy-MM-dd"));
-      setIsOpen(false);
-    }
-  };
-
-  const previousMonth = () => {
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1),
+export default function DatePicker({
+  value,
+  onChange,
+  min,
+  className = "",
+  label,
+  dateFormat,
+}) {
+  const { t, language } = useI18n();
+  const id = useId();
+  const dialog = useRef(null);
+  const trigger = useRef(null);
+  const [month, setMonth] = useState(() => parseDate(value) || new Date());
+  const [focused, setFocused] = useState(value);
+  const [saveError, setSaveError] = useState(false);
+  const valid = (date) => !min || date >= min;
+  const locale = getLanguage(language).locale;
+  const monthStart = new Date(month);
+  monthStart.setDate(1);
+  const lastDay = new Date(month);
+  lastDay.setMonth(lastDay.getMonth() + 1, 0);
+  const cells = [
+    ...Array(monthStart.getDay()).fill(null),
+    ...Array.from({ length: lastDay.getDate() }, (_, day) => {
+      const date = new Date(monthStart);
+      date.setDate(day + 1);
+      return localDate(date);
+    }),
+  ];
+  while (cells.length % 7) cells.push(null);
+  const weekdays = Array.from({ length: 7 }, (_, day) =>
+    new Intl.DateTimeFormat(locale, { weekday: "short" }).format(
+      new Date(2023, 0, 1 + day),
+    ),
+  );
+  function focusDate(date) {
+    if (!valid(date)) date = min;
+    const parsed = parseDate(date);
+    if (!parsed) return;
+    setFocused(date);
+    setMonth(parsed);
+    requestAnimationFrame(() =>
+      document.getElementById(`${id}-${date}`)?.focus(),
     );
-  };
-
-  const nextMonth = () => {
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1),
-    );
-  };
-
-  const isDateDisabled = (date) => {
-    if (!date) return true;
-    if (!min) return false;
-    const minDate = parse(min, "yyyy-MM-dd", new Date());
-    return date < minDate;
-  };
-
-  const isDateSelected = (date) => {
-    if (!date || !selectedDate) return false;
-    return (
-      date.getDate() === selectedDate.getDate() &&
-      date.getMonth() === selectedDate.getMonth() &&
-      date.getFullYear() === selectedDate.getFullYear()
-    );
-  };
-
-  const isToday = (date) => {
-    if (!date) return false;
-    const today = new Date();
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
-  };
-
-  const days = getDaysInMonth(currentMonth);
-  const weekDaysTranslation = t("datepicker:weekdaysShort");
-  const weekDays = Array.isArray(weekDaysTranslation)
-    ? weekDaysTranslation
-    : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
+  }
+  function open() {
+    setSaveError(false);
+    const date =
+      valid(value) && parseDate(value) ? value : min || getTodayDate();
+    focusDate(date);
+    dialog.current.showModal();
+  }
+  function shiftMonth(delta) {
+    const next = new Date(monthStart);
+    next.setMonth(next.getMonth() + delta);
+    focusDate(localDate(next));
+  }
+  async function choose(date) {
+    if (!valid(date)) return;
+    setSaveError(false);
+    if ((await onChange(date)) !== false) dialog.current.close();
+    else {
+      setSaveError(true);
+      focusDate(date);
+    }
+  }
   return (
-    <div ref={containerRef} className="relative w-full">
-      <input
-        type="text"
-        value={displayValue}
-        readOnly
-        onClick={() => setIsOpen(!isOpen)}
-        className={`input cursor-pointer ${className}`}
-        placeholder={t("common:selectDate")}
-      />
-
-      {isOpen && (
-        <div className="absolute z-50 mt-2 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg shadow-2xl border border-gray-300 dark:border-[#444444] p-3 sm:p-4 w-[calc(100vw-2rem)] sm:w-80 max-w-80 left-0 right-auto">
-          {/* Month/Year Header */}
-          <div className="flex items-center justify-between mb-4">
+    <div className="w-full">
+      <button
+        type="button"
+        ref={trigger}
+        onClick={open}
+        className={`input min-h-11 text-start ${className}`}
+        aria-label={`${label || t("common:selectDate")}: ${formatDate(value, dateFormat, language) || ""}`}
+        aria-haspopup="dialog"
+      >
+        {value
+          ? formatDate(value, dateFormat, language)
+          : t("common:selectDate")}
+      </button>
+      <dialog
+        ref={dialog}
+        onClose={() => requestAnimationFrame(() => trigger.current?.focus())}
+        className="calendar-dialog m-auto w-[calc(100vw-8px)] max-w-sm rounded-lg border border-gray-300 bg-gray-50 text-gray-900 dark:bg-[#2a2a2a] dark:text-gray-100 dark:border-[#444444] p-0 shadow-2xl"
+        aria-labelledby={`${id}-title`}
+        onClick={(event) => {
+          if (event.target === dialog.current) dialog.current.close();
+        }}
+      >
+        <div>
+          <div className="flex items-center justify-between p-2">
             <button
               type="button"
-              onClick={previousMonth}
-              className="min-h-11 min-w-11 inline-flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="btn min-w-11"
+              aria-label={t("datepicker:previousMonth")}
+              onClick={() => shiftMonth(-1)}
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              ‹
             </button>
-
-            <div className="text-lg font-semibold">
-              {format(currentMonth, "MMMM yyyy")}
-            </div>
-
+            <h3 id={`${id}-title`} aria-live="polite" className="font-semibold">
+              {new Intl.DateTimeFormat(locale, {
+                year: "numeric",
+                month: "long",
+                calendar: "gregory",
+              }).format(month)}
+            </h3>
             <button
               type="button"
-              onClick={nextMonth}
-              className="min-h-11 min-w-11 inline-flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="btn min-w-11"
+              aria-label={t("datepicker:nextMonth")}
+              onClick={() => shiftMonth(1)}
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              ›
             </button>
           </div>
-
-          {/* Week Days Header */}
-          <div className="grid grid-cols-7 gap-1 mb-2">
-            {weekDays.map((day) => (
-              <div
-                key={day}
-                className="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2"
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-1">
-            {days.map((date, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => handleDateClick(date)}
-                disabled={isDateDisabled(date)}
-                className={`
-                  h-11 flex items-center justify-center rounded-lg text-sm font-medium
-                  transition-colors duration-150
-                  ${
-                    !date
-                      ? "invisible"
-                      : isDateSelected(date)
-                        ? "bg-blue-600 text-white dark:bg-blue-500"
-                        : isToday(date)
-                          ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                          : isDateDisabled(date)
-                            ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-                            : "hover:bg-gray-200 dark:hover:bg-[#333333] text-gray-700 dark:text-gray-300"
-                  }
-                `}
-              >
-                {date && date.getDate()}
-              </button>
-            ))}
-          </div>
-
-          {/* Today Button */}
-          <div className="mt-4 pt-3 border-t border-gray-300 dark:border-[#444444]">
+          <table
+            role="grid"
+            className="w-full table-fixed"
+            aria-label={label || t("common:selectDate")}
+          >
+            <thead>
+              <tr>
+                {weekdays.map((day, index) => (
+                  <th key={index} className="text-xs py-2 font-normal">
+                    {day}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: cells.length / 7 }, (_, row) => (
+                <tr key={row}>
+                  {cells.slice(row * 7, row * 7 + 7).map((date, col) => (
+                    <td
+                      key={col}
+                      className="p-0"
+                      aria-selected={Boolean(date && date === value)}
+                    >
+                      {date && (
+                        <button
+                          id={`${id}-${date}`}
+                          type="button"
+                          disabled={!valid(date)}
+                          tabIndex={date === focused ? 0 : -1}
+                          aria-label={formatDate(
+                            date,
+                            "MMM dd, yyyy",
+                            language,
+                          )}
+                          aria-current={
+                            date === getTodayDate() ? "date" : undefined
+                          }
+                          className={`min-h-11 min-w-11 w-full rounded-lg disabled:opacity-30 ${date === value ? "bg-primary-600 text-white" : "hover:bg-gray-200 dark:hover:bg-[#444444]"}`}
+                          onFocus={() => setFocused(date)}
+                          onClick={() => choose(date)}
+                          onKeyDown={(event) => {
+                            const direction =
+                              getLanguage(language).dir === "rtl" ? -1 : 1;
+                            const delta = {
+                              ArrowLeft: -direction,
+                              ArrowRight: direction,
+                              ArrowUp: -7,
+                              ArrowDown: 7,
+                            }[event.key];
+                            if (delta) {
+                              event.preventDefault();
+                              focusDate(addDays(date, delta));
+                            } else if (
+                              event.key === "PageUp" ||
+                              event.key === "PageDown"
+                            ) {
+                              event.preventDefault();
+                              shiftMonth(event.key === "PageUp" ? -1 : 1);
+                            } else if (
+                              event.key === "Home" ||
+                              event.key === "End"
+                            ) {
+                              event.preventDefault();
+                              const day = parseDate(date).getDay();
+                              focusDate(
+                                addDays(
+                                  date,
+                                  event.key === "Home" ? -day : 6 - day,
+                                ),
+                              );
+                            }
+                          }}
+                        >
+                          {new Intl.NumberFormat(locale).format(
+                            parseDate(date).getDate(),
+                          )}
+                        </button>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {saveError && (
+            <p
+              role="alert"
+              className="px-3 py-2 text-sm text-red-700 dark:text-red-300"
+            >
+              {t("common:saveError")}
+            </p>
+          )}
+          <div className="flex gap-2 p-2 border-t border-gray-300 dark:border-[#444444]">
             <button
               type="button"
-              onClick={() => handleDateClick(new Date())}
-              className="w-full min-h-11 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-gray-200 dark:hover:bg-[#333333] rounded-lg transition-colors"
+              className="btn btn-secondary flex-1"
+              disabled={!valid(getTodayDate())}
+              onClick={() => choose(getTodayDate())}
             >
               {t("common:today")}
             </button>
+            <button
+              type="button"
+              className="btn btn-secondary flex-1"
+              onClick={() => dialog.current.close()}
+            >
+              {t("common:cancel")}
+            </button>
           </div>
         </div>
-      )}
+      </dialog>
     </div>
   );
 }

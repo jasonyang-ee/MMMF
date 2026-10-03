@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { formatDate } from "../utils";
+import { formatDate, nextCardDate, currencyStep } from "../utils";
 import { useI18n } from "../i18n";
 import DeleteButton from "./DeleteButton";
 
@@ -12,14 +12,16 @@ function CreditCardItem({
   forecastEndDate,
   transactions = [],
   dateFormat = "MMM dd, yyyy",
+  currencySymbol = "USD",
 }) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const safeTransactions = Array.isArray(transactions) ? transactions : [];
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [amount, setAmount] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState(item.name);
   const nameInputRef = useRef(null);
+  const saving = useRef(false);
   const amountInputRef = useRef(null);
 
   useEffect(() => {
@@ -39,11 +41,14 @@ function CreditCardItem({
     setIsEditingName(true);
   };
 
-  const handleNameBlur = () => {
-    if (isEditingName) {
+  const handleNameBlur = async () => {
+    if (isEditingName && !saving.current) {
       const trimmedName = editName.trim();
       if (trimmedName && trimmedName !== item.name) {
-        onUpdate(item.id, { ...item, name: trimmedName });
+        saving.current = true;
+        const saved = await onUpdate(item.id, { name: trimmedName });
+        saving.current = false;
+        if (!saved) return;
       }
       setIsEditingName(false);
     }
@@ -58,110 +63,30 @@ function CreditCardItem({
     }
   };
 
-  // Calculate the next occurrence date based on dayOfMonth and existing transactions
-  const getNextOccurrenceDate = () => {
-    if (!item.dayOfMonth) return "";
+  const getNextOccurrenceDate = () =>
+    nextCardDate(item, safeTransactions, currentDate, forecastEndDate);
 
-    // Parse dates in local timezone to avoid off-by-one errors
-    const parseLocalDate = (dateString) => {
-      const [year, month, day] = dateString.split("-").map(Number);
-      return new Date(year, month - 1, day);
-    };
-
-    const today = parseLocalDate(currentDate);
-    const endDate = parseLocalDate(forecastEndDate);
-
-    // Find all existing transactions for this credit card
-    const existingDates = safeTransactions
-      .filter((t) => t.name === item.name)
-      .map((t) => parseLocalDate(t.date))
-      .sort((a, b) => b - a); // Sort descending to get most recent first
-
-    // Start from current month
-    let currentYear = today.getFullYear();
-    let currentMonth = today.getMonth();
-
-    // If there are existing transactions, start from the month after the latest one
-    if (existingDates.length > 0) {
-      const latestTransaction = existingDates[0];
-      currentYear = latestTransaction.getFullYear();
-      currentMonth = latestTransaction.getMonth() + 1; // Next month after latest transaction
-
-      // Handle year rollover
-      if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-      }
-    }
-
-    // Find the next valid date starting from the determined month
-    let targetDate = null;
-    const maxIterations = 12; // Check up to 12 months ahead
-
-    for (let i = 0; i < maxIterations; i++) {
-      const testMonth = currentMonth + i;
-      const testYear = currentYear + Math.floor(testMonth / 12);
-      const normalizedMonth = testMonth % 12;
-
-      // Get the last day of the target month
-      const lastDayOfMonth = new Date(
-        testYear,
-        normalizedMonth + 1,
-        0,
-      ).getDate();
-
-      // Use the specified day or the last day of the month, whichever is smaller
-      const dayToUse = Math.min(item.dayOfMonth, lastDayOfMonth);
-
-      const testDate = new Date(testYear, normalizedMonth, dayToUse);
-
-      // Check if this date is valid (after today and not already used)
-      const isAfterToday = testDate > today;
-      const isNotUsed = !existingDates.some((existing) => {
-        return (
-          existing.getFullYear() === testDate.getFullYear() &&
-          existing.getMonth() === testDate.getMonth() &&
-          existing.getDate() === testDate.getDate()
-        );
-      });
-      const isWithinForecast = testDate <= endDate;
-
-      if (isAfterToday && isNotUsed && isWithinForecast) {
-        targetDate = testDate;
-        break;
-      }
-    }
-
-    if (!targetDate) {
-      return ""; // No upcoming date within forecast range
-    }
-
-    // Format as YYYY-MM-DD
-    const year = targetDate.getFullYear();
-    const month = String(targetDate.getMonth() + 1).padStart(2, "0");
-    const day = String(targetDate.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const nextDate = getNextOccurrenceDate();
 
     if (!amount) {
-      alert("Please enter amount");
+      alert(t("cards:enterAmount"));
       return;
     }
 
     if (!nextDate) {
-      alert("No upcoming payment date within forecast range");
+      alert(t("cards:noUpcomingInRange"));
       return;
     }
 
-    onUse({
+    const saved = await onUse({
+      creditCardId: item.id,
       name: item.name,
       amount: parseFloat(amount),
       date: nextDate,
     });
+    if (!saved) return;
     setAmount("");
     setShowAmountForm(false);
   };
@@ -176,6 +101,7 @@ function CreditCardItem({
             <input
               ref={nameInputRef}
               type="text"
+              aria-label={t("recurring:descriptionPh")}
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
               onBlur={handleNameBlur}
@@ -184,13 +110,14 @@ function CreditCardItem({
               autoFocus
             />
           ) : (
-            <div
+            <button
+              type="button"
               onClick={handleNameClick}
-              className="font-medium text-sm text-gray-900 dark:text-gray-100 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
+              className="btn-inline text-start font-medium text-sm text-gray-900 dark:text-gray-100 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#3a3a3a] px-1 py-0.5 rounded -ml-1"
               title={t("cards:clickToEditName")}
             >
               {item.name}
-            </div>
+            </button>
           )}
           {item.dayOfMonth && (
             <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -209,7 +136,7 @@ function CreditCardItem({
         <div>
           {nextDate && (
             <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-              {t("cards:next")} {formatDate(nextDate, dateFormat)}
+              {t("cards:next")} {formatDate(nextDate, dateFormat, language)}
             </p>
           )}
           <button
@@ -224,16 +151,19 @@ function CreditCardItem({
         <form onSubmit={handleSubmit} className="space-y-1.5">
           <div className="text-xs text-gray-600 dark:text-gray-400">
             {t("cards:paymentDate")}{" "}
-            {nextDate ? formatDate(nextDate, dateFormat) : "N/A"}
+            {nextDate
+              ? formatDate(nextDate, dateFormat, language)
+              : t("cards:noUpcoming")}
           </div>
           <input
             ref={amountInputRef}
             type="number"
             placeholder={t("recurring:amountPh")}
+            aria-label={t("recurring:amountPh")}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            step="0.01"
-            min="0"
+            step={currencyStep(currencySymbol)}
+            min={currencyStep(currencySymbol)}
             className="input text-sm py-1"
             required
           />
@@ -271,6 +201,7 @@ function RecurringCreditCards({
   forecastEndDate,
   transactions = [],
   dateFormat = "MMM dd, yyyy",
+  currencySymbol = "USD",
 }) {
   const { t } = useI18n();
   const safeCreditCards = Array.isArray(creditCards) ? creditCards : [];
@@ -288,7 +219,7 @@ function RecurringCreditCards({
     }
   }, [showForm]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.dayOfMonth) {
       alert(t("recurring:validationAll"));
@@ -301,10 +232,11 @@ function RecurringCreditCards({
       return;
     }
 
-    onAddCreditCard({
+    const saved = await onAddCreditCard({
       name: formData.name,
       dayOfMonth: dayOfMonth,
     });
+    if (!saved) return;
     setFormData({ name: "", dayOfMonth: "" });
     setShowForm(false);
   };
@@ -329,6 +261,7 @@ function RecurringCreditCards({
             ref={nameInputRef}
             type="text"
             placeholder={t("cards:cardNamePh")}
+            aria-label={t("cards:cardNamePh")}
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className="input text-sm"
@@ -337,6 +270,7 @@ function RecurringCreditCards({
           <input
             type="number"
             placeholder={t("recurring:dayOfMonthPh")}
+            aria-label={t("recurring:dayOfMonthPh")}
             value={formData.dayOfMonth}
             onChange={(e) =>
               setFormData({ ...formData, dayOfMonth: e.target.value })
@@ -370,6 +304,7 @@ function RecurringCreditCards({
               forecastEndDate={forecastEndDate}
               transactions={safeTransactions}
               dateFormat={dateFormat}
+              currencySymbol={currencySymbol}
             />
           ))
         )}

@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "Perkirakan saldo rekening untuk merencanakan setoran reksa dana pasar uang.",
+    "github": "Lihat di GitHub",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "Batal",
+    "add": "Tambah",
+    "save": "Simpan",
+    "today": "Hari ini",
+    "selectDate": "Pilih tanggal",
+    "auto": "Otomatis"
+  },
+  "balance": {
+    "accountBalance": "Saldo rekening",
+    "startingBalance": "Saldo awal",
+    "forecastedBalance": "Perkiraan saldo",
+    "netChange": "Perubahan bersih",
+    "lowestBalance": "Saldo terendah",
+    "onDate": "pada",
+    "startingBalanceRow": "Saldo awal"
+  },
+  "forecast": {
+    "settings": "Pengaturan perkiraan",
+    "currentDate": "Tanggal mulai",
+    "forecastUntil": "Perkirakan hingga",
+    "quick30": "30 hari",
+    "quick60": "60 hari",
+    "quick90": "90 hari",
+    "daysFromCurrent": "hari dari tanggal mulai",
+    "selectFutureDate": "Pilih tanggal mendatang",
+    "clearAll": "Hapus semua transaksi",
+    "clearNote": "Transaksi berulang akan tetap disimpan"
+  },
+  "transactions": {
+    "addTransaction": "Tambah transaksi",
+    "description": "Deskripsi",
+    "amount": "Jumlah",
+    "type": "Jenis",
+    "debitPayment": "Debit (Pembayaran)",
+    "creditIncome": "Kredit (Pendapatan)",
+    "date": "Tanggal",
+    "fillAllFields": "Harap isi semua kolom",
+    "listTitle": "Transaksi ({0})",
+    "noneYet": "Belum ada transaksi",
+    "getStarted": "Tambahkan transaksi pertama untuk memulai",
+    "delete": "Hapus transaksi",
+    "descriptionPh": "Contoh: Pembayaran sewa",
+    "addBtn": "Tambah transaksi",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "Transaksi berulang",
+    "addButton": "+ Tambah",
+    "saveRecurring": "Simpan transaksi berulang",
+    "noRecurring": "Tidak ada transaksi berulang",
+    "autoNote": "Transaksi berulang dibuat otomatis setiap bulan",
+    "payment": "Pembayaran",
+    "income": "Pendapatan",
+    "dayOfMonthPh": "Tanggal setiap bulan (1–31)",
+    "dayOfMonth": "Tanggal {0} setiap bulan",
+    "clickToEditDesc": "Klik untuk mengubah deskripsi",
+    "clickToEditAmount": "Klik untuk mengubah jumlah",
+    "deleteRecurring": "Hapus transaksi berulang",
+    "validationDayRange": "Tanggal harus antara 1 dan 31",
+    "descriptionPh": "Deskripsi",
+    "amountPh": "Jumlah",
+    "validationAll": "Harap isi semua kolom"
+  },
+  "cards": {
+    "title": "Kartu kredit berulang",
+    "saveCard": "Simpan kartu kredit",
+    "noCards": "Tidak ada kartu kredit",
+    "addNote": "Tambahkan kartu untuk mencatat pembayaran dengan cepat",
+    "cardNamePh": "Nama kartu (contoh: Visa)",
+    "deleteCard": "Hapus kartu",
+    "clickToEditName": "Klik untuk mengubah nama",
+    "next": "Berikutnya:",
+    "addPayment": "Tambah pembayaran",
+    "noUpcoming": "Tidak ada tanggal mendatang",
+    "paymentDate": "Tanggal pembayaran:",
+    "enterAmount": "Harap masukkan jumlah",
+    "noUpcomingInRange": "Tidak ada tanggal pembayaran dalam rentang perkiraan",
+    "dayOfMonth": "Tanggal {0} setiap bulan"
+  },
+  "timeline": {
+    "title": "Linimasa saldo",
+    "action": "Tindakan",
+    "balance": "Saldo",
+    "description": "Deskripsi",
+    "amount": "Jumlah",
+    "date": "Tanggal",
+    "delete": "Hapus transaksi"
+  },
+  "settings": {
+    "globalSettings": "Pengaturan umum",
+    "darkMode": "Mode gelap",
+    "lightMode": "Mode terang",
+    "language": "Bahasa",
+    "currency": "Mata uang",
+    "dateFormat": "Format tanggal"
+  }
+}

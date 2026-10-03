@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "मनी मार्केट फंड में जमा की योजना के लिए खाते के शेष का पूर्वानुमान।",
+    "github": "GitHub पर देखें",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "रद्द करें",
+    "add": "जोड़ें",
+    "save": "सहेजें",
+    "today": "आज",
+    "selectDate": "तारीख चुनें",
+    "auto": "स्वचालित"
+  },
+  "balance": {
+    "accountBalance": "खाते का शेष",
+    "startingBalance": "शुरुआती शेष",
+    "forecastedBalance": "अनुमानित शेष",
+    "netChange": "शुद्ध बदलाव",
+    "lowestBalance": "न्यूनतम शेष",
+    "onDate": "को",
+    "startingBalanceRow": "शुरुआती शेष"
+  },
+  "forecast": {
+    "settings": "पूर्वानुमान सेटिंग",
+    "currentDate": "शुरुआती तारीख",
+    "forecastUntil": "इस तारीख तक पूर्वानुमान",
+    "quick30": "30 दिन",
+    "quick60": "60 दिन",
+    "quick90": "90 दिन",
+    "daysFromCurrent": "शुरुआती तारीख से दिन",
+    "selectFutureDate": "आगे की तारीख चुनें",
+    "clearAll": "सभी लेनदेन मिटाएँ",
+    "clearNote": "आवर्ती लेनदेन बने रहेंगे"
+  },
+  "transactions": {
+    "addTransaction": "लेनदेन जोड़ें",
+    "description": "विवरण",
+    "amount": "राशि",
+    "type": "प्रकार",
+    "debitPayment": "डेबिट (भुगतान)",
+    "creditIncome": "क्रेडिट (आय)",
+    "date": "तारीख",
+    "fillAllFields": "कृपया सभी फ़ील्ड भरें",
+    "listTitle": "लेनदेन ({0})",
+    "noneYet": "अभी कोई लेनदेन नहीं है",
+    "getStarted": "शुरू करने के लिए पहला लेनदेन जोड़ें",
+    "delete": "लेनदेन हटाएँ",
+    "descriptionPh": "जैसे: किराए का भुगतान",
+    "addBtn": "लेनदेन जोड़ें",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "आवर्ती लेनदेन",
+    "addButton": "+ जोड़ें",
+    "saveRecurring": "आवर्ती लेनदेन सहेजें",
+    "noRecurring": "कोई आवर्ती लेनदेन नहीं",
+    "autoNote": "आवर्ती लेनदेन हर महीने स्वतः बनते हैं",
+    "payment": "भुगतान",
+    "income": "आय",
+    "dayOfMonthPh": "महीने का दिन (1–31)",
+    "dayOfMonth": "हर महीने का दिन {0}",
+    "clickToEditDesc": "विवरण बदलने के लिए क्लिक करें",
+    "clickToEditAmount": "राशि बदलने के लिए क्लिक करें",
+    "deleteRecurring": "आवर्ती लेनदेन हटाएँ",
+    "validationDayRange": "महीने का दिन 1 से 31 के बीच होना चाहिए",
+    "descriptionPh": "विवरण",
+    "amountPh": "राशि",
+    "validationAll": "कृपया सभी फ़ील्ड भरें"
+  },
+  "cards": {
+    "title": "आवर्ती क्रेडिट कार्ड",
+    "saveCard": "क्रेडिट कार्ड सहेजें",
+    "noCards": "कोई क्रेडिट कार्ड नहीं",
+    "addNote": "जल्दी भुगतान दर्ज करने के लिए कार्ड जोड़ें",
+    "cardNamePh": "कार्ड का नाम (जैसे: वीज़ा)",
+    "deleteCard": "कार्ड हटाएँ",
+    "clickToEditName": "नाम बदलने के लिए क्लिक करें",
+    "next": "अगला:",
+    "addPayment": "भुगतान जोड़ें",
+    "noUpcoming": "आगे कोई तारीख नहीं",
+    "paymentDate": "भुगतान की तारीख:",
+    "enterAmount": "कृपया राशि दर्ज करें",
+    "noUpcomingInRange": "पूर्वानुमान अवधि में भुगतान की कोई तारीख नहीं है",
+    "dayOfMonth": "हर महीने का दिन {0}"
+  },
+  "timeline": {
+    "title": "शेष की समयरेखा",
+    "action": "कार्रवाई",
+    "balance": "शेष",
+    "description": "विवरण",
+    "amount": "राशि",
+    "date": "तारीख",
+    "delete": "लेनदेन हटाएँ"
+  },
+  "settings": {
+    "globalSettings": "सामान्य सेटिंग",
+    "darkMode": "गहरा मोड",
+    "lightMode": "हल्का मोड",
+    "language": "भाषा",
+    "currency": "मुद्रा",
+    "dateFormat": "तारीख का प्रारूप"
+  }
+}

@@ -9,5 +9,5 @@ services:
       - ./data:/app/data
     environment:
       TZ: America/Los_Angeles
-      DEFAULT_LANGUAGE: en # supported lanugage values: en, zht, ja, es
+      DEFAULT_LANGUAGE: en # supported language values: see shared/preferences.js
       # ALLOWED_ORIGIN: https://example.com # optional cross-origin API access

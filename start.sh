@@ -11,7 +11,6 @@ set -e
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
-YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 BOLD='\033[1m'
 NC='\033[0m'
@@ -26,14 +25,14 @@ echo ""
 # Check if node is installed
 if ! command -v node &>/dev/null; then
     echo -e "${RED}ERROR: Node.js is not installed.${NC}"
-    echo "Please install Node.js 20+ from https://nodejs.org/"
+    echo "Please install Node.js 24+ from https://nodejs.org/"
     exit 1
 fi
 
-# Check node version (require 20+)
+# Check node version (require 24+)
 NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
-if [ "$NODE_VERSION" -lt 20 ]; then
-    echo -e "${RED}ERROR: Node.js version $NODE_VERSION detected. Version 20+ is required.${NC}"
+if [ "$NODE_VERSION" -lt 24 ]; then
+    echo -e "${RED}ERROR: Node.js version $NODE_VERSION detected. Version 24+ is required.${NC}"
     exit 1
 fi
 
@@ -56,7 +55,7 @@ fi
 # Install dependencies if needed
 if [ ! -d "node_modules" ]; then
     echo "Installing dependencies..."
-    npm install
+    npm ci
 fi
 
 # Create data directory if it doesn't exist
@@ -73,34 +72,37 @@ npm run build
 # Process Management
 # -----------------------------------------------------------------------------
 
+# Invoked by the EXIT trap even when startup or wait fails.
+# shellcheck disable=SC2317
 cleanup() {
     echo ""
     echo "Shutting down..."
-    [ ! -z "$SERVER_PID" ] && kill $SERVER_PID 2>/dev/null || true
-    [ ! -z "$CLIENT_PID" ] && kill $CLIENT_PID 2>/dev/null || true
+    if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
+    if [ -n "${CLIENT_PID:-}" ]; then kill "$CLIENT_PID" 2>/dev/null || true; fi
     echo "Stopped."
-    exit 0
 }
 
-trap cleanup SIGTERM SIGINT
+trap cleanup EXIT
+trap 'exit 130' SIGINT
+trap 'exit 143' SIGTERM
 
 # Start backend server
 node server/index.js &
 SERVER_PID=$!
 sleep 2
-if ! kill -0 $SERVER_PID 2>/dev/null; then
+if ! kill -0 "$SERVER_PID" 2>/dev/null; then
     echo -e "${RED}ERROR: Backend server failed to start${NC}"
     exit 1
 fi
 echo -e "${GREEN}OK${NC} Backend started (PID: $SERVER_PID)"
 
 # Start frontend dev server
-npx vite --config client/vite.config.js &
+./node_modules/.bin/vite --config client/vite.config.js &
 CLIENT_PID=$!
 sleep 2
-if ! kill -0 $CLIENT_PID 2>/dev/null; then
+if ! kill -0 "$CLIENT_PID" 2>/dev/null; then
     echo -e "${RED}ERROR: Frontend dev server failed to start${NC}"
-    kill $SERVER_PID 2>/dev/null || true
+    kill "$SERVER_PID" 2>/dev/null || true
     exit 1
 fi
 echo -e "${GREEN}OK${NC} Frontend started (PID: $CLIENT_PID)"
@@ -112,14 +114,14 @@ echo "  Frontend:    http://localhost:5173"
 echo ""
 
 # Wait for either process to exit
-wait -n $SERVER_PID $CLIENT_PID
-
-EXIT_CODE=$?
-if ! kill -0 $SERVER_PID 2>/dev/null; then
+EXIT_CODE=0
+wait -n "$SERVER_PID" "$CLIENT_PID" || EXIT_CODE=$?
+# Any child exit is unexpected while running the development environment.
+[ "$EXIT_CODE" -ne 0 ] || EXIT_CODE=1
+if ! kill -0 "$SERVER_PID" 2>/dev/null; then
     echo -e "${RED}ERROR: Backend exited unexpectedly${NC}"
-elif ! kill -0 $CLIENT_PID 2>/dev/null; then
+elif ! kill -0 "$CLIENT_PID" 2>/dev/null; then
     echo -e "${RED}ERROR: Frontend exited unexpectedly${NC}"
 fi
 
-cleanup
-exit $EXIT_CODE
+exit "$EXIT_CODE"

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { getTodayDate } from "../utils";
+import { getTodayDate, currencyStep } from "../utils";
 import DatePicker from "./DatePicker";
 import TypeToggle from "./TypeToggle";
 import { useI18n } from "../i18n";
 
-function TransactionForm({ onAddTransaction }) {
+function TransactionForm({ onAddTransaction, currencySymbol, dateFormat }) {
   const { t } = useI18n();
   const [formData, setFormData] = useState({
     name: "",
@@ -13,7 +13,7 @@ function TransactionForm({ onAddTransaction }) {
     date: getTodayDate(),
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.name || !formData.amount || !formData.date) {
@@ -21,13 +21,14 @@ function TransactionForm({ onAddTransaction }) {
       return;
     }
 
-    onAddTransaction({
+    const saved = await onAddTransaction({
       name: formData.name,
       amount: parseFloat(formData.amount),
       type: formData.type,
       date: formData.date,
     });
 
+    if (!saved) return;
     // Reset form
     setFormData({
       name: "",
@@ -50,8 +51,11 @@ function TransactionForm({ onAddTransaction }) {
 
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         <div>
-          <label className="label">{t("transactions:description")}</label>
+          <label className="label" htmlFor="transaction-name">
+            {t("transactions:description")}
+          </label>
           <input
+            id="transaction-name"
             type="text"
             name="name"
             value={formData.name}
@@ -63,14 +67,17 @@ function TransactionForm({ onAddTransaction }) {
         </div>
 
         <div>
-          <label className="label">{t("transactions:amount")}</label>
+          <label className="label" htmlFor="transaction-amount">
+            {t("transactions:amount")}
+          </label>
           <input
+            id="transaction-amount"
             type="number"
             name="amount"
             value={formData.amount}
             onChange={handleChange}
-            step="0.01"
-            min="0"
+            step={currencyStep(currencySymbol)}
+            min={currencyStep(currencySymbol)}
             className="input"
             placeholder={t("transactions:amountPh")}
             required
@@ -90,6 +97,8 @@ function TransactionForm({ onAddTransaction }) {
         <div>
           <label className="label">{t("transactions:date")}</label>
           <DatePicker
+            label={t("transactions:date")}
+            dateFormat={dateFormat}
             value={formData.date}
             onChange={(date) => setFormData({ ...formData, date })}
             className="w-full"

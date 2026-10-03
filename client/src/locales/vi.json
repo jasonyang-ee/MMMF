@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "Dự báo số dư tài khoản để lên kế hoạch gửi tiền vào quỹ thị trường tiền tệ.",
+    "github": "Xem trên GitHub",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "Hủy",
+    "add": "Thêm",
+    "save": "Lưu",
+    "today": "Hôm nay",
+    "selectDate": "Chọn ngày",
+    "auto": "Tự động"
+  },
+  "balance": {
+    "accountBalance": "Số dư tài khoản",
+    "startingBalance": "Số dư ban đầu",
+    "forecastedBalance": "Số dư dự báo",
+    "netChange": "Thay đổi ròng",
+    "lowestBalance": "Số dư thấp nhất",
+    "onDate": "vào",
+    "startingBalanceRow": "Số dư ban đầu"
+  },
+  "forecast": {
+    "settings": "Cài đặt dự báo",
+    "currentDate": "Ngày bắt đầu",
+    "forecastUntil": "Dự báo đến",
+    "quick30": "30 ngày",
+    "quick60": "60 ngày",
+    "quick90": "90 ngày",
+    "daysFromCurrent": "ngày kể từ ngày bắt đầu",
+    "selectFutureDate": "Chọn ngày trong tương lai",
+    "clearAll": "Xóa tất cả giao dịch",
+    "clearNote": "Các giao dịch định kỳ sẽ được giữ lại"
+  },
+  "transactions": {
+    "addTransaction": "Thêm giao dịch",
+    "description": "Mô tả",
+    "amount": "Số tiền",
+    "type": "Loại",
+    "debitPayment": "Ghi nợ (Chi)",
+    "creditIncome": "Ghi có (Thu)",
+    "date": "Ngày",
+    "fillAllFields": "Vui lòng điền tất cả các trường",
+    "listTitle": "Giao dịch ({0})",
+    "noneYet": "Chưa có giao dịch",
+    "getStarted": "Thêm giao dịch đầu tiên để bắt đầu",
+    "delete": "Xóa giao dịch",
+    "descriptionPh": "Ví dụ: Tiền thuê nhà",
+    "addBtn": "Thêm giao dịch",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "Giao dịch định kỳ",
+    "addButton": "+ Thêm",
+    "saveRecurring": "Lưu giao dịch định kỳ",
+    "noRecurring": "Không có giao dịch định kỳ",
+    "autoNote": "Giao dịch định kỳ được tạo tự động mỗi tháng",
+    "payment": "Chi",
+    "income": "Thu",
+    "dayOfMonthPh": "Ngày trong tháng (1–31)",
+    "dayOfMonth": "Ngày {0} hằng tháng",
+    "clickToEditDesc": "Nhấp để sửa mô tả",
+    "clickToEditAmount": "Nhấp để sửa số tiền",
+    "deleteRecurring": "Xóa giao dịch định kỳ",
+    "validationDayRange": "Ngày trong tháng phải từ 1 đến 31",
+    "descriptionPh": "Mô tả",
+    "amountPh": "Số tiền",
+    "validationAll": "Vui lòng điền tất cả các trường"
+  },
+  "cards": {
+    "title": "Thẻ tín dụng định kỳ",
+    "saveCard": "Lưu thẻ tín dụng",
+    "noCards": "Không có thẻ tín dụng",
+    "addNote": "Thêm thẻ để nhập khoản thanh toán nhanh chóng",
+    "cardNamePh": "Tên thẻ (ví dụ: Visa)",
+    "deleteCard": "Xóa thẻ",
+    "clickToEditName": "Nhấp để sửa tên",
+    "next": "Tiếp theo:",
+    "addPayment": "Thêm thanh toán",
+    "noUpcoming": "Không có ngày sắp tới",
+    "paymentDate": "Ngày thanh toán:",
+    "enterAmount": "Vui lòng nhập số tiền",
+    "noUpcomingInRange": "Không có ngày thanh toán trong khoảng dự báo",
+    "dayOfMonth": "Ngày {0} hằng tháng"
+  },
+  "timeline": {
+    "title": "Dòng thời gian số dư",
+    "action": "Thao tác",
+    "balance": "Số dư",
+    "description": "Mô tả",
+    "amount": "Số tiền",
+    "date": "Ngày",
+    "delete": "Xóa giao dịch"
+  },
+  "settings": {
+    "globalSettings": "Cài đặt chung",
+    "darkMode": "Chế độ tối",
+    "lightMode": "Chế độ sáng",
+    "language": "Ngôn ngữ",
+    "currency": "Tiền tệ",
+    "dateFormat": "Định dạng ngày"
+  }
+}

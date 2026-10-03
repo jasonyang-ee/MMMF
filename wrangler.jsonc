@@ -7,7 +7,7 @@
 	//
 	// Deployment Options:
 	// 1. Workers: wrangler deploy
-	// 2. Pages: wrangler pages deploy client/dist
+	// 2. Pages: wrangler pages deploy --config wrangler.pages.jsonc
 	// =============================================================================
 	"name": "mmmf",
 	"compatibility_date": "2024-01-01",
@@ -15,6 +15,9 @@
 	// Assets configuration for Workers (built output)
 	"assets": {
 		"directory": "./client/dist",
+		"binding": "ASSETS",
+		"not_found_handling": "single-page-application",
+		"run_worker_first": ["/api", "/api/*"],
 	},
 	// KV namespace for data storage (session-based for demo mode)
 	"kv_namespaces": [

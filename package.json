@@ -26,18 +26,22 @@
     "server": "node server/index.js",
     "client": "cd client && vite",
     "build": "cd client && vite build",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "test": "node --test tests/*.test.js",
+    "test:watch": "node --test --watch tests/*.test.js",
+    "build:worker": "wrangler deploy --dry-run --outdir .wrangler/build",
+    "build:pages": "wrangler pages functions build functions --outdir .wrangler/pages",
+    "test:ui": "playwright test --config tests/playwright.config.js"
   },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.4.1",
     "cors": "^2.8.5",
-    "date-fns": "^4.1.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "hono": "^4.11.4",
     "nanoid": "^5.1.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -46,9 +50,6 @@
     "concurrently": "^9.2.1",
     "postcss": "^8.5.6",
     "react": "^19.2.3",
-    "react-datepicker": "^8.10.0",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.2.3",
     "vite": "^7.2.6",
     "wrangler": "^4.53.0"

@@ -1,6 +1,6 @@
 import React from "react";
 
-// Single source for the debit/credit type selector (R9). One active-red /
+// Single source for the debit/credit type selector. One active-red /
 // active-green pair shared by RecurringList and TransactionForm; `size`
 // covers the only real difference between the two call sites.
 // min-h-11 keeps both variants at the >=44px tap target (V19).
@@ -14,6 +14,7 @@ function TypeToggle({ value, onChange, debitLabel, creditLabel, size = "md" }) {
     <div className="flex gap-2">
       <button
         type="button"
+        aria-pressed={value === "debit"}
         onClick={() => onChange("debit")}
         className={`${base} ${
           value === "debit"
@@ -25,6 +26,7 @@ function TypeToggle({ value, onChange, debitLabel, creditLabel, size = "md" }) {
       </button>
       <button
         type="button"
+        aria-pressed={value === "credit"}
         onClick={() => onChange("credit")}
         className={`${base} ${
           value === "credit"

@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.PROD ? "/api" : "http://localhost:3600/api";
+const API_BASE = "/api";
 
 async function checkOk(res) {
   if (!res.ok) {

@@ -1,225 +1,198 @@
 import { Hono } from "hono";
+import { bodyLimit } from "hono/body-limit";
 import { cors } from "hono/cors";
+import { collections, createDataService } from "./dataService.js";
 import {
-  demoSessionMiddlewareHono,
   cleanupExpiredSessions,
+  getKVKey,
+  resolveSession,
+  sessionCookie,
+  sessionExpiry,
 } from "./demo-session.js";
 
 const app = new Hono();
-
-// Demo mode session middleware (must be before API routes)
-app.use("*", async (c, next) => {
-  await demoSessionMiddlewareHono(c, next);
+app.use("*", (c, next) => {
+  c.header("Cache-Control", "no-store");
+  return next();
 });
-
-// API routes with CORS
-app.use(
-  "/api/*",
-  cors({
-    origin: (origin, c) =>
-      c.env.ALLOWED_ORIGIN === origin ? origin : null,
-  }),
-);
-
-// Periodic cleanup of expired sessions (run on first API call after startup)
-let lastCleanup = 0;
-const CLEANUP_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
-
+// This serializes mutations within an isolate only. KV has no cross-isolate lock.
+const queues = new WeakMap();
+const cleanupTimes = new WeakMap();
+const limits = new WeakMap();
+function kvStore(KV, sessionId) {
+  if (!queues.has(KV)) queues.set(KV, new Map());
+  const pending = queues.get(KV);
+  const read = async (key, fallback) => {
+    const value = await KV.get(getKVKey(key, sessionId));
+    return value === null ? fallback : JSON.parse(value);
+  };
+  return {
+    read,
+    async update(key, fallback, change) {
+      const storageKey = getKVKey(key, sessionId);
+      const previous = pending.get(storageKey) || Promise.resolve();
+      const operation = previous
+        .catch(() => {})
+        .then(async () => {
+          const value = await change(await read(key, fallback));
+          await KV.put(
+            storageKey,
+            JSON.stringify(value),
+            sessionId
+              ? {
+                  expiration: Math.max(
+                    Math.ceil(sessionExpiry(sessionId) / 1000),
+                    Math.floor(Date.now() / 1000) + 60,
+                  ),
+                }
+              : undefined,
+          );
+        });
+      pending.set(storageKey, operation);
+      try {
+        await operation;
+      } finally {
+        if (pending.get(storageKey) === operation) pending.delete(storageKey);
+      }
+    },
+  };
+}
+// Per-isolate protection; use Cloudflare rate limiting for distributed enforcement.
 app.use("/api/*", async (c, next) => {
+  const KV = c.env.MMMF_KV;
+  if (!limits.has(KV)) limits.set(KV, new Map());
+  const clients = limits.get(KV);
   const now = Date.now();
-  if (now - lastCleanup > CLEANUP_INTERVAL) {
-    lastCleanup = now;
-    // Run cleanup in background
-    cleanupExpiredSessions(c.env.MMMF_KV).catch(console.error);
+  for (const [key, entry] of clients)
+    if (entry.reset <= now) clients.delete(key);
+  const ip = c.req.header("CF-Connecting-IP") || "local";
+  const entry = clients.get(ip) || { count: 0, reset: now + 60_000 };
+  clients.set(ip, entry);
+  if (++entry.count > 300) {
+    c.header("Retry-After", String(Math.ceil((entry.reset - now) / 1000)));
+    return c.json({ error: "Too many requests, slow down" }, 429);
   }
   return next();
 });
-
-// Helper to get data from KV with default (session-aware)
-async function getData(c, key, defaultValue = []) {
-  const getKVKey = c.get("getKVKey");
-  const sessionKey = getKVKey(key);
-  const data = await c.env.MMMF_KV.get(sessionKey);
-  return data ? JSON.parse(data) : defaultValue;
-}
-
-// Helper to save data to KV (session-aware)
-async function saveData(c, key, data) {
-  const getKVKey = c.get("getKVKey");
-  const sessionKey = getKVKey(key);
-  await c.env.MMMF_KV.put(sessionKey, JSON.stringify(data));
-}
-
-// --- Transactions ---
-
-app.get("/api/transactions", async (c) => {
-  const transactions = await getData(c, "transactions");
-  return c.json(transactions);
-});
-
-app.post("/api/transactions", async (c) => {
-  const transactions = await getData(c, "transactions");
-  const body = await c.req.json();
-  const newTransaction = {
-    id: Date.now().toString(),
-    ...body,
-    createdAt: new Date().toISOString(),
-  };
-  transactions.push(newTransaction);
-  await saveData(c, "transactions", transactions);
-  return c.json(newTransaction, 201);
-});
-
-app.put("/api/transactions/:id", async (c) => {
-  const id = c.req.param("id");
-  const transactions = await getData(c, "transactions");
-  const index = transactions.findIndex((t) => t.id === id);
-
-  if (index !== -1) {
-    const body = await c.req.json();
-    transactions[index] = { ...transactions[index], ...body };
-    await saveData(c, "transactions", transactions);
-    return c.json(transactions[index]);
-  }
-  return c.json({ error: "Transaction not found" }, 404);
-});
-
-app.delete("/api/transactions/:id", async (c) => {
-  const id = c.req.param("id");
-  const transactions = await getData(c, "transactions");
-  const filtered = transactions.filter((t) => t.id !== id);
-  await saveData(c, "transactions", filtered);
-  return c.json({ success: true });
-});
-
-app.delete("/api/transactions", async (c) => {
-  await saveData(c, "transactions", []);
-  return c.json({ success: true });
-});
-
-// --- Recurring ---
-
-app.get("/api/recurring", async (c) => {
-  const recurring = await getData(c, "recurring");
-  return c.json(recurring);
-});
-
-app.post("/api/recurring", async (c) => {
-  const recurring = await getData(c, "recurring");
-  const body = await c.req.json();
-  const newRecurring = {
-    id: Date.now().toString(),
-    ...body,
-    createdAt: new Date().toISOString(),
-  };
-  recurring.push(newRecurring);
-  await saveData(c, "recurring", recurring);
-  return c.json(newRecurring, 201);
-});
-
-app.put("/api/recurring/:id", async (c) => {
-  const id = c.req.param("id");
-  const recurring = await getData(c, "recurring");
-  const index = recurring.findIndex((r) => r.id === id);
-
-  if (index !== -1) {
-    const body = await c.req.json();
-    recurring[index] = { ...recurring[index], ...body };
-    await saveData(c, "recurring", recurring);
-    return c.json(recurring[index]);
-  }
-  return c.json({ error: "Recurring transaction not found" }, 404);
-});
-
-app.delete("/api/recurring/:id", async (c) => {
-  const id = c.req.param("id");
-  const recurring = await getData(c, "recurring");
-  const filtered = recurring.filter((r) => r.id !== id);
-  await saveData(c, "recurring", filtered);
-  return c.json({ success: true });
-});
-
-// --- Credit Cards ---
-
-app.get("/api/credit-cards", async (c) => {
-  const cards = await getData(c, "credit-cards");
-  return c.json(cards);
-});
-
-app.post("/api/credit-cards", async (c) => {
-  const cards = await getData(c, "credit-cards");
-  const body = await c.req.json();
-  const newCard = {
-    id: Date.now().toString(),
-    ...body,
-    createdAt: new Date().toISOString(),
-  };
-  cards.push(newCard);
-  await saveData(c, "credit-cards", cards);
-  return c.json(newCard, 201);
-});
-
-app.put("/api/credit-cards/:id", async (c) => {
-  const id = c.req.param("id");
-  const cards = await getData(c, "credit-cards");
-  const index = cards.findIndex((c) => c.id === id);
-
-  if (index !== -1) {
-    const body = await c.req.json();
-    cards[index] = { ...cards[index], ...body, id }; // Ensure ID doesn't change
-    await saveData(c, "credit-cards", cards);
-    return c.json(cards[index]);
-  }
-  return c.json({ error: "Credit card not found" }, 404);
-});
-
-app.delete("/api/credit-cards/:id", async (c) => {
-  const id = c.req.param("id");
-  const cards = await getData(c, "credit-cards");
-  const filtered = cards.filter((c) => c.id !== id);
-  await saveData(c, "credit-cards", filtered);
-  return c.json({ success: true });
-});
-
-// --- Settings ---
-
-app.get("/api/settings", async (c) => {
-  let settings = await getData(c, "settings", null);
-
-  // Default settings logic (mirrored from server/index.js)
-  if (!settings) {
-    settings = { startingBalance: 0 };
-  }
-
-  if (!settings.currentDate) {
-    const today = new Date();
-    settings.currentDate = today.toISOString().split("T")[0];
-  }
-
-  if (!settings.forecastEndDate) {
-    const forecastEnd = new Date(settings.currentDate);
-    forecastEnd.setDate(forecastEnd.getDate() + 30);
-    settings.forecastEndDate = forecastEnd.toISOString().split("T")[0];
-  }
-
-  if (!settings.currencySymbol) settings.currencySymbol = "USD";
-  if (!settings.dateFormat) settings.dateFormat = "MMM dd, yyyy";
-  if (!settings.language) settings.language = "en";
-
-  return c.json(settings);
-});
-
-app.put("/api/settings", async (c) => {
-  const body = await c.req.json();
-  const { language, startingBalance } = body || {};
+app.use(
+  "/api/*",
+  bodyLimit({
+    maxSize: 100 * 1024,
+    onError: (c) => c.json({ error: "Request too large" }, 413),
+  }),
+);
+app.use("/api/*", async (c, next) => {
+  const origin = c.req.header("origin");
   if (
-    !["en", "es", "zht", "ja"].includes(language) ||
-    !Number.isFinite(startingBalance)
-  ) {
-    return c.json({ error: "Invalid settings" }, 400);
-  }
-  await saveData(c, "settings", body);
-  return c.json(body);
+    origin &&
+    origin !== new URL(c.req.url).origin &&
+    origin !== c.env.ALLOWED_ORIGIN
+  )
+    return c.json({ error: "Origin not allowed" }, 403);
+  return next();
 });
-
+app.use(
+  "/api/*",
+  cors({
+    origin: (origin, c) => (c.env.ALLOWED_ORIGIN === origin ? origin : null),
+    credentials: true,
+  }),
+);
+app.use("/api/*", async (c, next) => {
+  let sessionId = null;
+  if (c.env.DEMO === "true") {
+    const session = resolveSession(c.req.header("cookie"));
+    sessionId = session.id;
+    if (session.fresh)
+      c.header(
+        "Set-Cookie",
+        sessionCookie(sessionId, new URL(c.req.url).protocol === "https:"),
+      );
+    const KV = c.env.MMMF_KV;
+    if (Date.now() - (cleanupTimes.get(KV) || 0) > 86_400_000) {
+      cleanupTimes.set(KV, Date.now());
+      const cleanup = cleanupExpiredSessions(KV).catch((error) =>
+        console.error(
+          "[ERROR] [DemoSession] Cleanup failed:",
+          error.code || error.name,
+        ),
+      );
+      try {
+        c.executionCtx.waitUntil(cleanup);
+      } catch {
+        await cleanup;
+      }
+    }
+  }
+  c.set(
+    "dataService",
+    createDataService(
+      kvStore(c.env.MMMF_KV, sessionId),
+      c.env.DEFAULT_LANGUAGE,
+    ),
+  );
+  return next();
+});
+async function body(c) {
+  if (
+    c.req.header("content-type")?.split(";")[0].trim().toLowerCase() !==
+    "application/json"
+  ) {
+    const error = new Error("Invalid request");
+    error.status = 400;
+    throw error;
+  }
+  try {
+    return await c.req.json();
+  } catch {
+    const error = new Error("Invalid request");
+    error.status = 400;
+    throw error;
+  }
+}
+for (const key of collections) {
+  app.get(`/api/${key}`, async (c) =>
+    c.json(await c.get("dataService").list(key)),
+  );
+  app.post(`/api/${key}`, async (c) =>
+    c.json(await c.get("dataService").create(key, await body(c)), 201),
+  );
+  app.put(`/api/${key}/:id`, async (c) =>
+    c.json(
+      await c.get("dataService").update(key, c.req.param("id"), await body(c)),
+    ),
+  );
+  app.delete(`/api/${key}/:id`, async (c) =>
+    c.json(await c.get("dataService").remove(key, c.req.param("id"))),
+  );
+}
+app.delete("/api/transactions", async (c) =>
+  c.json(await c.get("dataService").clear()),
+);
+app.get("/api/settings", async (c) =>
+  c.json(await c.get("dataService").settings()),
+);
+app.put("/api/settings", async (c) =>
+  c.json(await c.get("dataService").saveSettings(await body(c))),
+);
+app.notFound((c) => c.json({ error: "Not found" }, 404));
+app.onError((error, c) => {
+  const status = error.status || 500;
+  if (status >= 500)
+    console.error(
+      "[ERROR] [DataStore] Request failed:",
+      error.code || error.name,
+    );
+  return c.json(
+    {
+      error:
+        status >= 500
+          ? "Storage unavailable"
+          : status === 400
+            ? "Invalid request"
+            : error.message,
+    },
+    status,
+  );
+});
 export default app;

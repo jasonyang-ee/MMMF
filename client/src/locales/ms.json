@@ -1,0 +1,104 @@
+{
+  "header": {
+    "tagline": "Ramalkan baki akaun untuk merancang deposit dana pasaran wang.",
+    "github": "Lihat di GitHub",
+    "title": "MMMF"
+  },
+  "common": {
+    "cancel": "Batal",
+    "add": "Tambah",
+    "save": "Simpan",
+    "today": "Hari ini",
+    "selectDate": "Pilih tarikh",
+    "auto": "Automatik"
+  },
+  "balance": {
+    "accountBalance": "Baki akaun",
+    "startingBalance": "Baki awal",
+    "forecastedBalance": "Baki ramalan",
+    "netChange": "Perubahan bersih",
+    "lowestBalance": "Baki terendah",
+    "onDate": "pada",
+    "startingBalanceRow": "Baki awal"
+  },
+  "forecast": {
+    "settings": "Tetapan ramalan",
+    "currentDate": "Tarikh mula",
+    "forecastUntil": "Ramalkan hingga",
+    "quick30": "30 hari",
+    "quick60": "60 hari",
+    "quick90": "90 hari",
+    "daysFromCurrent": "hari dari tarikh mula",
+    "selectFutureDate": "Pilih tarikh akan datang",
+    "clearAll": "Padam semua transaksi",
+    "clearNote": "Transaksi berulang akan dikekalkan"
+  },
+  "transactions": {
+    "addTransaction": "Tambah transaksi",
+    "description": "Keterangan",
+    "amount": "Amaun",
+    "type": "Jenis",
+    "debitPayment": "Debit (Bayaran)",
+    "creditIncome": "Kredit (Pendapatan)",
+    "date": "Tarikh",
+    "fillAllFields": "Sila isi semua medan",
+    "listTitle": "Transaksi ({0})",
+    "noneYet": "Belum ada transaksi",
+    "getStarted": "Tambah transaksi pertama untuk bermula",
+    "delete": "Padam transaksi",
+    "descriptionPh": "Contoh: Bayaran sewa",
+    "addBtn": "Tambah transaksi",
+    "amountPh": "0.00"
+  },
+  "recurring": {
+    "title": "Transaksi berulang",
+    "addButton": "+ Tambah",
+    "saveRecurring": "Simpan transaksi berulang",
+    "noRecurring": "Tiada transaksi berulang",
+    "autoNote": "Transaksi berulang dijana secara automatik setiap bulan",
+    "payment": "Bayaran",
+    "income": "Pendapatan",
+    "dayOfMonthPh": "Hari dalam bulan (1–31)",
+    "dayOfMonth": "Hari {0} setiap bulan",
+    "clickToEditDesc": "Klik untuk mengubah keterangan",
+    "clickToEditAmount": "Klik untuk mengubah amaun",
+    "deleteRecurring": "Padam transaksi berulang",
+    "validationDayRange": "Hari dalam bulan mestilah antara 1 hingga 31",
+    "descriptionPh": "Keterangan",
+    "amountPh": "Amaun",
+    "validationAll": "Sila isi semua medan"
+  },
+  "cards": {
+    "title": "Kad kredit berulang",
+    "saveCard": "Simpan kad kredit",
+    "noCards": "Tiada kad kredit",
+    "addNote": "Tambah kad untuk memasukkan bayaran dengan cepat",
+    "cardNamePh": "Nama kad (contoh: Visa)",
+    "deleteCard": "Padam kad",
+    "clickToEditName": "Klik untuk mengubah nama",
+    "next": "Seterusnya:",
+    "addPayment": "Tambah bayaran",
+    "noUpcoming": "Tiada tarikh akan datang",
+    "paymentDate": "Tarikh bayaran:",
+    "enterAmount": "Sila masukkan amaun",
+    "noUpcomingInRange": "Tiada tarikh bayaran dalam tempoh ramalan",
+    "dayOfMonth": "Hari {0} setiap bulan"
+  },
+  "timeline": {
+    "title": "Garis masa baki",
+    "action": "Tindakan",
+    "balance": "Baki",
+    "description": "Keterangan",
+    "amount": "Amaun",
+    "date": "Tarikh",
+    "delete": "Padam transaksi"
+  },
+  "settings": {
+    "globalSettings": "Tetapan umum",
+    "darkMode": "Mod gelap",
+    "lightMode": "Mod cerah",
+    "language": "Bahasa",
+    "currency": "Mata wang",
+    "dateFormat": "Format tarikh"
+  }
+}

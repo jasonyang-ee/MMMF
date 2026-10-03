@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useI18n } from "../i18n";
+import SearchSelect from "./SearchSelect";
+import {
+  currencyCodes,
+  getLanguage,
+  languages,
+  dateFormats,
+} from "../../../shared/preferences.js";
+import { formatDate } from "../utils";
 
 function GlobalSettings({
   currencySymbol,
@@ -12,7 +20,12 @@ function GlobalSettings({
 
   // Load dark mode preference from localStorage on mount
   useEffect(() => {
-    const savedMode = localStorage.getItem("darkMode");
+    let savedMode;
+    try {
+      savedMode = localStorage.getItem("darkMode");
+    } catch {
+      /* Storage may be disabled. */
+    }
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)",
     ).matches;
@@ -29,7 +42,11 @@ function GlobalSettings({
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
-    localStorage.setItem("darkMode", newMode.toString());
+    try {
+      localStorage.setItem("darkMode", newMode.toString());
+    } catch {
+      /* Keep the current session usable. */
+    }
 
     if (newMode) {
       document.documentElement.classList.add("dark");
@@ -38,25 +55,35 @@ function GlobalSettings({
     }
   };
 
-  const currencyOptions = [
-    { value: "USD", label: "$ (USD)", symbol: "$" },
-    { value: "EUR", label: "€ (EUR)", symbol: "€" },
-    { value: "GBP", label: "£ (GBP)", symbol: "£" },
-    { value: "JPY", label: "¥ (JPY)", symbol: "¥" },
-    { value: "CNY", label: "¥ (CNY)", symbol: "¥" },
-    { value: "INR", label: "₹ (INR)", symbol: "₹" },
-    { value: "CAD", label: "$ (CAD)", symbol: "$" },
-    { value: "AUD", label: "$ (AUD)", symbol: "$" },
-    { value: "CHF", label: "Fr (CHF)", symbol: "Fr" },
-    { value: "KRW", label: "₩ (KRW)", symbol: "₩" },
-    { value: "GTQ", label: "Q (GTQ)", symbol: "Q" },
-  ];
-
-  const dateFormatOptions = [
-    { value: "MMM dd, yyyy", label: "Oct 05, 2025", example: "Oct 05, 2025" },
-    { value: "yyyy/MM/dd", label: "2025/10/05", example: "2025/10/05" },
-    { value: "MM/dd/yyyy", label: "10/05/2025", example: "10/05/2025" },
-  ];
+  const currencyOptions = useMemo(() => {
+    const locale = getLanguage(language).locale;
+    const names = new Intl.DisplayNames([locale], { type: "currency" });
+    const english = new Intl.DisplayNames(["en"], { type: "currency" });
+    return [...new Set([...currencyCodes, currencySymbol])]
+      .sort()
+      .map((code) => {
+        const symbol =
+          new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency: code,
+            currencyDisplay: "narrowSymbol",
+          })
+            .formatToParts(0)
+            .find((part) => part.type === "currency")?.value || code;
+        return {
+          value: code,
+          label: `${code} · ${symbol}`,
+          description: names.of(code),
+          search: english.of(code),
+        };
+      });
+  }, [language, currencySymbol]);
+  const languageOptions = languages.map((item) => ({
+    value: item.value,
+    label: item.nativeName,
+    description: item.name,
+    search: item.locale,
+  }));
 
   return (
     <div className="card space-y-4">
@@ -100,6 +127,7 @@ function GlobalSettings({
             className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
             role="switch"
             aria-checked={isDarkMode}
+            aria-label={t("settings:darkMode")}
           >
             <span
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
@@ -108,7 +136,9 @@ function GlobalSettings({
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  isDarkMode ? "translate-x-6" : "translate-x-1"
+                  isDarkMode
+                    ? "translate-x-6 rtl:-translate-x-6"
+                    : "translate-x-1 rtl:-translate-x-1"
                 }`}
               />
             </span>
@@ -118,46 +148,38 @@ function GlobalSettings({
 
       {/* Language Selection */}
       <div className="pb-3 border-b border-gray-200 dark:border-[#3a3a3a]">
-        <label className="label">{t("settings:language")}</label>
-        <select
+        <SearchSelect
+          label={t("settings:language")}
           value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-          className="input cursor-pointer"
-        >
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="zht">繁體中文</option>
-          <option value="ja">日本語</option>
-        </select>
+          onChange={setLanguage}
+          options={languageOptions}
+        />
       </div>
 
       {/* Currency Symbol Selection */}
       <div className="pb-3 border-b border-gray-200 dark:border-[#3a3a3a]">
-        <label className="label">{t("settings:currency")}</label>
-        <select
+        <SearchSelect
+          label={t("settings:currency")}
           value={currencySymbol}
-          onChange={(e) => onCurrencyChange(e.target.value)}
-          className="input cursor-pointer"
-        >
-          {currencyOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          onChange={onCurrencyChange}
+          options={currencyOptions}
+        />
       </div>
 
       {/* Date Format Selection */}
       <div>
-        <label className="label">{t("settings:dateFormat")}</label>
+        <label className="label" htmlFor="date-format">
+          {t("settings:dateFormat")}
+        </label>
         <select
+          id="date-format"
           value={dateFormat}
           onChange={(e) => onDateFormatChange(e.target.value)}
           className="input cursor-pointer"
         >
-          {dateFormatOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+          {dateFormats.map((option) => (
+            <option key={option} value={option}>
+              {formatDate("2025-10-05", option, language)}
             </option>
           ))}
         </select>

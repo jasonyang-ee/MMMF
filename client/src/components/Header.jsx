@@ -20,8 +20,9 @@ function Header() {
               href="https://github.com/jasonyang-ee/MMMF"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
               title={t("header:github")}
+              aria-label={t("header:github")}
             >
               <svg
                 className="w-6 h-6"

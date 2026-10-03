@@ -27,7 +27,7 @@ jobs:
             ${{ secrets.USERNAME_DOCKERHUB }}/mmmf
             ghcr.io/${{ github.actor }}/mmmf
           tags: type=raw,value=test
-          flavor: onlatest=false
+          flavor: latest=false
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -112,13 +112,13 @@ jobs:
           docker logs mmmf-test || echo "Could not get logs"
 
           echo "Waiting for HTTP response on port 5173..."
-          timeout 120 bash -c 'until curl -f http://127.0.0.1:5173 > /dev/null 2>&1; do 
+          timeout 120 bash -c 'until curl -f http://127.0.0.1:5173 > /dev/null 2>&1; do
             echo "Still waiting... (curl exit code: $?)"
             sleep 3
           done' || (echo "ERROR: Server health check failed after 120 seconds" && docker logs mmmf-test && exit 1)
 
           echo "Server responding on root endpoint, checking /api/settings..."
-          timeout 30 bash -c 'until curl -f http://127.0.0.1:5173/api/settings > /dev/null 2>&1; do 
+          timeout 30 bash -c 'until curl -f http://127.0.0.1:5173/api/settings > /dev/null 2>&1; do
             echo "Still waiting for /api/settings..."
             sleep 2
           done' || (echo "ERROR: API endpoint /api/settings not responding" && docker logs mmmf-test && exit 1)
@@ -206,7 +206,10 @@ jobs:
           node-version: "24"
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Regression tests
+        run: npm test
 
       - name: Build Frontend
         run: npm run build
@@ -223,5 +226,6 @@ jobs:
         run: |
           echo "Validating wrangler.jsonc..."
           test -f wrangler.jsonc || (echo "ERROR: wrangler.jsonc not found" && exit 1)
-          npx wrangler --version
+          npm run build:worker
+          npm run build:pages
           echo "✅ Wrangler configuration valid"

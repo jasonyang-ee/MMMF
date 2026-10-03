@@ -23,13 +23,13 @@ client/src/components/          # BalanceDisplay, BalanceTimeline, DatePicker,
                                 #   TransactionForm, TypeToggle
 client/src/api.js               # fetch wrapper for all /api routes
 client/src/utils.js             # calculateBalance, generateRecurringTransactions, formatters
-client/src/i18n.js              # I18nProvider + useI18n; 4 active langs
+client/src/i18n.js              # I18nProvider + useI18n; shared 20-language registry
 client/index.html               # Vite entry point
-server/index.js                 # Express REST API + static serving (production)
+server/index.js                 # Express entry; app.js owns REST/static middleware
 server/hono-app.js              # Cloudflare Workers/Pages mirror (Hono + KV)
 server/demo-session.js          # cookie-based session isolation (DEMO=true mode)
 cloudflare/worker.js            # Hono worker entry point
-cloudflare/functions/api/[[route]].js  # Cloudflare Pages function route
+functions/api/[[route]].js       # Cloudflare Pages function route
 data/                           # JSON flat-file DB: transactions.json, recurring.json,
                                 #   settings.json, credit-cards.json
 client/dist/                    # Vite build output (served by Express in production)

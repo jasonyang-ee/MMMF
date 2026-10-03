@@ -10,7 +10,7 @@ function BalanceTimeline({
   currencySymbol = "USD",
   dateFormat = "MMM dd, yyyy",
 }) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const safeBalanceHistory = Array.isArray(balanceHistory)
     ? balanceHistory
     : [];
@@ -95,7 +95,11 @@ function BalanceTimeline({
                       }`}
                     >
                       {entry.transaction.type === "credit" ? "+" : "-"}
-                      {formatCurrency(entry.transaction.amount, currencySymbol)}
+                      {formatCurrency(
+                        entry.transaction.amount,
+                        currencySymbol,
+                        language,
+                      )}
                     </span>
                   )}
                 </td>
@@ -107,11 +111,11 @@ function BalanceTimeline({
                         : "text-red-600 dark:text-red-400"
                     }`}
                   >
-                    {formatCurrency(entry.balance, currencySymbol)}
+                    {formatCurrency(entry.balance, currencySymbol, language)}
                   </span>
                 </td>
                 <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-900 dark:text-gray-100 font-medium">
-                  {formatDate(entry.date, dateFormat)}
+                  {formatDate(entry.date, dateFormat, language)}
                 </td>
               </tr>
             ))}

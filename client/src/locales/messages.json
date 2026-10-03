@@ -1,0 +1,362 @@
+{
+  "en": {
+    "common": {
+      "search": "Search…",
+      "noResults": "No matches found",
+      "loading": "Loading…",
+      "loadError": "Could not load your data.",
+      "saveError": "Some changes could not be saved. Please review and try again.",
+      "retry": "Retry",
+      "saving": "Saving…"
+    },
+    "datepicker": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month"
+    },
+    "forecast": {
+      "clearConfirm": "Clear all transactions and reset the forecast dates? Recurring transactions and credit cards will be kept."
+    }
+  },
+  "es": {
+    "common": {
+      "search": "Buscar…",
+      "noResults": "No se encontraron coincidencias",
+      "loading": "Cargando…",
+      "loadError": "No se pudieron cargar tus datos.",
+      "saveError": "No se pudieron guardar algunos cambios. Revisa los datos e inténtalo de nuevo.",
+      "retry": "Reintentar",
+      "saving": "Guardando…"
+    },
+    "datepicker": {
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente"
+    },
+    "forecast": {
+      "clearConfirm": "¿Borrar todas las transacciones y restablecer las fechas? Se conservarán las transacciones recurrentes y las tarjetas."
+    }
+  },
+  "zht": {
+    "common": {
+      "search": "搜尋…",
+      "noResults": "找不到符合的項目",
+      "loading": "載入中…",
+      "loadError": "無法載入您的資料。",
+      "saveError": "部分變更無法儲存。請檢查資料後再試一次。",
+      "retry": "重試",
+      "saving": "儲存中…"
+    },
+    "datepicker": {
+      "previousMonth": "上個月",
+      "nextMonth": "下個月"
+    },
+    "forecast": {
+      "clearConfirm": "清除所有交易並重設預測日期？重複性交易與信用卡將會保留。"
+    }
+  },
+  "zhs": {
+    "common": {
+      "search": "搜索…",
+      "noResults": "未找到匹配项",
+      "loading": "加载中…",
+      "loadError": "无法加载您的数据。",
+      "saveError": "部分更改无法保存。请检查数据后重试。",
+      "retry": "重试",
+      "saving": "保存中…"
+    },
+    "datepicker": {
+      "previousMonth": "上个月",
+      "nextMonth": "下个月"
+    },
+    "forecast": {
+      "clearConfirm": "清除所有交易并重置预测日期？定期交易和信用卡将保留。"
+    }
+  },
+  "ja": {
+    "common": {
+      "search": "検索…",
+      "noResults": "一致する項目がありません",
+      "loading": "読み込み中…",
+      "loadError": "データを読み込めませんでした。",
+      "saveError": "一部の変更を保存できませんでした。内容を確認して再試行してください。",
+      "retry": "再試行",
+      "saving": "保存中…"
+    },
+    "datepicker": {
+      "previousMonth": "前の月",
+      "nextMonth": "次の月"
+    },
+    "forecast": {
+      "clearConfirm": "すべての取引を削除して予測日をリセットしますか？定期取引とクレジットカードは保持されます。"
+    }
+  },
+  "ko": {
+    "common": {
+      "search": "검색…",
+      "noResults": "검색 결과가 없습니다",
+      "loading": "불러오는 중…",
+      "loadError": "데이터를 불러오지 못했습니다.",
+      "saveError": "일부 변경 사항을 저장하지 못했습니다. 내용을 확인하고 다시 시도하세요.",
+      "retry": "다시 시도",
+      "saving": "저장 중…"
+    },
+    "datepicker": {
+      "previousMonth": "이전 달",
+      "nextMonth": "다음 달"
+    },
+    "forecast": {
+      "clearConfirm": "모든 거래를 삭제하고 예측 날짜를 초기화할까요? 정기 거래와 신용카드는 유지됩니다."
+    }
+  },
+  "de": {
+    "common": {
+      "search": "Suchen…",
+      "noResults": "Keine Treffer",
+      "loading": "Wird geladen…",
+      "loadError": "Ihre Daten konnten nicht geladen werden.",
+      "saveError": "Einige Änderungen konnten nicht gespeichert werden. Bitte prüfen und erneut versuchen.",
+      "retry": "Erneut versuchen",
+      "saving": "Wird gespeichert…"
+    },
+    "datepicker": {
+      "previousMonth": "Vorheriger Monat",
+      "nextMonth": "Nächster Monat"
+    },
+    "forecast": {
+      "clearConfirm": "Alle Transaktionen löschen und die Prognosedaten zurücksetzen? Wiederkehrende Transaktionen und Kreditkarten bleiben erhalten."
+    }
+  },
+  "fr": {
+    "common": {
+      "search": "Rechercher…",
+      "noResults": "Aucun résultat",
+      "loading": "Chargement…",
+      "loadError": "Impossible de charger vos données.",
+      "saveError": "Certaines modifications n’ont pas été enregistrées. Vérifiez les données et réessayez.",
+      "retry": "Réessayer",
+      "saving": "Enregistrement…"
+    },
+    "datepicker": {
+      "previousMonth": "Mois précédent",
+      "nextMonth": "Mois suivant"
+    },
+    "forecast": {
+      "clearConfirm": "Effacer toutes les transactions et réinitialiser les dates de prévision ? Les transactions récurrentes et les cartes seront conservées."
+    }
+  },
+  "pt": {
+    "common": {
+      "search": "Pesquisar…",
+      "noResults": "Nenhum resultado",
+      "loading": "Carregando…",
+      "loadError": "Não foi possível carregar seus dados.",
+      "saveError": "Algumas alterações não foram salvas. Confira os dados e tente novamente.",
+      "retry": "Tentar novamente",
+      "saving": "Salvando…"
+    },
+    "datepicker": {
+      "previousMonth": "Mês anterior",
+      "nextMonth": "Próximo mês"
+    },
+    "forecast": {
+      "clearConfirm": "Limpar todas as transações e redefinir as datas da previsão? Transações recorrentes e cartões serão mantidos."
+    }
+  },
+  "it": {
+    "common": {
+      "search": "Cerca…",
+      "noResults": "Nessun risultato",
+      "loading": "Caricamento…",
+      "loadError": "Impossibile caricare i dati.",
+      "saveError": "Alcune modifiche non sono state salvate. Controlla i dati e riprova.",
+      "retry": "Riprova",
+      "saving": "Salvataggio…"
+    },
+    "datepicker": {
+      "previousMonth": "Mese precedente",
+      "nextMonth": "Mese successivo"
+    },
+    "forecast": {
+      "clearConfirm": "Cancellare tutte le transazioni e reimpostare le date della previsione? Le transazioni ricorrenti e le carte saranno conservate."
+    }
+  },
+  "ru": {
+    "common": {
+      "search": "Поиск…",
+      "noResults": "Совпадений не найдено",
+      "loading": "Загрузка…",
+      "loadError": "Не удалось загрузить данные.",
+      "saveError": "Не удалось сохранить некоторые изменения. Проверьте данные и повторите попытку.",
+      "retry": "Повторить",
+      "saving": "Сохранение…"
+    },
+    "datepicker": {
+      "previousMonth": "Предыдущий месяц",
+      "nextMonth": "Следующий месяц"
+    },
+    "forecast": {
+      "clearConfirm": "Удалить все транзакции и сбросить даты прогноза? Повторяющиеся транзакции и кредитные карты будут сохранены."
+    }
+  },
+  "ar": {
+    "common": {
+      "search": "بحث…",
+      "noResults": "لا توجد نتائج مطابقة",
+      "loading": "جارٍ التحميل…",
+      "loadError": "تعذر تحميل بياناتك.",
+      "saveError": "تعذر حفظ بعض التغييرات. يرجى مراجعة البيانات والمحاولة مجددًا.",
+      "retry": "إعادة المحاولة",
+      "saving": "جارٍ الحفظ…"
+    },
+    "datepicker": {
+      "previousMonth": "الشهر السابق",
+      "nextMonth": "الشهر التالي"
+    },
+    "forecast": {
+      "clearConfirm": "هل تريد مسح جميع المعاملات وإعادة ضبط تواريخ التوقع؟ سيتم الاحتفاظ بالمعاملات المتكررة وبطاقات الائتمان."
+    }
+  },
+  "hi": {
+    "common": {
+      "search": "खोजें…",
+      "noResults": "कोई मेल नहीं मिला",
+      "loading": "लोड हो रहा है…",
+      "loadError": "आपका डेटा लोड नहीं हो सका।",
+      "saveError": "कुछ बदलाव सहेजे नहीं जा सके। कृपया जाँचें और फिर से कोशिश करें।",
+      "retry": "फिर से कोशिश करें",
+      "saving": "सहेजा जा रहा है…"
+    },
+    "datepicker": {
+      "previousMonth": "पिछला महीना",
+      "nextMonth": "अगला महीना"
+    },
+    "forecast": {
+      "clearConfirm": "सभी लेनदेन मिटाकर पूर्वानुमान की तारीखें रीसेट करें? आवर्ती लेनदेन और क्रेडिट कार्ड बने रहेंगे।"
+    }
+  },
+  "th": {
+    "common": {
+      "search": "ค้นหา…",
+      "noResults": "ไม่พบผลลัพธ์",
+      "loading": "กำลังโหลด…",
+      "loadError": "ไม่สามารถโหลดข้อมูลของคุณได้",
+      "saveError": "บันทึกการเปลี่ยนแปลงบางส่วนไม่สำเร็จ กรุณาตรวจสอบและลองอีกครั้ง",
+      "retry": "ลองอีกครั้ง",
+      "saving": "กำลังบันทึก…"
+    },
+    "datepicker": {
+      "previousMonth": "เดือนก่อนหน้า",
+      "nextMonth": "เดือนถัดไป"
+    },
+    "forecast": {
+      "clearConfirm": "ล้างธุรกรรมทั้งหมดและรีเซ็ตวันที่คาดการณ์หรือไม่? ธุรกรรมประจำและบัตรเครดิตจะยังคงอยู่"
+    }
+  },
+  "vi": {
+    "common": {
+      "search": "Tìm kiếm…",
+      "noResults": "Không tìm thấy kết quả",
+      "loading": "Đang tải…",
+      "loadError": "Không thể tải dữ liệu của bạn.",
+      "saveError": "Không thể lưu một số thay đổi. Vui lòng kiểm tra và thử lại.",
+      "retry": "Thử lại",
+      "saving": "Đang lưu…"
+    },
+    "datepicker": {
+      "previousMonth": "Tháng trước",
+      "nextMonth": "Tháng sau"
+    },
+    "forecast": {
+      "clearConfirm": "Xóa tất cả giao dịch và đặt lại ngày dự báo? Giao dịch định kỳ và thẻ tín dụng sẽ được giữ lại."
+    }
+  },
+  "id": {
+    "common": {
+      "search": "Cari…",
+      "noResults": "Tidak ada hasil",
+      "loading": "Memuat…",
+      "loadError": "Data Anda tidak dapat dimuat.",
+      "saveError": "Beberapa perubahan tidak dapat disimpan. Periksa data dan coba lagi.",
+      "retry": "Coba lagi",
+      "saving": "Menyimpan…"
+    },
+    "datepicker": {
+      "previousMonth": "Bulan sebelumnya",
+      "nextMonth": "Bulan berikutnya"
+    },
+    "forecast": {
+      "clearConfirm": "Hapus semua transaksi dan atur ulang tanggal perkiraan? Transaksi berulang dan kartu kredit akan tetap disimpan."
+    }
+  },
+  "ms": {
+    "common": {
+      "search": "Cari…",
+      "noResults": "Tiada padanan",
+      "loading": "Memuatkan…",
+      "loadError": "Data anda tidak dapat dimuatkan.",
+      "saveError": "Sesetengah perubahan tidak dapat disimpan. Sila semak dan cuba lagi.",
+      "retry": "Cuba lagi",
+      "saving": "Menyimpan…"
+    },
+    "datepicker": {
+      "previousMonth": "Bulan sebelumnya",
+      "nextMonth": "Bulan seterusnya"
+    },
+    "forecast": {
+      "clearConfirm": "Padam semua transaksi dan tetapkan semula tarikh ramalan? Transaksi berulang dan kad kredit akan dikekalkan."
+    }
+  },
+  "nl": {
+    "common": {
+      "search": "Zoeken…",
+      "noResults": "Geen resultaten",
+      "loading": "Laden…",
+      "loadError": "Uw gegevens konden niet worden geladen.",
+      "saveError": "Sommige wijzigingen konden niet worden opgeslagen. Controleer de gegevens en probeer het opnieuw.",
+      "retry": "Opnieuw proberen",
+      "saving": "Opslaan…"
+    },
+    "datepicker": {
+      "previousMonth": "Vorige maand",
+      "nextMonth": "Volgende maand"
+    },
+    "forecast": {
+      "clearConfirm": "Alle transacties wissen en de prognosedatums opnieuw instellen? Terugkerende transacties en creditcards blijven bewaard."
+    }
+  },
+  "pl": {
+    "common": {
+      "search": "Szukaj…",
+      "noResults": "Brak wyników",
+      "loading": "Ładowanie…",
+      "loadError": "Nie udało się wczytać danych.",
+      "saveError": "Nie udało się zapisać niektórych zmian. Sprawdź dane i spróbuj ponownie.",
+      "retry": "Spróbuj ponownie",
+      "saving": "Zapisywanie…"
+    },
+    "datepicker": {
+      "previousMonth": "Poprzedni miesiąc",
+      "nextMonth": "Następny miesiąc"
+    },
+    "forecast": {
+      "clearConfirm": "Usunąć wszystkie transakcje i zresetować daty prognozy? Transakcje cykliczne i karty kredytowe zostaną zachowane."
+    }
+  },
+  "tr": {
+    "common": {
+      "search": "Ara…",
+      "noResults": "Eşleşme bulunamadı",
+      "loading": "Yükleniyor…",
+      "loadError": "Verileriniz yüklenemedi.",
+      "saveError": "Bazı değişiklikler kaydedilemedi. Lütfen kontrol edip tekrar deneyin.",
+      "retry": "Tekrar dene",
+      "saving": "Kaydediliyor…"
+    },
+    "datepicker": {
+      "previousMonth": "Önceki ay",
+      "nextMonth": "Sonraki ay"
+    },
+    "forecast": {
+      "clearConfirm": "Tüm işlemler temizlensin ve tahmin tarihleri sıfırlansın mı? Tekrarlanan işlemler ve kredi kartları korunacaktır."
+    }
+  }
+}
