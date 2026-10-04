@@ -19,15 +19,23 @@ jobs:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     steps:
+      - name: Normalize GHCR package name
+        id: package
+        shell: bash
+        env:
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
+        # GHCR image names are lowercase; GitHub repository names may not be.
+        run: echo "name=${REPOSITORY_NAME,,}" >> "$GITHUB_OUTPUT"
+
       # Manifest-aware: untagged child/platform manifests referenced by a
       # tagged multi-arch/attested index are NOT treated as untagged, so
       # pruning untagged images cannot orphan a tag (V21). validate: true
-      # post-checks multi-arch image integrity and fails the job on orphaning.
+      # post-checks multi-arch image integrity and reports missing children.
       - name: Delete untagged GHCR versions
         uses: dataaxiom/ghcr-cleanup-action@v1
         with:
           owner: ${{ github.repository_owner }}
-          package: ${{ github.event.repository.name }}
+          package: ${{ steps.package.outputs.name }}
           delete-untagged: true
           validate: true
           token: ${{ secrets.TOKEN_GITHUB != '' && secrets.TOKEN_GITHUB || github.token }}

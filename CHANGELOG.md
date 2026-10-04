@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- GHCR cleanup lowercases the repository-derived package name, so `MMMF` targets the published `mmmf` image instead of failing registry login with HTTP 404
+
 ## [1.2.0] - 2026-10-03
 
 ### Added
