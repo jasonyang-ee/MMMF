@@ -1,6 +1,6 @@
 {
   "name": "mmmf",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "description": "MMMF - Max Money Market Funds. Balance forecasting tool.",
   "main": "server/index.js",

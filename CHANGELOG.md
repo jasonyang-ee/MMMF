@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-10-04
+
 ### Fixed
 
 - GHCR cleanup lowercases the repository-derived package name, so `MMMF` targets the published `mmmf` image instead of failing registry login with HTTP 404
@@ -242,5 +244,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vite for frontend build
 - Docker multi-stage build
 [1.1.5]: https://github.com/jasonyang-ee/MMMF/releases/tag/v1.1.5
-[Unreleased]: https://github.com/jasonyang-ee/MMMF/compare/v1.2.0...HEAD
 [1.2.0]: https://github.com/jasonyang-ee/MMMF/releases/tag/v1.2.0
+[Unreleased]: https://github.com/jasonyang-ee/MMMF/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/jasonyang-ee/MMMF/releases/tag/v1.2.1
